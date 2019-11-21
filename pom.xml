@@ -1,0 +1,72 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.example</groupId>
+  <artifactId>myproject</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>My Project</name>
+  <url>https://example.com</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <!--
+    Update this to the latest Yamcs release.
+    Check https://mvnrepository.com/artifact/org.yamcs/yamcs-core
+    -->
+    <yamcsVersion>4.10.4</yamcsVersion>
+  </properties>
+
+  <dependencies>
+    <!-- Yamcs core framework -->
+    <dependency>
+      <groupId>org.yamcs</groupId>
+      <artifactId>yamcs-core</artifactId>
+      <version>${yamcsVersion}</version>
+    </dependency>
+    <!-- Adding this dependency, enables the web interface. -->
+    <dependency>
+      <groupId>org.yamcs</groupId>
+      <artifactId>yamcs-web</artifactId>
+      <version>${yamcsVersion}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.yamcs</groupId>
+        <artifactId>yamcs-maven-plugin</artifactId>
+        <version>1.1.1</version>
+        <executions>
+          <!-- Tell Maven to bundle Yamcs into a tar.gz file
+               when the 'mvn package' command is run -->
+          <execution>
+            <id>bundle-yamcs</id>
+            <phase>package</phase>
+            <goals>
+              <goal>bundle</goal>
+            </goals>
+            <configuration>
+              <formats>
+                <format>tar.gz</format>
+              </formats>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
