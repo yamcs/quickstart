@@ -6,8 +6,6 @@ services:
   - class: org.yamcs.archive.EventRecorder
   - class: org.yamcs.archive.ReplayServer
   - class: org.yamcs.archive.IndexServer
-    args:
-      tmIndexer: com.example.myproject.NoopCompletenessIndex
   - class: org.yamcs.parameter.SystemParametersCollector
     args:
       provideJvmVariables: true
