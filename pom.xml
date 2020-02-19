@@ -17,7 +17,7 @@
     Update this to the latest Yamcs release.
     Check https://mvnrepository.com/artifact/org.yamcs/yamcs-core
     -->
-    <yamcsVersion>4.10.5</yamcsVersion>
+    <yamcsVersion>4.10.7</yamcsVersion>
   </properties>
 
   <dependencies>
