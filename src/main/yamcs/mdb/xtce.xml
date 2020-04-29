@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SpaceSystem name="myproject" 
-    xmlns="http://www.omg.org/space/xtce" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/space/xtce https://www.omg.org/spec/XTCE/20180204/SpaceSystem.xsd">
+    xmlns="http://www.omg.org/spec/XTCE/20180204" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/spec/XTCE/20180204 https://www.omg.org/spec/XTCE/20180204/SpaceSystem.xsd">
     <TelemetryMetaData>
         <ParameterTypeSet>
             <AggregateParameterType name="CCSDS_Packet_ID_Type">
@@ -122,6 +122,7 @@
                 </EntryList>
             </SequenceContainer>
             <SequenceContainer name="TelemetryPacket">
+                <EntryList />
                 <BaseContainer containerRef="CCSDSPacket">
                     <RestrictionCriteria>
                         <ComparisonList>
@@ -130,17 +131,8 @@
                         </ComparisonList>
                     </RestrictionCriteria>
                 </BaseContainer>
-                <EntryList />
             </SequenceContainer>
             <SequenceContainer name="Spacecraft">
-                <BaseContainer containerRef="TelemetryPacket">
-                    <RestrictionCriteria>
-                        <ComparisonList>
-                            <Comparison value="NotPresent" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
-                            <Comparison value="100" parameterRef="CCSDS_Packet_ID/APID" />
-                        </ComparisonList>
-                    </RestrictionCriteria>
-                </BaseContainer>
                 <EntryList>
                     <ParameterRefEntry parameterRef="EpochUSNO" />
                     <ParameterRefEntry parameterRef="OrbitNumberCumulative" />
@@ -177,6 +169,14 @@
                     <ParameterRefEntry parameterRef="Mode_SBand" />
                     <ParameterRefEntry parameterRef="Mode_Safe" />
                 </EntryList>
+                <BaseContainer containerRef="TelemetryPacket">
+                    <RestrictionCriteria>
+                        <ComparisonList>
+                            <Comparison value="NotPresent" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+                            <Comparison value="100" parameterRef="CCSDS_Packet_ID/APID" />
+                        </ComparisonList>
+                    </RestrictionCriteria>
+                </BaseContainer>
             </SequenceContainer>
         </ContainerSet>
     </TelemetryMetaData>
