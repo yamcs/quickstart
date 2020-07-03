@@ -4,7 +4,6 @@ services:
   - class: org.yamcs.archive.AlarmRecorder
   - class: org.yamcs.archive.EventRecorder
   - class: org.yamcs.archive.ReplayServer
-  - class: org.yamcs.archive.IndexServer
   - class: org.yamcs.parameter.SystemParametersCollector
     args:
       provideJvmVariables: true
@@ -25,16 +24,15 @@ services:
 dataLinks:
   - name: udp-in
     class: org.yamcs.tctm.UdpTmDataLink
-    args:
-      stream: tm_realtime
-      port: 10015
-      packetPreprocessorClassName: com.example.myproject.MyPacketPreprocessor
+    stream: tm_realtime
+    port: 10015
+    packetPreprocessorClassName: com.example.myproject.MyPacketPreprocessor
+
   - name: udp-out
     class: org.yamcs.tctm.UdpTcDataLink
-    args:
-      stream: tc_realtime
-      host: localhost
-      port: 10025
+    stream: tc_realtime
+    host: localhost
+    port: 10025
 
 mdb:
   # Configuration of the active loaders
