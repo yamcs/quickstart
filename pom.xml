@@ -17,7 +17,7 @@
     Update this to the latest Yamcs release.
     Check https://mvnrepository.com/artifact/org.yamcs/yamcs-core
     -->
-    <yamcsVersion>5.0.0</yamcsVersion>
+    <yamcsVersion>5.1.1</yamcsVersion>
   </properties>
 
   <dependencies>
@@ -49,7 +49,7 @@
       <plugin>
         <groupId>org.yamcs</groupId>
         <artifactId>yamcs-maven-plugin</artifactId>
-        <version>1.2.3</version>
+        <version>1.2.5</version>
         <executions>
           <!-- Tell Maven to bundle Yamcs into a tar.gz file
                when the 'mvn package' command is run -->
