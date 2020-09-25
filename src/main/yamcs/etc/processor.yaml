@@ -35,6 +35,7 @@ realtime:
 Archive:
   services:
     - class: org.yamcs.tctm.ReplayService
+    - class: org.yamcs.algorithms.AlgorithmManager
   config:
     # Keep a small cache in case new displays are open while the replay is paused, to have the parameters readily available
     parameterCache:
@@ -48,16 +49,18 @@ Archive:
 ParameterArchive:
   services:
     - class: org.yamcs.tctm.ReplayService
+    - class: org.yamcs.algorithms.AlgorithmManager
   config:
     parameterCache:
       enabled: false
 
 
-# Used for performing archive retrievals via replays
+# Used for performing archive retrievals via replays (e.g. GET /api/archive/{instance}/parameters/{name*}?source=replay)
 # we do not want cache in order to extract the minimum data necessary
 ArchiveRetrieval:
   services:
     - class: org.yamcs.tctm.ReplayService
+    - class: org.yamcs.algorithms.AlgorithmManager
   config:
     parameterCache:
       enabled: false
