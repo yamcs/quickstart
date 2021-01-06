@@ -1,5 +1,3 @@
-FROM maven:latest
+FROM maven:3.6-openjdk-11
 
 WORKDIR /yamcs
-
-RUN git clone https://github.com/yamcs/quickstart.git .
