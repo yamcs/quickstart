@@ -1,0 +1,12 @@
+
+services:
+  yamcs:
+    image: "yamcs"
+    hostname: yamcs
+    container_name: yamcs
+    command: "mvn yamcs:run"
+    volumes:
+      - ../:/yamcs
+    ports:
+      - "127.0.0.1:8090:8090"
+      - "127.0.0.1:10015:10015/udp"
