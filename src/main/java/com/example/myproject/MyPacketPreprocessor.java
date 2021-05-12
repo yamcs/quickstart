@@ -10,12 +10,38 @@ import org.yamcs.YConfiguration;
 import org.yamcs.tctm.AbstractPacketPreprocessor;
 import org.yamcs.utils.TimeEncoding;
 
+/**
+ * Component capable of modifying packet binary received from a link, before passing it further into Yamcs.
+ * <p>
+ * A single instance of this class is created, scoped to the link udp-in.
+ * <p>
+ * This is specified in the configuration file yamcs.myproject.yaml:
+ * 
+ * <pre>
+ * ...
+ * dataLinks:
+ *   - name: udp-in
+ *     class: org.yamcs.tctm.UdpTmDataLink
+ *     stream: tm_realtime
+ *     host: localhost
+ *     port: 10015
+ *     packetPreprocessorClassName: com.example.myproject.MyPacketPreprocessor
+ * ...
+ * </pre>
+ */
 public class MyPacketPreprocessor extends AbstractPacketPreprocessor {
 
     private Map<Integer, AtomicInteger> seqCounts = new HashMap<>();
 
+    // Constructor used when this preprocessor is used without YAML configuration
     public MyPacketPreprocessor(String yamcsInstance) {
-        super(yamcsInstance, YConfiguration.emptyConfig());
+        this(yamcsInstance, YConfiguration.emptyConfig());
+    }
+
+    // Constructor used when this preprocessor is used with YAML configuration
+    // (packetPreprocessorClassArgs)
+    public MyPacketPreprocessor(String yamcsInstance, YConfiguration config) {
+        super(yamcsInstance, config);
     }
 
     @Override

@@ -33,6 +33,7 @@ dataLinks:
     stream: tc_realtime
     host: localhost
     port: 10025
+    commandPostprocessorClassName: com.example.myproject.MyCommandPostprocessor
 
 mdb:
   # Configuration of the active loaders
