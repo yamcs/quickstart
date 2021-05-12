@@ -7,8 +7,8 @@ You may find it useful as a starting point for your own project.
 
 ## Prerequisites
 
-* Java 8 or 11
-* Maven
+* Java 11
+* Maven 3.1+
 * Linux x64 or macOS
 
 
