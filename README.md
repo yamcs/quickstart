@@ -48,7 +48,7 @@ The packets are a bit artificial and include a mixture of HK and accessory data.
 
 ## Telecommanding
 
-This project defines a few example CCSDS telecommands. They are sent to UDP port 10025. Nothing is listening to this port, so issued commands will not cause any side effects.
+This project defines a few example CCSDS telecommands. They are sent to UDP port 10025. The simulator.py script listens to this port. Commands  have no side effects. The script will only count them.
 
 
 ## Bundling

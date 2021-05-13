@@ -316,7 +316,9 @@
 					<Argument argumentTypeRef="Battery_Type" name="Battery" shortDescription="Number of the battery" />
 				</ArgumentList>
 				<CommandContainer name="SwitchVoltageOn">
-					<EntryList />
+					<EntryList>
+						<ArgumentRefEntry argumentRef="Battery" />
+					</EntryList>
 					<BaseContainer containerRef="MyProjectPacket" />
 				</CommandContainer>
 			</MetaCommand>
@@ -330,7 +332,9 @@
 					<Argument argumentTypeRef="Battery_Type" name="Battery" shortDescription="Number of the battery" />
 				</ArgumentList>
 				<CommandContainer name="SwitchVoltageOff">
-					<EntryList />
+					<EntryList>
+						<ArgumentRefEntry argumentRef="Battery" />
+					</EntryList>
 					<BaseContainer containerRef="MyProjectPacket" />
 				</CommandContainer>
 			</MetaCommand>
