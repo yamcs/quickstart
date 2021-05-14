@@ -72,6 +72,7 @@ if __name__ == '__main__':
                 sys.stdout.write('\r')
                 sys.stdout.write(status)
                 sys.stdout.flush()
+                prev_status = status
             sleep(0.5)
     except KeyboardInterrupt:
         sys.stdout.write('\n')
