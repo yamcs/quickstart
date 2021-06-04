@@ -4,8 +4,6 @@ realtime:
       args:
         streams: ["tm_realtime"]
     - class: org.yamcs.StreamTcCommandReleaser
-      args:
-        stream: "tc_realtime"
     - class: org.yamcs.tctm.StreamParameterProvider
     - class: org.yamcs.algorithms.AlgorithmManager
     - class: org.yamcs.parameter.LocalParameterManager

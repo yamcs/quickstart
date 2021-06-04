@@ -51,4 +51,7 @@ streamConfig:
   event: ["events_realtime", "events_dump"]
   param: ["pp_realtime", "sys_param", "proc_param"]
   parameterAlarm: ["alarms_realtime"]
-  tc: ["tc_realtime"]
+  tc:
+    - name: "tc_realtime"
+      processor: "realtime"
+
