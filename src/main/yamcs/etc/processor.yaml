@@ -16,14 +16,10 @@ realtime:
       parameterCheck: true
       parameterServer: enabled
     parameterCache:
-      enabled: true
-      cacheAll: true
-      # Duration in seconds on how long parameters are kept into cache
-      duration: 600
-      # Maximum number of entries in the cache for one parameter
-      maxNumEntries: 4096
+      enabled: false
     tmProcessor:
-      # If container entries fit outside the binary packet, setting this to true will cause the error to be ignored, otherwise an exception will be printed in the yamcs logs
+      # If container entries fit outside the binary packet, setting this to true causes the error
+      # to be ignored, otherwise an exception will be printed in Yamcs log output
       ignoreOutOfContainerEntries: false
     # Record all the parameters that have initial values at the start of the processor
     recordInitialValues: true
@@ -31,7 +27,7 @@ realtime:
     recordLocalValues: true
 
 
-# Used to perform step by step archive replays to displays,etc
+# Used to perform step-by-step archive replays to displays, etc
 Archive:
   services:
     - class: org.yamcs.tctm.ReplayService
