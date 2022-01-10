@@ -1,12 +1,9 @@
 .DEFAULT_GOAL := help
 
-all: ## run all, yamcs-build, yamcs-up (yamcs-down) and yamcs-simulator
+all: ## run all, yamcs-up (yamcs-down) and yamcs-simulator
 	$(MAKE) yamcs-simulator
   
-yamcs-build: ## build yamcs system
-	docker build . -t yamcs
-
-yamcs-up: | yamcs-build yamcs-down ## bring up yamcs system
+yamcs-up: | yamcs-down ## bring up yamcs system
 	docker-compose up -d
 
 yamcs-down: ## bring down yamcs system
@@ -16,7 +13,7 @@ yamcs-simulator: yamcs-up ## run yamcs simulator
 	@echo "connect via http://localhost:8090/ system make take about 50 seconds to startup" && \
 	cd .. && python ./simulator.py
 
-yamcs-shell: yamcs-build ## shell into yamcs container
+yamcs-shell: ## shell into yamcs container
 	docker-compose up -d && docker run -it yamcs "bash"
 
 help:

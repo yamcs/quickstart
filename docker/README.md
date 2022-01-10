@@ -20,10 +20,6 @@ To run the all target:
 
     make all
 
-To build yamcs:
-
-    make yamcs-build
-
 To bring up yamcs container:
 
     make yamcs-up
