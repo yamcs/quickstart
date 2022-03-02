@@ -54,7 +54,7 @@ public class MyCommandPostprocessor implements CommandPostprocessor {
         byte[] binary = pc.getBinary();
 
         // Set CCSDS packet length
-        ByteArrayUtils.encodeShort(binary.length - 7, binary, 4);
+        ByteArrayUtils.encodeUnsignedShort(binary.length - 7, binary, 4);
 
         // Set CCSDS sequence count
         int seqCount = seqFiller.fill(binary);
