@@ -11,7 +11,7 @@ yamcs-down: ## bring down yamcs system
 
 yamcs-simulator: yamcs-up ## run yamcs simulator
 	@echo "connect via http://localhost:8090/ system make take about 50 seconds to startup" && \
-	cd .. && python ./simulator.py
+	cd .. && python3 ./simulator.py
 
 yamcs-shell: ## shell into yamcs container
 	docker-compose up -d && docker run -it yamcs "bash"
