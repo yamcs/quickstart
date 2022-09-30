@@ -12,3 +12,6 @@ instances:
 # Secret key unique to a particular Yamcs installation.
 # This is used to provide cryptographic signing.
 secretKey: changeme
+
+# https://github.com/yamcs/quickstart/issues/11
+address: "0.0.0.0"
