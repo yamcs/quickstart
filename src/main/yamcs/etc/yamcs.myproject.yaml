@@ -20,6 +20,7 @@ services:
       backFiller:
         enabled: false
         warmupTime: 60
+  - class: org.yamcs.timeline.TimelineService
 
 dataLinks:
   - name: udp-in
