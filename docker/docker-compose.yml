@@ -16,3 +16,5 @@ services:
     ports:
       - "8090:8090"
       - "10015:10015/udp"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
