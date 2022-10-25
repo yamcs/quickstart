@@ -5,3 +5,6 @@
 
 # Maven output
 /target/
+
+# VSCode
+.vscode/settings.json

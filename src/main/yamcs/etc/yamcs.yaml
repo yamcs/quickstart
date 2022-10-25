@@ -1,5 +1,11 @@
 services:
   - class: org.yamcs.http.HttpServer
+    args:
+      port: 8090
+      address: "0.0.0.0" # https://github.com/yamcs/quickstart/issues/11
+      cors:
+        allowOrigin: "*"
+        allowCredentials: false
 
 # This is where Yamcs will persist its data. Paths are resolved relative to where Yamcs is running
 # from (by default: target/yamcs). This means that `mvn clean` will remove also persisted data.
