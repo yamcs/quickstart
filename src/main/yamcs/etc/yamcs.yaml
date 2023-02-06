@@ -6,6 +6,12 @@ services:
       cors:
         allowOrigin: "*"
         allowCredentials: false
+      maxContentLength: 5000000
+      webSocket:
+        writeBufferWaterMark: { low: 32768, high: 20000000 }
+  - class: org.yamcs.replication.ReplicationServer
+    args:
+      port: 8099
 
 # This is where Yamcs will persist its data. Paths are resolved relative to where Yamcs is running
 # from (by default: target/yamcs). This means that `mvn clean` will remove also persisted data.
