@@ -1,0 +1,25 @@
+
+services:
+  yamcs:
+    build: .
+    hostname: yamcs
+    container_name: yamcs
+    command: "mvn yamcs:run"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8090"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    volumes:
+      - ../:/yamcs
+    ports:
+      - "8090:8090"
+      - "10015:10015/udp"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - quickstart
+networks:
+  quickstart:
+    driver: bridge
