@@ -2,7 +2,7 @@ services:
   - class: org.yamcs.http.HttpServer
     args:
       port: 8090
-      address: "0.0.0.0" # https://github.com/yamcs/quickstart/issues/11
+      address: "0.0.0.0"
       cors:
         allowOrigin: "*"
         allowCredentials: false
