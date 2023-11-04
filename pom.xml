@@ -54,6 +54,12 @@
         <artifactId>yamcs-maven-plugin</artifactId>
         <version>1.2.9</version>
         <executions>
+          <!-- Detect plugins, if any -->
+          <execution>
+            <goals>
+              <goal>detect</goal>
+            </goals>
+          </execution>
           <!-- Tell Maven to bundle Yamcs into a tar.gz file
                when the 'mvn package' command is run -->
           <execution>
