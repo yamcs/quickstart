@@ -60,3 +60,4 @@ ArchiveRetrieval:
   config:
     parameterCache:
       enabled: false
+    subscribeContainerArchivePartitions: false
