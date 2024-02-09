@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import binascii
 import io
 import socket
