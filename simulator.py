@@ -23,7 +23,7 @@ def send_tm(simulator):
             tm_socket.sendto(packet, ('127.0.0.1', 10015))
             simulator.tm_counter += 1
 
-            sleep(1)
+            sleep(0.1)
 
 
 def receive_tc(simulator):
