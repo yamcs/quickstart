@@ -71,7 +71,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     simulator = Simulator(args.rate)
     simulator.start()
-
+    sys.stdout.write('Using playback rate of ' + str(args.rate) + 'Hz \r\n');
     try:
         prev_status = None
         while True:
