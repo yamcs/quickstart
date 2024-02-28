@@ -5,7 +5,7 @@ import sys
 from struct import unpack_from
 from threading import Thread
 from time import sleep
-
+from argparse import ArgumentParser
 
 def send_tm(simulator):
     tm_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -23,7 +23,7 @@ def send_tm(simulator):
             tm_socket.sendto(packet, ('127.0.0.1', 10015))
             simulator.tm_counter += 1
 
-            sleep(0.1)
+            sleep(1 / simulator.rate)
 
 
 def receive_tc(simulator):
@@ -37,12 +37,13 @@ def receive_tc(simulator):
 
 class Simulator():
 
-    def __init__(self):
+    def __init__(self, rate):
         self.tm_counter = 0
         self.tc_counter = 0
         self.tm_thread = None
         self.tc_thread = None
         self.last_tc = None
+        self.rate = rate
 
     def start(self):
         self.tm_thread = Thread(target=send_tm, args=(self,))
@@ -61,7 +62,14 @@ class Simulator():
 
 
 if __name__ == '__main__':
-    simulator = Simulator()
+    parser = ArgumentParser()
+    parser.add_argument("-r", "--rate",
+        dest="rate",
+        default=1,
+        type=int,
+        help="Playback rate. 1 = 1Hz, 10 = 10Hz, etc.")
+    args = parser.parse_args()
+    simulator = Simulator(args.rate)
     simulator.start()
 
     try:
