@@ -8,7 +8,10 @@ endif
 
 all: ## run all, yamcs-up (yamcs-down) and yamcs-simulator
 	$(MAKE) yamcs-simulator
-  
+
+all-10hz: 
+        $(MAKE) yamcs-simulator-10hz
+
 yamcs-up: | yamcs-down ## bring up yamcs system
 	docker-compose up -d
 
@@ -18,7 +21,13 @@ yamcs-down: ## bring down yamcs system
 yamcs-simulator: yamcs-up ## run yamcs simulator
 	@echo "connect via http://localhost:8090/ system make take about 50 seconds to startup" && \
         export SIMULATOR_PLAYBACK_RATE="${SIMULATOR_PLAYBACK_RATE}:-1"
-	cd .. && $(PYTHON) ./simulator.py --rate=$SIMULATOR_PLAYBACK_RATE
+	cd .. && $(PYTHON) ./simulator.py
+
+yamcs-simulator-10-hz: yamcs-up ## run yamcs simulator
+        @echo "connect via http://localhost:8090/ system make take about 50 seconds to startup" && \
+        export SIMULATOR_PLAYBACK_RATE="${SIMULATOR_PLAYBACK_RATE}:-1"
+        cd .. && $(PYTHON) ./simulator.py --rate=10
+
 
 yamcs-shell: ## shell into yamcs container
 	docker-compose up -d && docker run -it yamcs "bash"
