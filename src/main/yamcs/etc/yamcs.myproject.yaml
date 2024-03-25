@@ -6,8 +6,9 @@ services:
   - class: org.yamcs.archive.ReplayServer
   - class: org.yamcs.parameter.SystemParametersService
     args:
-      provideJvmVariables: true
-      provideFsVariables: true
+      producers:
+        - fs
+        - jvm
   - class: org.yamcs.ProcessorCreatorService
     args:
       name: realtime
