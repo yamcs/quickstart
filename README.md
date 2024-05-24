@@ -7,12 +7,10 @@ You may find it useful as a starting point for your own project.
 
 ## Prerequisites
 
-* Java 11+
-* Linux x64/aarch64, macOS x64, or Windows x64
+* Java 17+
+* Linux x64/aarch64, macOS x64/aarch64, or Windows x64
 
-A copy of Maven 3.1+ is also required, however this gets automatically downloaded an installed by using the `./mvnw` shell script as detailed below.
-
-Note that Yamcs does not currently support running on Apple M1 or M2. We hope to address this soon.
+A copy of Maven is also required, however this gets automatically downloaded an installed by using the `./mvnw` shell script as detailed below.
 
 
 ## Running Yamcs
