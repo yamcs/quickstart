@@ -16,7 +16,7 @@
     Update this to the latest Yamcs release.
     Check https://mvnrepository.com/artifact/org.yamcs/yamcs-core
     -->
-    <yamcsVersion>5.9.4</yamcsVersion>
+    <yamcsVersion>5.9.6</yamcsVersion>
   </properties>
 
   <dependencies>
@@ -52,7 +52,7 @@
       <plugin>
         <groupId>org.yamcs</groupId>
         <artifactId>yamcs-maven-plugin</artifactId>
-        <version>1.2.12</version>
+        <version>1.2.13</version>
         <executions>
           <!-- Detect plugins, if any -->
           <execution>
