@@ -4,7 +4,7 @@ realtime:
     - class: org.yamcs.StreamTcCommandReleaser
     - class: org.yamcs.tctm.StreamParameterProvider
       args:
-        streams: ["pp_realtime", "sys_param", "proc_param"]
+        streams: ["pp_realtime", "sys_param"]
     - class: org.yamcs.algorithms.AlgorithmManager
     - class: org.yamcs.parameter.LocalParameterManager
   config:
