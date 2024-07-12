@@ -10,17 +10,17 @@ all: ## run all, yamcs-up (yamcs-down) and yamcs-simulator
 	$(MAKE) yamcs-simulator
   
 yamcs-up: | yamcs-down ## bring up yamcs system
-	docker-compose up -d
+	docker compose up -d
 
 yamcs-down: ## bring down yamcs system
-	docker-compose down -v --remove-orphans
+	docker compose down -v --remove-orphans
 
 yamcs-simulator: yamcs-up ## run yamcs simulator
 	@echo "connect via http://localhost:8090/ system make take about 50 seconds to startup" && \
 	cd .. && $(PYTHON) ./simulator.py
 
 yamcs-shell: ## shell into yamcs container
-	docker-compose up -d && docker run -it yamcs "bash"
+	docker compose up -d && docker compose exec yamcs bash
 
 help:
 	@printf "\033[37m%-30s\033[0m %s\n" "#----------------------------------------------------------------------------------"
