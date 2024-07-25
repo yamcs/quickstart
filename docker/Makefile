@@ -22,6 +22,23 @@ yamcs-simulator: yamcs-up ## run yamcs simulator
 yamcs-shell: ## shell into yamcs container
 	docker compose up -d && docker compose exec yamcs bash
 
+wait-for-sent: yamcs-up ## run make all and wait up to 10 minutes for "Sent:" in the output
+	@echo "Running make all and waiting for 'Sent:' in the output..." && \
+	nohup $(MAKE) all > all.log 2>&1 & \
+	pid=$$!; \
+	timeout=600; \
+	while ! grep -q "Sent:" all.log; do \
+		sleep 1; \
+		timeout=$$((timeout - 1)); \
+		if [ $$timeout -le 0 ]; then \
+			echo "Timeout waiting for 'Sent:' in the output"; \
+			kill $$pid; \
+			exit 1; \
+		fi; \
+	done; \
+	echo "Found 'Sent:' in the output"; \
+	kill $$pid
+
 help:
 	@printf "\033[37m%-30s\033[0m %s\n" "#----------------------------------------------------------------------------------"
 	@printf "\033[37m%-30s\033[0m %s\n" "# Makefile                                          "
