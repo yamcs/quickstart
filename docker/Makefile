@@ -6,7 +6,7 @@ endif
 
 .DEFAULT_GOAL := help
 
-all: ## run all, yamcs-up (yamcs-down) and yamcs-simulator
+all: clean ## run all, clean, yamcs-up (yamcs-down) and yamcs-simulator
 	$(MAKE) yamcs-simulator
   
 yamcs-up: | yamcs-down ## bring up yamcs system
@@ -22,6 +22,12 @@ yamcs-simulator: yamcs-up ## run yamcs simulator
 yamcs-shell: ## shell into yamcs container
 	docker compose up -d && docker compose exec yamcs bash
 
+clean: ## remove yamcs build artifacts and Docker resources created by this Makefile
+	docker compose down -v --remove-orphans
+	docker compose rm -f -s -v
+	docker image rm -f docker-yamcs || true
+	rm -rf ../target
+
 help:
 	@printf "\033[37m%-30s\033[0m %s\n" "#----------------------------------------------------------------------------------"
 	@printf "\033[37m%-30s\033[0m %s\n" "# Makefile                                          "
@@ -31,3 +37,4 @@ help:
 
 print-%:
 	@echo $* = $($*)
+	
