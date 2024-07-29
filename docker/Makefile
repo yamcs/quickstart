@@ -1,28 +1,48 @@
-ifeq ($(shell which python3),)
-  PYTHON = python
-else
-  PYTHON = python3
-endif
+SHELL := /bin/bash
+.ONESHELL:
+.SHELLFLAGS := -eu -o pipefail -c
+.DELETE_ON_ERROR:
+MAKEFLAGS += --warn-undefined-variables
+MAKEFLAGS += --no-builtin-rules
+
+PYTHON := $(shell command -v python3 2>/dev/null || echo python)
 
 .DEFAULT_GOAL := help
 
-all: ## run all, yamcs-up (yamcs-down) and yamcs-simulator
-	$(MAKE) yamcs-simulator
-  
+# Define function to print messages in different colors
+# Usage: $(call print_message,ANSI_COLOR_CODE,Your message here)
+define print_message
+	@printf "\033[$(1)m$(2)\033[0m\n"
+endef
+
+.PHONY: all clean yamcs-up yamcs-down yamcs-simulator yamcs-shell help
+
+all: clean yamcs-simulator ## run all: clean, yamcs-up (yamcs-down) and yamcs-simulator
+
 yamcs-up: | yamcs-down ## bring up yamcs system
 	docker compose up -d
 
 yamcs-down: ## bring down yamcs system
+	$(call print_message,33,Stopping any running docker-yamcs containers...)
 	docker compose down -v --remove-orphans
 
 yamcs-simulator: yamcs-up ## run yamcs simulator
-	@echo "connect via http://localhost:8090/ system make take about 50 seconds to startup" && \
+	$(call print_message,36,Connect via http://localhost:8090/ system may take about 50 seconds to startup)
 	cd .. && $(PYTHON) ./simulator.py
 
 yamcs-shell: ## shell into yamcs container
 	docker compose up -d && docker compose exec yamcs bash
 
-wait-for-sent: yamcs-up ## run make all and wait up to 10 minutes for "Sent:" in the output
+clean: | yamcs-down ## remove yamcs build artifacts and docker resources created by this Makefile
+	$(call print_message,33,Cleaning up docker-yamcs resources (containers, volumes, networks)...)
+	docker compose rm -f -s -v
+	$(call print_message,33,Removing docker-yamcs image...)
+	docker image rm -f docker-yamcs 2>/dev/null || true
+	$(call print_message,33,Cleaning up yamcs build artifacts...)
+	rm -rf ../target
+	$(call print_message,32,Done!)
+
+wait-for-sent: | yamcs-up ## run make all and wait up to 10 minutes for "Sent:" in the output
 	@echo "Running make all and waiting for 'Sent:' in the output..." && \
 	nohup $(MAKE) all > all.log 2>&1 & \
 	pid=$$!; \
@@ -39,12 +59,18 @@ wait-for-sent: yamcs-up ## run make all and wait up to 10 minutes for "Sent:" in
 	echo "Found 'Sent:' in the output"; \
 	kill $$pid
 
-help:
-	@printf "\033[37m%-30s\033[0m %s\n" "#----------------------------------------------------------------------------------"
-	@printf "\033[37m%-30s\033[0m %s\n" "# Makefile                                          "
-	@printf "\033[37m%-30s\033[0m %s\n" "#----------------------------------------------------------------------------------"
-	@printf "\033[37m%-30s\033[0m %s\n" "#-targets----------------------description-----------------------------------------"
-	@grep -E '^[a-zA-Z_-].+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+TERM_WIDTH := $(shell tput cols 2>/dev/null || echo 80)
 
-print-%:
+define print_header
+	@printf '%*s\n' "$(TERM_WIDTH)" '' | tr ' ' '-'
+	@printf '%-*s\n' "$(TERM_WIDTH)" "$(1)"
+	@printf '%*s\n' "$(TERM_WIDTH)" '' | tr ' ' '-'
+endef
+
+
+help: ## display this help message
+	$(call print_header,"Makefile")
+	@awk 'BEGIN {FS = ":.*##"; printf "\033[36m%-30s\033[0m %s\n", "Target", "Description"} /^[a-zA-Z_-]+:.*?##/ {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST) | sort
+
+print-%: ## Print any variable (e.g., make print-PYTHON)
 	@echo $* = $($*)
