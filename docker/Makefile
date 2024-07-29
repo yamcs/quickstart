@@ -42,6 +42,23 @@ clean: | yamcs-down ## remove yamcs build artifacts and docker resources created
 	rm -rf ../target
 	$(call print_message,32,Done!)
 
+wait-for-sent: | yamcs-up ## run make all and wait up to 10 minutes for "Sent:" in the output
+	@echo "Running make all and waiting for 'Sent:' in the output..." && \
+	nohup $(MAKE) all > all.log 2>&1 & \
+	pid=$$!; \
+	timeout=600; \
+	while ! grep -q "Sent:" all.log; do \
+		sleep 1; \
+		timeout=$$((timeout - 1)); \
+		if [ $$timeout -le 0 ]; then \
+			echo "Timeout waiting for 'Sent:' in the output"; \
+			kill $$pid; \
+			exit 1; \
+		fi; \
+	done; \
+	echo "Found 'Sent:' in the output"; \
+	kill $$pid
+
 TERM_WIDTH := $(shell tput cols 2>/dev/null || echo 80)
 
 define print_header
@@ -49,6 +66,7 @@ define print_header
 	@printf '%-*s\n' "$(TERM_WIDTH)" "$(1)"
 	@printf '%*s\n' "$(TERM_WIDTH)" '' | tr ' ' '-'
 endef
+
 
 help: ## display this help message
 	$(call print_header,"Makefile")
