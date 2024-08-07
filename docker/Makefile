@@ -15,9 +15,11 @@ define print_message
 	@printf "\033[$(1)m$(2)\033[0m\n"
 endef
 
-.PHONY: all clean yamcs-up yamcs-down yamcs-simulator yamcs-shell help
+.PHONY: all all-10hz clean yamcs-up yamcs-down yamcs-simulator yamcs-simulator-10hz yamcs-shell help
 
 all: clean yamcs-simulator ## run all: clean, yamcs-up (yamcs-down) and yamcs-simulator
+
+all-10hz: clean yamcs-simulator-10hz ## run all: clean, yamcs-up (yamcs-down) and yamcs-simulator
 
 yamcs-up: | yamcs-down ## bring up yamcs system
 	docker compose up -d
@@ -29,6 +31,10 @@ yamcs-down: ## bring down yamcs system
 yamcs-simulator: yamcs-up ## run yamcs simulator
 	$(call print_message,36,Connect via http://localhost:8090/ system may take about 50 seconds to startup)
 	cd .. && $(PYTHON) ./simulator.py
+
+yamcs-simulator-10hz: yamcs-up ## run yamcs simulator at 10hz
+	$(call print_message,36,Connect via http://localhost:8090/ system may take about 50 seconds to startup)
+	cd .. && $(PYTHON) ./simulator.py --rate=10
 
 yamcs-shell: ## shell into yamcs container
 	docker compose up -d && docker compose exec yamcs bash
