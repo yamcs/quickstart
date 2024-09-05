@@ -105,6 +105,7 @@
 			<Parameter name="Battery2_Temp" parameterTypeRef="float_t" />
 			<Parameter name="Magnetometer" parameterTypeRef="vec3_t" />
 			<Parameter name="Sunsensor" parameterTypeRef="float_t" />
+			<Parameter name="Sunsensor_Beta" parameterTypeRef="float_t" />
 			<Parameter name="Gyro" parameterTypeRef="vec3_t" />
 			<Parameter name="Detector_Temp" parameterTypeRef="float_t" />
 			<Parameter name="Shadow" parameterTypeRef="bool_t" />
@@ -165,6 +166,7 @@
 					<ParameterRefEntry parameterRef="Battery2_Temp" />
 					<ParameterRefEntry parameterRef="Magnetometer" />
 					<ParameterRefEntry parameterRef="Sunsensor" />
+					<ParameterRefEntry parameterRef="Sunsensor_Beta" />
 					<ParameterRefEntry parameterRef="Gyro" />
 					<ParameterRefEntry parameterRef="Detector_Temp" />
 					<ParameterRefEntry parameterRef="Shadow" />
@@ -210,6 +212,22 @@
 				</BaseContainer>
 			</SequenceContainer>
 		</ContainerSet>
+		<AlgorithmSet>
+			<CustomAlgorithm name="copySunsensor">
+				<AlgorithmText language="java-expression">
+					out0.setFloatValue(in.getEngValue().getFloatValue());
+				</AlgorithmText>
+				<InputSet>
+					<InputParameterInstanceRef parameterRef="/myproject/Sunsensor" inputName="in"/>
+				</InputSet>
+				<OutputSet>
+					<OutputParameterRef parameterRef="Sunsensor_Beta" outputName="out0"/>
+				</OutputSet>
+				<TriggerSet>
+					<OnParameterUpdateTrigger parameterRef="/myproject/Sunsensor"/>
+				</TriggerSet>
+			</CustomAlgorithm>
+		</AlgorithmSet>
 	</TelemetryMetaData>
 	<CommandMetaData>
 		<ArgumentTypeSet>
