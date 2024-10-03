@@ -94,7 +94,7 @@ if __name__ == '__main__':
     simulator = Simulator(RATE)
     simulator.start()
     sys.stdout.write('Using playback rate of ' + str(RATE) + 'Hz, ');
-    sys.stdout.write('TC host=' + str(TM_SEND_ADDRESS) + ', TM port=' + str(TM_SEND_PORT) + ', ');
+    sys.stdout.write('TM host=' + str(TM_SEND_ADDRESS) + ', TM port=' + str(TM_SEND_PORT) + ', ');
     sys.stdout.write('TC host=' + str(TC_RECEIVE_ADDRESS) + ', TC port=' + str(TC_RECEIVE_PORT) + '\r\n');
     try:
         prev_status = None
