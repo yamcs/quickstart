@@ -4,15 +4,42 @@ import binascii
 import io
 import socket
 import sys
+import argparse
+
 from struct import unpack_from
 from threading import Thread
 from time import sleep
-from argparse import ArgumentParser
+
+parser = argparse.ArgumentParser(description='Yamcs Simulator')
+parser.add_argument('--testdata', type=str, default='testdata.ccsds', help='simulated testdata.ccsds data')
+
+# telemetry
+parser.add_argument('--tm_host',    type=str, default='127.0.0.1', help='TM host')
+parser.add_argument('--tm_port',    type=int, default=10015,       help='TM port')
+parser.add_argument('-r', '--rate', type=int, default=1,           help='TM playback rate. 1 = 1Hz, 10 = 10Hz, etc.')
+
+# telecommand
+parser.add_argument('--tc_host', type=str, default='127.0.0.1', help='TC host')
+parser.add_argument('--tc_port', type=int, default=10025 ,      help='TC port')
+
+args = vars(parser.parse_args())
+
+# test data
+TEST_DATA = args['testdata']
+
+# telemetry
+TM_SEND_ADDRESS = args['tm_host']
+TM_SEND_PORT    = args['tm_port']
+RATE            = args['rate']
+
+# telecommand
+TC_RECEIVE_ADDRESS = args['tc_host']
+TC_RECEIVE_PORT    = args['tc_port']
 
 def send_tm(simulator):
     tm_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    with io.open('testdata.ccsds', 'rb') as f:
+    with io.open(TEST_DATA, 'rb') as f:
         simulator.tm_counter = 1
         header = bytearray(6)
         while f.readinto(header) == 6:
@@ -22,7 +49,7 @@ def send_tm(simulator):
             f.seek(-6, io.SEEK_CUR)
             f.readinto(packet)
 
-            tm_socket.sendto(packet, ('127.0.0.1', 10015))
+            tm_socket.sendto(packet, (TM_SEND_ADDRESS, TM_SEND_PORT))
             simulator.tm_counter += 1
 
             sleep(1 / simulator.rate)
@@ -30,7 +57,7 @@ def send_tm(simulator):
 
 def receive_tc(simulator):
     tc_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    tc_socket.bind(('127.0.0.1', 10025))
+    tc_socket.bind((TC_RECEIVE_ADDRESS, TC_RECEIVE_PORT ))
     while True:
         data, _ = tc_socket.recvfrom(4096)
         simulator.last_tc = data
@@ -64,16 +91,11 @@ class Simulator():
 
 
 if __name__ == '__main__':
-    parser = ArgumentParser()
-    parser.add_argument("-r", "--rate",
-        dest="rate",
-        default=1,
-        type=int,
-        help="Playback rate. 1 = 1Hz, 10 = 10Hz, etc.")
-    args = parser.parse_args()
-    simulator = Simulator(args.rate)
+    simulator = Simulator(RATE)
     simulator.start()
-    sys.stdout.write('Using playback rate of ' + str(args.rate) + 'Hz \r\n');
+    sys.stdout.write('Using playback rate of ' + str(RATE) + 'Hz, ');
+    sys.stdout.write('TM host=' + str(TM_SEND_ADDRESS) + ', TM port=' + str(TM_SEND_PORT) + ', ');
+    sys.stdout.write('TC host=' + str(TC_RECEIVE_ADDRESS) + ', TC port=' + str(TC_RECEIVE_PORT) + '\r\n');
     try:
         prev_status = None
         while True:
