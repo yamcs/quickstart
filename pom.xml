@@ -2,22 +2,26 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.example</groupId>
-  <artifactId>myproject</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <groupId>org.bossy</groupId>
+  <artifactId>bossy</artifactId>
+  <version>1.0.0</version>
+  <packaging>pom</packaging>
 
-  <name>My Project</name>
-  <url>https://example.com</url>
+  <name>BOSSY - Basic Open-source Spacecraft Simulator with Yamcs</name>
+  <description>A realtime spacecraft simulator with 3D visualization capabilities</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <!--
-    Update this to the latest Yamcs release.
-    Check https://mvnrepository.com/artifact/org.yamcs/yamcs-core
-    -->
-    <yamcsVersion>5.10.4</yamcsVersion>
+    <yamcsVersion>5.10.8</yamcsVersion>
+    <jsleVersion>1.1.0</jsleVersion>
+    <pythonVersion>3.9</pythonVersion>
+    <yamcsSleVersion>1.3.4</yamcsSleVersion>
   </properties>
+
+  <modules>
+    <module>MCS</module>
+    <module>GND</module>
+  </modules>
 
   <dependencies>
     <!-- Yamcs core framework -->
@@ -26,11 +30,17 @@
       <artifactId>yamcs-core</artifactId>
       <version>${yamcsVersion}</version>
     </dependency>
-    <!-- Add this dependency to enable the web ui. -->
+    <!-- Yamcs web UI -->
     <dependency>
       <groupId>org.yamcs</groupId>
       <artifactId>yamcs-web</artifactId>
       <version>${yamcsVersion}</version>
+    </dependency>
+    <!-- JSLE for ground station simulation -->
+    <dependency>
+      <groupId>org.yamcs</groupId>
+      <artifactId>jsle</artifactId>
+      <version>${jsleVersion}</version>
     </dependency>
   </dependencies>
 
@@ -44,24 +54,18 @@
           <release>17</release>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>3.12.1</version>
-      </plugin>
+      
+      <!-- Yamcs Maven plugin -->
       <plugin>
         <groupId>org.yamcs</groupId>
         <artifactId>yamcs-maven-plugin</artifactId>
         <version>1.3.5</version>
         <executions>
-          <!-- Detect plugins, if any -->
           <execution>
             <goals>
               <goal>detect</goal>
             </goals>
           </execution>
-          <!-- Tell Maven to bundle Yamcs into a tar.gz file
-               when the 'mvn package' command is run -->
           <execution>
             <id>bundle-yamcs</id>
             <phase>package</phase>
@@ -76,16 +80,41 @@
           </execution>
         </executions>
       </plugin>
+
+      <!-- Plugin for Python integration -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.1</version>
+        <configuration>
+          <executable>python3</executable>
+        </configuration>
+      </plugin>
+
+      <!-- Yamcs Sle plugin -->
+      <plugin>
+        <groupId>org.yamcs</groupId>
+        <artifactId>yamcs-sle-plugin</artifactId>
+        <version>${yamcsSleVersion}</version>
+      </plugin>
     </plugins>
   </build>
 
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>3.4.3</version>
-      </plugin>
-    </plugins>
-  </reporting>
+  <repositories>
+    <repository>
+      <id>central</id>
+      <url>https://repo.maven.apache.org/maven2</url>
+    </repository>
+    <repository>
+      <id>yamcs</id>
+      <name>Yamcs Repository</name>
+      <url>https://www.yamcs.org/maven/</url>
+    </repository>
+    <repository>
+      <id>esa</id>
+      <name>ESA Repository</name>
+      <url>https://artifacts.esa.int/repository/maven-public/</url>
+    </repository>
+  </repositories>
+
 </project>

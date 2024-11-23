@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.bossy</groupId>
+        <artifactId>bossy</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>bossy-mcs</artifactId>
+    <packaging>jar</packaging>
+    <name>BOSSY - Mission Control System</name>
+    <description>Mission Control System using Yamcs</description>
+
+    <dependencies>
+        <!-- Yamcs core dependencies -->
+        <dependency>
+            <groupId>org.yamcs</groupId>
+            <artifactId>yamcs-core</artifactId>
+            <version>${yamcsVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yamcs</groupId>
+            <artifactId>yamcs-web</artifactId>
+            <version>${yamcsVersion}</version>
+        </dependency>
+        <!-- SLE support -->
+        <dependency>
+            <groupId>org.yamcs</groupId>
+            <artifactId>yamcs-sle</artifactId>
+            <version>${yamcsSleVersion}</version>
+        </dependency>
+        <!-- Testing dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>17</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.yamcs</groupId>
+                <artifactId>yamcs-maven-plugin</artifactId>
+                <version>1.3.5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>detect</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>bundle-yamcs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
+                        <configuration>
+                            <formats>
+                                <format>tar.gz</format>
+                            </formats>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
