@@ -2,12 +2,14 @@
 <SpaceSystem name="spacecraft" xmlns="http://www.omg.org/spec/XTCE/20180204" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.omg.org/spec/XTCE/20180204 https://www.omg.org/spec/XTCE/20180204/SpaceSystem.xsd">
 	<TelemetryMetaData>
 		<ParameterTypeSet>
+
+			<!-- CCSDS Types -->
 			<AggregateParameterType name="CCSDS_Packet_ID_Type">
 				<MemberList>
-					<Member name="Version" typeRef="CCSDS_Version_Type" />
-					<Member name="Type" typeRef="CCSDS_Type_Type" />
-					<Member name="SecHdrFlag" typeRef="CCSDS_Sec_Hdr_Flag_Type" />
-					<Member name="APID" typeRef="CCSDS_APID_Type" />
+					<Member name="Version" typeRef="uint3"/>
+					<Member name="Type" typeRef="uint1"/>
+					<Member name="SecHdrFlag" typeRef="uint1"/>
+					<Member name="APID" typeRef="uint11"/>
 				</MemberList>
 			</AggregateParameterType>
 			<IntegerParameterType name="CCSDS_Version_Type" signed="false">
@@ -52,87 +54,283 @@
 				</UnitSet>
 				<IntegerDataEncoding sizeInBits="16" />
 			</IntegerParameterType>
-			<IntegerParameterType name="uint32_t" signed="false">
-				<UnitSet />
+
+			<!-- Generic Types -->
+			<IntegerParameterType name="int8" signed="true">
+				<IntegerDataEncoding sizeInBits="8" />
+			</IntegerParameterType>
+			<IntegerParameterType name="int8_degC" signed="true">
+				<UnitSet>
+					<Unit>degC</Unit>
+				</UnitSet>
+				<IntegerDataEncoding sizeInBits="8" />
+			</IntegerParameterType>
+			<IntegerParameterType name="uint32" signed="false">
 				<IntegerDataEncoding encoding="unsigned" sizeInBits="32" />
 			</IntegerParameterType>
-			<FloatParameterType name="float_t">
-				<UnitSet />
+			<IntegerParameterType name="uint32_bits" signed="false">
+				<UnitSet>
+					<Unit>bits</Unit>
+				</UnitSet>
+				<IntegerDataEncoding encoding="unsigned" sizeInBits="32" />
+			</IntegerParameterType>
+			<IntegerParameterType name="uint32_bps" signed="false">
+				<UnitSet>
+					<Unit>bps</Unit>
+				</UnitSet>
+				<IntegerDataEncoding encoding="unsigned" sizeInBits="32" />
+			</IntegerParameterType>
+			<FloatParameterType name="float">
 				<FloatDataEncoding sizeInBits="32" />
 			</FloatParameterType>
-			<BooleanParameterType name="bool_t">
-				<UnitSet />
+			<FloatParameterType name="float_W">
+				<UnitSet>
+					<Unit>W</Unit>
+				</UnitSet>
+				<FloatDataEncoding sizeInBits="32" />
+			</FloatParameterType>
+			<FloatParameterType name="float_V">
+				<UnitSet>
+					<Unit>V</Unit>
+				</UnitSet>
+				<FloatDataEncoding sizeInBits="32" />
+			</FloatParameterType>
+			<FloatParameterType name="float_A">
+				<UnitSet>
+					<Unit>A</Unit>
+				</UnitSet>
+				<FloatDataEncoding sizeInBits="32" />
+			</FloatParameterType>
+			<FloatParameterType name="float_percent">
+				<UnitSet>
+					<Unit>%</Unit>
+				</UnitSet>
+				<FloatDataEncoding sizeInBits="32" />
+			</FloatParameterType>
+			<FloatParameterType name="float_deg_s">
+				<UnitSet>
+					<Unit>deg/s</Unit>	
+				</UnitSet>
+				<FloatDataEncoding sizeInBits="32" />
+			</FloatParameterType>
+			<FloatParameterType name="float_deg">
+				<UnitSet>
+					<Unit>deg</Unit>	
+				</UnitSet>
+				<FloatDataEncoding sizeInBits="32" />
+			</FloatParameterType>
+			<FloatParameterType name="float_km">
+				<UnitSet>
+					<Unit>km</Unit>	
+				</UnitSet>
+				<FloatDataEncoding sizeInBits="32" />
+			</FloatParameterType>
+			<FloatParameterType name="float_MB">
+				<UnitSet>
+					<Unit>MB</Unit>	
+				</UnitSet>
+				<FloatDataEncoding sizeInBits="32" />
+			</FloatParameterType>	
+			<BooleanParameterType name="bool">
 				<IntegerDataEncoding sizeInBits="8" />
 			</BooleanParameterType>
-			<AggregateParameterType name="vec3_t">
-				<MemberList>
-					<Member name="x" typeRef="float_t" />
-					<Member name="y" typeRef="float_t" />
-					<Member name="z" typeRef="float_t" />
-				</MemberList>
-			</AggregateParameterType>
-			<EnumeratedParameterType name="EnumerationTest">
-				<UnitSet />
-				<IntegerDataEncoding sizeInBits="3" />
+
+			<!-- Spacecraft Telemetry Types -->
+
+			<!-- Telemetry Mode Type -->	
+			<EnumeratedParameterType name="TelemetryMode_Type">
+				<IntegerDataEncoding sizeInBits="8"/>
 				<EnumerationList>
-					<Enumeration value="0" label="ENUM_VALUE_0" />
-					<Enumeration value="1" label="ENUM_VALUE_1" />
-					<Enumeration value="2" label="ENUM_VALUE_2" />
-					<Enumeration value="3" label="ENUM_VALUE_3" />
-					<Enumeration value="4" label="ENUM_VALUE_4" />
-					<Enumeration value="5" label="ENUM_VALUE_5" />
-					<Enumeration value="6" label="ENUM_VALUE_6" />
-					<Enumeration value="7" label="ENUM_VALUE_7" />
+					<Enumeration label="MIN" value="0"/>
+					<Enumeration label="NOM" value="1"/>
+					<Enumeration label="MAX" value="2"/>
 				</EnumerationList>
 			</EnumeratedParameterType>
+
+			<!-- Subsystem State Type -->	
+			<EnumeratedParameterType name="SubsystemState_Type">
+				<IntegerDataEncoding sizeInBits="8"/>
+				<EnumerationList>
+					<Enumeration label="OFF" value="0"/>
+					<Enumeration label="IDLE" value="1"/>
+					<Enumeration label="ACTIVE" value="2"/>
+					<Enumeration label="ERROR" value="3"/>
+				</EnumerationList>
+			</EnumeratedParameterType>
+
+			<!-- ADCS Mode -->	
+			<EnumeratedParameterType name="ADCSMode_Type">
+				<IntegerDataEncoding sizeInBits="8"/>
+				<EnumerationList>
+					<Enumeration label="OFF" value="0"/>
+					<Enumeration label="LOCK" value="1"/>
+					<Enumeration label="SUNPOINTING" value="2"/>
+					<Enumeration label="NADIR" value="3"/>
+					<Enumeration label="DOWNLOAD" value="4"/>
+				</EnumerationList>
+			</EnumeratedParameterType>	
+
+			<!-- ADCS Status Type -->	
+			<EnumeratedParameterType name="ADCSStatus_Type">
+				<IntegerDataEncoding sizeInBits="8"/>
+				<EnumerationList>
+					<Enumeration label="UNCONTROLLED" value="0"/>
+					<Enumeration label="SLEWING" value="1"/>
+					<Enumeration label="POINTING" value="2"/>
+				</EnumerationList>
+			</EnumeratedParameterType>
+
+			<!-- Communications Mode Type -->	
+			<EnumeratedParameterType name="CommsMode_Type">
+				<IntegerDataEncoding sizeInBits="8"/>
+				<EnumerationList>
+					<Enumeration label="OFF" value="0"/>
+					<Enumeration label="RX" value="1"/>
+					<Enumeration label="TXRX" value="2"/>
+				</EnumerationList>
+			</EnumeratedParameterType>
+
+			<!-- OBC Mode Type -->	
+			<EnumeratedParameterType name="OBCMode_Type">
+				<IntegerDataEncoding sizeInBits="8"/>
+				<EnumerationList>
+					<Enumeration label="SAFE" value="0"/>
+					<Enumeration label="NOMINAL" value="1"/>
+					<Enumeration label="PAYLOAD" value="2"/>
+				</EnumerationList>
+			</EnumeratedParameterType>
+
+			<!-- Payload Status Type -->	
+			<EnumeratedParameterType name="PayloadStatus_Type">
+				<IntegerDataEncoding sizeInBits="8"/>
+				<EnumerationList>
+					<Enumeration label="READY" value="0"/>
+					<Enumeration label="BUSY" value="1"/>
+				</EnumerationList>
+			</EnumeratedParameterType>	
+
+			<!-- Generic State -->	
+			<EnumeratedParameterType name="GenericState_Type">
+				<IntegerDataEncoding sizeInBits="8"/>
+				<EnumerationList>
+					<Enumeration label="OFF" value="0"/>
+					<Enumeration label="ON" value="1"/>
+				</EnumerationList>
+			</EnumeratedParameterType>
+
+			<!-- Eclipse Type -->
+			<EnumeratedParameterType name="Eclipse_Type">
+				<IntegerDataEncoding sizeInBits="8" />
+				<EnumerationList>
+					<Enumeration label="DAY" value="0"/>
+					<Enumeration label="NIGHT" value="1"/>
+				</EnumerationList>
+			</EnumeratedParameterType>
+
+			<!-- Power Balance Type -->
+			<EnumeratedParameterType name="PowerBalance_Type">	
+				<IntegerDataEncoding sizeInBits="8"/>
+				<EnumerationList>
+					<Enumeration label="BALANCED" value="0"/>
+					<Enumeration label="POSITIVE" value="1"/>
+					<Enumeration label="NEGATIVE" value="2"/>
+				</EnumerationList>
+			</EnumeratedParameterType>
+
+			<!-- Basic Integer Types -->
+			<IntegerParameterType name="uint1" signed="false">
+				<UnitSet/>
+				<IntegerDataEncoding sizeInBits="1"/>
+			</IntegerParameterType>
+			
+			<IntegerParameterType name="uint3" signed="false">
+				<UnitSet/>
+				<IntegerDataEncoding sizeInBits="3"/>
+			</IntegerParameterType>
+
+			<IntegerParameterType name="uint11" signed="false">
+				<UnitSet/>
+				<IntegerDataEncoding sizeInBits="11"/>
+			</IntegerParameterType>
+
 		</ParameterTypeSet>
+
 		<ParameterSet>
+			<!-- CCSDS Header Parameters -->
 			<Parameter name="CCSDS_Packet_ID" parameterTypeRef="CCSDS_Packet_ID_Type" />
 			<Parameter name="CCSDS_Packet_Sequence" parameterTypeRef="CCSDS_Packet_Sequence_Type" />
 			<Parameter name="CCSDS_Packet_Length" parameterTypeRef="CCSDS_Packet_Length_Type" />
-			<Parameter name="EpochUSNO" parameterTypeRef="float_t" />
-			<Parameter name="OrbitNumberCumulative" parameterTypeRef="uint32_t" />
-			<Parameter name="ElapsedSeconds" parameterTypeRef="uint32_t" />
-			<Parameter name="A" parameterTypeRef="float_t" />
-			<Parameter name="Height" parameterTypeRef="float_t" />
-			<Parameter name="Position" parameterTypeRef="vec3_t" />
-			<Parameter name="Velocity" parameterTypeRef="vec3_t" />
-			<Parameter name="Latitude" parameterTypeRef="float_t" />
-			<Parameter name="Longitude" parameterTypeRef="float_t" />
-			<Parameter name="Battery1_Voltage" parameterTypeRef="float_t" />
-			<Parameter name="Battery2_Voltage" parameterTypeRef="float_t" />
-			<Parameter name="Battery1_Temp" parameterTypeRef="float_t" />
-			<Parameter name="Battery2_Temp" parameterTypeRef="float_t" />
-			<Parameter name="Magnetometer" parameterTypeRef="vec3_t" />
-			<Parameter name="Sunsensor" parameterTypeRef="float_t" />
-			<Parameter name="Sunsensor_Beta" parameterTypeRef="float_t">
-				<ParameterProperties dataSource="derived" />
-			</Parameter>
-			<Parameter name="Gyro" parameterTypeRef="vec3_t" />
-			<Parameter name="Detector_Temp" parameterTypeRef="float_t" />
-			<Parameter name="Shadow" parameterTypeRef="bool_t" />
-			<Parameter name="Contact_Golbasi_GS" parameterTypeRef="bool_t" />
-			<Parameter name="Contact_Svalbard" parameterTypeRef="bool_t" />
-			<Parameter name="Payload_Status" parameterTypeRef="bool_t" />
-			<Parameter name="Payload_Error_Flag" parameterTypeRef="bool_t" />
-			<Parameter name="ADCS_Error_Flag" parameterTypeRef="bool_t" />
-			<Parameter name="CDHS_Error_Flag" parameterTypeRef="bool_t" />
-			<Parameter name="COMMS_Error_Flag" parameterTypeRef="bool_t" />
-			<Parameter name="EPS_Error_Flag" parameterTypeRef="bool_t" />
-			<Parameter name="COMMS_Status" parameterTypeRef="bool_t" />
-			<Parameter name="CDHS_Status" parameterTypeRef="bool_t" />
-			<Parameter name="Mode_Night" parameterTypeRef="bool_t" />
-			<Parameter name="Mode_Day" parameterTypeRef="bool_t" />
-			<Parameter name="Mode_Payload" parameterTypeRef="bool_t" />
-			<Parameter name="Mode_XBand" parameterTypeRef="bool_t" />
-			<Parameter name="Mode_SBand" parameterTypeRef="bool_t" />
-			<Parameter name="Mode_Safe" parameterTypeRef="bool_t" />
 
-			<Parameter name="Enum_Para_1" parameterTypeRef="EnumerationTest" />
-			<Parameter name="Enum_Para_2" parameterTypeRef="EnumerationTest" />
-			<Parameter name="Enum_Para_3" parameterTypeRef="EnumerationTest" />
-		</ParameterSet>
-		<ContainerSet>
+            <!-- OBC Parameters --> 	
+            <Parameter name="OBC_state" parameterTypeRef="SubsystemState_Type"/>
+            <Parameter name="OBC_temperature" parameterTypeRef="int8_degC"/>
+            <Parameter name="OBC_heater_setpoint" parameterTypeRef="int8_degC"/>
+            <Parameter name="OBC_power_draw" parameterTypeRef="float_W"/>
+            <Parameter name="OBC_mode" parameterTypeRef="OBCMode_Type"/>
+
+            <!-- Power Parameters -->
+            <Parameter name="POWER_state" parameterTypeRef="SubsystemState_Type"/>
+            <Parameter name="POWER_temperature" parameterTypeRef="int8_degC"/>
+            <Parameter name="POWER_heater_setpoint" parameterTypeRef="int8_degC"/>
+            <Parameter name="POWER_power_draw" parameterTypeRef="float_W"/>
+            <Parameter name="POWER_battery_voltage" parameterTypeRef="float_V"/>
+            <Parameter name="POWER_battery_current" parameterTypeRef="float_A"/>
+            <Parameter name="POWER_battery_charge" parameterTypeRef="float_percent"/>
+			<Parameter name="POWER_total_power_balance" parameterTypeRef="PowerBalance_Type"/>
+			<Parameter name="POWER_solar_total_generation" parameterTypeRef="float_W"/>
+            <Parameter name="POWER_solar_panel_generation_pX" parameterTypeRef="float_W"/>
+            <Parameter name="POWER_solar_panel_generation_nX" parameterTypeRef="float_W"/>
+			<Parameter name="POWER_solar_panel_generation_pY" parameterTypeRef="float_W"/>
+			<Parameter name="POWER_solar_panel_generation_nY" parameterTypeRef="float_W"/>
+			
+            <!-- ADCS Parameters -->
+            <Parameter name="ADCS_state" parameterTypeRef="SubsystemState_Type"/>
+            <Parameter name="ADCS_temperature" parameterTypeRef="int8_degC"/>
+            <Parameter name="ADCS_heater_setpoint" parameterTypeRef="int8_degC"/>
+            <Parameter name="ADCS_power_draw" parameterTypeRef="float_W"/>
+            <Parameter name="ADCS_mode" parameterTypeRef="ADCSMode_Type"/>
+            <Parameter name="ADCS_status" parameterTypeRef="ADCSStatus_Type"/>
+            <Parameter name="ADCS_quaternion_q1" parameterTypeRef="float"/>
+            <Parameter name="ADCS_quaternion_q2" parameterTypeRef="float"/>
+            <Parameter name="ADCS_quaternion_q3" parameterTypeRef="float"/>
+            <Parameter name="ADCS_quaternion_q4" parameterTypeRef="float"/>
+            <Parameter name="ADCS_angular_velocity_x" parameterTypeRef="float_deg_s"/>	
+            <Parameter name="ADCS_angular_velocity_y" parameterTypeRef="float_deg_s"/>	
+            <Parameter name="ADCS_angular_velocity_z" parameterTypeRef="float_deg_s"/>	
+			<Parameter name="ADCS_earth_latitude" parameterTypeRef="float_deg"/>
+			<Parameter name="ADCS_earth_longitude" parameterTypeRef="float_deg"/>	
+			<Parameter name="ADCS_earth_altitude" parameterTypeRef="float_km"/>	
+			<Parameter name="ADCS_eclipse" parameterTypeRef="Eclipse_Type"/>
+
+            <!-- Communications Parameters -->
+            <Parameter name="COMMS_state" parameterTypeRef="SubsystemState_Type"/>
+            <Parameter name="COMMS_temperature" parameterTypeRef="int8_degC"/>
+            <Parameter name="COMMS_heater_setpoint" parameterTypeRef="int8_degC"/>
+            <Parameter name="COMMS_power_draw" parameterTypeRef="float_W"/>
+            <Parameter name="COMMS_mode" parameterTypeRef="CommsMode_Type"/>
+            <Parameter name="COMMS_tm_queue_size" parameterTypeRef="uint32_bits"/>
+            <Parameter name="COMMS_tc_queue_size" parameterTypeRef="uint32_bits"/>
+            <Parameter name="COMMS_tm_bitrate" parameterTypeRef="uint32_bps"/>
+            <Parameter name="COMMS_tc_bitrate" parameterTypeRef="uint32_bps"/>
+
+            <!-- Payload Parameters -->
+            <Parameter name="PAYLOAD_state" parameterTypeRef="SubsystemState_Type"/>
+            <Parameter name="PAYLOAD_temperature" parameterTypeRef="int8_degC"/>
+            <Parameter name="PAYLOAD_heater_setpoint" parameterTypeRef="int8_degC"/>
+            <Parameter name="PAYLOAD_power_draw" parameterTypeRef="float_W"/>
+            <Parameter name="PAYLOAD_status" parameterTypeRef="PayloadStatus_Type"/>
+
+            <!-- Datastore Parameters -->
+            <Parameter name="DATASTORE_state" parameterTypeRef="SubsystemState_Type"/>
+            <Parameter name="DATASTORE_temperature" parameterTypeRef="int8_degC"/>
+            <Parameter name="DATASTORE_heater_setpoint" parameterTypeRef="int8_degC"/>
+            <Parameter name="DATASTORE_power_draw" parameterTypeRef="float_W"/>
+            <Parameter name="DATASTORE_storage_remaining" parameterTypeRef="float_MB"/>
+            <Parameter name="DATASTORE_number_of_files" parameterTypeRef="uint32"/>
+        </ParameterSet>
+
+        <ContainerSet>
+			<!-- Base CCSDS Packet Container --> 	
 			<SequenceContainer abstract="true" name="CCSDSPacket">
 				<EntryList>
 					<ParameterRefEntry parameterRef="CCSDS_Packet_ID" />
@@ -140,95 +338,91 @@
 					<ParameterRefEntry parameterRef="CCSDS_Packet_Length" />
 				</EntryList>
 			</SequenceContainer>
+
+			<!-- Base Telemetry Packet --> 
 			<SequenceContainer name="TelemetryPacket">
 				<EntryList />
 				<BaseContainer containerRef="CCSDSPacket">
 					<RestrictionCriteria>
 						<ComparisonList>
 							<Comparison value="0" parameterRef="CCSDS_Packet_ID/Version" />
-							<Comparison value="TM" parameterRef="CCSDS_Packet_ID/Type" />
+							<Comparison value="0" parameterRef="CCSDS_Packet_ID/Type" />
 						</ComparisonList>
 					</RestrictionCriteria>
 				</BaseContainer>
 			</SequenceContainer>
-			<SequenceContainer name="Spacecraft">
-				<EntryList>
-					<ParameterRefEntry parameterRef="EpochUSNO" />
-					<ParameterRefEntry parameterRef="OrbitNumberCumulative" />
-					<ParameterRefEntry parameterRef="ElapsedSeconds" />
-					<ParameterRefEntry parameterRef="A" />
-					<ParameterRefEntry parameterRef="Height" />
-					<ParameterRefEntry parameterRef="Position" />
-					<ParameterRefEntry parameterRef="Velocity" />
-					<ParameterRefEntry parameterRef="Latitude" />
-					<ParameterRefEntry parameterRef="Longitude" />
-					<ParameterRefEntry parameterRef="Battery1_Voltage" />
-					<ParameterRefEntry parameterRef="Battery2_Voltage" />
-					<ParameterRefEntry parameterRef="Battery1_Temp" />
-					<ParameterRefEntry parameterRef="Battery2_Temp" />
-					<ParameterRefEntry parameterRef="Magnetometer" />
-					<ParameterRefEntry parameterRef="Sunsensor" />
-					<ParameterRefEntry parameterRef="Gyro" />
-					<ParameterRefEntry parameterRef="Detector_Temp" />
-					<ParameterRefEntry parameterRef="Shadow" />
-					<ParameterRefEntry parameterRef="Contact_Golbasi_GS" />
-					<ParameterRefEntry parameterRef="Contact_Svalbard" />
-					<ParameterRefEntry parameterRef="Payload_Status" />
-					<ParameterRefEntry parameterRef="Payload_Error_Flag" />
-					<ParameterRefEntry parameterRef="ADCS_Error_Flag" />
-					<ParameterRefEntry parameterRef="CDHS_Error_Flag" />
-					<ParameterRefEntry parameterRef="COMMS_Error_Flag" />
-					<ParameterRefEntry parameterRef="EPS_Error_Flag" />
-					<ParameterRefEntry parameterRef="COMMS_Status" />
-					<ParameterRefEntry parameterRef="CDHS_Status" />
-					<ParameterRefEntry parameterRef="Mode_Night" />
-					<ParameterRefEntry parameterRef="Mode_Day" />
-					<ParameterRefEntry parameterRef="Mode_Payload" />
-					<ParameterRefEntry parameterRef="Mode_XBand" />
-					<ParameterRefEntry parameterRef="Mode_SBand" />
-					<ParameterRefEntry parameterRef="Mode_Safe" />
-					<ParameterRefEntry parameterRef="Enum_Para_1">
-						<LocationInContainerInBits referenceLocation="containerStart">
-							<FixedValue>29</FixedValue>
-						</LocationInContainerInBits>
-					</ParameterRefEntry>
-					<ParameterRefEntry parameterRef="Enum_Para_2">
-						<LocationInContainerInBits referenceLocation="containerStart">
-							<FixedValue>27</FixedValue>
-						</LocationInContainerInBits>
-					</ParameterRefEntry>
-					<ParameterRefEntry parameterRef="Enum_Para_3">
-						<LocationInContainerInBits referenceLocation="containerStart">
-							<FixedValue>25</FixedValue>
-						</LocationInContainerInBits>
-					</ParameterRefEntry>
+
+			<SequenceContainer name="Housekeeping">
+				<EntryList> 
+					<ParameterRefEntry parameterRef="OBC_state"/>
+					<ParameterRefEntry parameterRef="OBC_temperature"/>
+					<ParameterRefEntry parameterRef="OBC_heater_setpoint"/>
+					<ParameterRefEntry parameterRef="OBC_power_draw"/>
+					<ParameterRefEntry parameterRef="OBC_mode"/>	
+					<ParameterRefEntry parameterRef="POWER_state"/>
+					<ParameterRefEntry parameterRef="POWER_temperature"/>
+					<ParameterRefEntry parameterRef="POWER_heater_setpoint"/>
+					<ParameterRefEntry parameterRef="POWER_power_draw"/>
+					<ParameterRefEntry parameterRef="POWER_battery_voltage"/>
+					<ParameterRefEntry parameterRef="POWER_battery_current"/>
+					<ParameterRefEntry parameterRef="POWER_battery_charge"/>
+					<ParameterRefEntry parameterRef="POWER_total_power_balance"/>
+					<ParameterRefEntry parameterRef="POWER_solar_total_generation"/>
+					<ParameterRefEntry parameterRef="POWER_solar_panel_generation_pX"/>
+					<ParameterRefEntry parameterRef="POWER_solar_panel_generation_nX"/>
+					<ParameterRefEntry parameterRef="POWER_solar_panel_generation_pY"/>
+					<ParameterRefEntry parameterRef="POWER_solar_panel_generation_nY"/>
+					<ParameterRefEntry parameterRef="ADCS_state"/>
+					<ParameterRefEntry parameterRef="ADCS_temperature"/>
+					<ParameterRefEntry parameterRef="ADCS_heater_setpoint"/>
+					<ParameterRefEntry parameterRef="ADCS_power_draw"/>
+					<ParameterRefEntry parameterRef="ADCS_mode"/>
+					<ParameterRefEntry parameterRef="ADCS_status"/>
+					<ParameterRefEntry parameterRef="ADCS_quaternion_q1"/>
+					<ParameterRefEntry parameterRef="ADCS_quaternion_q2"/>
+					<ParameterRefEntry parameterRef="ADCS_quaternion_q3"/>
+					<ParameterRefEntry parameterRef="ADCS_quaternion_q4"/>
+					<ParameterRefEntry parameterRef="ADCS_angular_velocity_x"/>
+					<ParameterRefEntry parameterRef="ADCS_angular_velocity_y"/>
+					<ParameterRefEntry parameterRef="ADCS_angular_velocity_z"/>
+					<ParameterRefEntry parameterRef="ADCS_earth_latitude"/>
+					<ParameterRefEntry parameterRef="ADCS_earth_longitude"/>
+					<ParameterRefEntry parameterRef="ADCS_earth_altitude"/>
+					<ParameterRefEntry parameterRef="ADCS_eclipse"/>
+					<ParameterRefEntry parameterRef="COMMS_state"/>
+					<ParameterRefEntry parameterRef="COMMS_temperature"/>
+					<ParameterRefEntry parameterRef="COMMS_heater_setpoint"/>
+					<ParameterRefEntry parameterRef="COMMS_power_draw"/>
+					<ParameterRefEntry parameterRef="COMMS_mode"/>
+					<ParameterRefEntry parameterRef="COMMS_tm_queue_size"/>
+					<ParameterRefEntry parameterRef="COMMS_tc_queue_size"/>
+					<ParameterRefEntry parameterRef="COMMS_tm_bitrate"/>
+					<ParameterRefEntry parameterRef="COMMS_tc_bitrate"/>
+					<ParameterRefEntry parameterRef="PAYLOAD_state"/>
+					<ParameterRefEntry parameterRef="PAYLOAD_temperature"/>
+					<ParameterRefEntry parameterRef="PAYLOAD_heater_setpoint"/>
+					<ParameterRefEntry parameterRef="PAYLOAD_power_draw"/>
+					<ParameterRefEntry parameterRef="PAYLOAD_status"/>
+					<ParameterRefEntry parameterRef="DATASTORE_state"/>
+					<ParameterRefEntry parameterRef="DATASTORE_temperature"/>
+					<ParameterRefEntry parameterRef="DATASTORE_heater_setpoint"/>
+					<ParameterRefEntry parameterRef="DATASTORE_power_draw"/>
+					<ParameterRefEntry parameterRef="DATASTORE_storage_remaining"/>
+					<ParameterRefEntry parameterRef="DATASTORE_number_of_files"/>
 				</EntryList>
 				<BaseContainer containerRef="TelemetryPacket">
 					<RestrictionCriteria>
 						<ComparisonList>
-							<Comparison value="NotPresent" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="0" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
 							<Comparison value="100" parameterRef="CCSDS_Packet_ID/APID" />
 						</ComparisonList>
 					</RestrictionCriteria>
 				</BaseContainer>
 			</SequenceContainer>
-		</ContainerSet>
-		<AlgorithmSet>
-			<CustomAlgorithm name="copySunsensor">
-				<AlgorithmText language="java-expression">out0.setFloatValue(in.getEngValue().getFloatValue());</AlgorithmText>
-				<InputSet>
-					<InputParameterInstanceRef parameterRef="Sunsensor" inputName="in"/>
-				</InputSet>
-				<OutputSet>
-					<OutputParameterRef parameterRef="Sunsensor_Beta" outputName="out0"/>
-				</OutputSet>
-				<TriggerSet>
-					<OnParameterUpdateTrigger parameterRef="Sunsensor"/>
-				</TriggerSet>
-			</CustomAlgorithm>
-		</AlgorithmSet>
+        </ContainerSet>
 	</TelemetryMetaData>
-	<CommandMetaData>
+
+    <CommandMetaData>
 		<ArgumentTypeSet>
 			<IntegerArgumentType name="CCSDS_Version_Type" signed="false">
 				<UnitSet />
@@ -256,19 +450,78 @@
 					<Enumeration value="3" label="Standalone" />
 				</EnumerationList>
 			</EnumeratedArgumentType>
-			<IntegerArgumentType name="Packet_ID_Type" signed="false">
+			<IntegerArgumentType name="Command_ID_Type" signed="false">
 				<UnitSet />
 				<IntegerDataEncoding sizeInBits="16" />
 			</IntegerArgumentType>
-			<IntegerArgumentType name="Battery_Type" signed="false">
-				<UnitSet />
-				<IntegerDataEncoding encoding="unsigned" sizeInBits="16" />
-				<ValidRangeSet>
-					<ValidRange minInclusive="1" maxInclusive="3" />
-				</ValidRangeSet>
-			</IntegerArgumentType>
-		</ArgumentTypeSet>
-		<MetaCommandSet>
+		
+            <EnumeratedArgumentType name="state">
+                <IntegerDataEncoding sizeInBits="8"/>
+                <EnumerationList>
+                    <Enumeration label="OFF" value="0"/>
+                    <Enumeration label="IDLE" value="1"/>
+                    <Enumeration label="ACTIVE" value="2"/>
+                </EnumerationList>
+            </EnumeratedArgumentType>
+
+			<EnumeratedArgumentType name="heater">
+				<IntegerDataEncoding sizeInBits="8"/>
+				<EnumerationList>
+					<Enumeration label="OFF" value="0"/>
+					<Enumeration label="ON" value="1"/>
+				</EnumerationList>
+			</EnumeratedArgumentType>
+
+            <FloatArgumentType name="setpoint" sizeInBits="32">
+                <UnitSet>
+                    <Unit>degC</Unit>
+                </UnitSet>
+            </FloatArgumentType>
+
+			<EnumeratedArgumentType name="obc_mode">
+				<IntegerDataEncoding sizeInBits="8"/>
+				<EnumerationList>
+					<Enumeration label="SAFE" value="0"/>
+					<Enumeration label="NOMINAL" value="1"/>
+					<Enumeration label="PAYLOAD" value="2"/>
+				</EnumerationList>
+			</EnumeratedArgumentType>
+
+			<EnumeratedArgumentType name="adcs_mode">
+				<IntegerDataEncoding sizeInBits="8"/>
+				<EnumerationList>
+					<Enumeration label="OFF" value="0"/>
+					<Enumeration label="LOCKED" value="1"/>
+					<Enumeration label="SUNPOINTING" value="2"/>
+					<Enumeration label="NADIR" value="3"/>
+					<Enumeration label="DOWNLOAD" value="4"/>
+				</EnumerationList>
+			</EnumeratedArgumentType>
+
+			<EnumeratedArgumentType name="comms_mode">
+				<IntegerDataEncoding sizeInBits="8"/>
+				<EnumerationList>
+					<Enumeration label="OFF" value="0"/>
+					<Enumeration label="RX" value="1"/>
+					<Enumeration label="TXRX" value="2"/>
+				</EnumerationList>
+			</EnumeratedArgumentType>	
+
+			<FloatArgumentType name="quaternion" sizeInBits="32"/>
+
+			<IntegerArgumentType name="bitrate" signed="false">
+				<UnitSet>
+					<Unit>bps</Unit>
+				</UnitSet>
+				<IntegerDataEncoding sizeInBits="32"/>
+			</IntegerArgumentType>	
+
+            <StringArgumentType name="filename" sizeInBits="64"/>
+
+        </ArgumentTypeSet>
+
+        <MetaCommandSet>
+			<!-- CCSDS Packet -->
 			<MetaCommand name="CCSDSPacket" abstract="true">
 				<ArgumentList>
 					<Argument argumentTypeRef="CCSDS_Version_Type" name="CCSDS_Version" />
@@ -291,7 +544,8 @@
 					</EntryList>
 				</CommandContainer>
 			</MetaCommand>
-			<MetaCommand name="SpacecraftPacket" abstract="true">
+			<!-- Command Packet -->
+			<MetaCommand name="CommandPacket" abstract="true">
 				<BaseMetaCommand metaCommandRef="CCSDSPacket">
 					<ArgumentAssignmentList>
 						<ArgumentAssignment argumentName="CCSDS_Version" argumentValue="0" />
@@ -302,59 +556,482 @@
 					</ArgumentAssignmentList>
 				</BaseMetaCommand>
 				<ArgumentList>
-					<Argument argumentTypeRef="Packet_ID_Type" name="Packet_ID" />
+					<Argument argumentTypeRef="Command_ID_Type" name="Command_ID" />
 				</ArgumentList>
-				<CommandContainer name="SpacecraftPacket">
+				<CommandContainer name="CommandPacket">
 					<EntryList>
-						<ArgumentRefEntry argumentRef="Packet_ID" />
+						<ArgumentRefEntry argumentRef="Command_ID" />
 					</EntryList>
 					<BaseContainer containerRef="CCSDSPacket" />
 				</CommandContainer>
 			</MetaCommand>
-			<MetaCommand name="Reboot">
-				<BaseMetaCommand metaCommandRef="SpacecraftPacket">
+
+			<!-- OBC Commands -->	
+			<MetaCommand name="OBC_SET_STATE" shortDescription="Sets the OBC state">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
 					<ArgumentAssignmentList>
-						<ArgumentAssignment argumentName="Packet_ID" argumentValue="1" />
-					</ArgumentAssignmentList>
-				</BaseMetaCommand>
-				<CommandContainer name="Reboot">
-					<EntryList />
-					<BaseContainer containerRef="SpacecraftPacket" />
-				</CommandContainer>
-				<DefaultSignificance consequenceLevel="vital" />
-			</MetaCommand>
-			<MetaCommand name="SwitchVoltageOn" shortDescription="Switches a battery on">
-				<BaseMetaCommand metaCommandRef="SpacecraftPacket">
-					<ArgumentAssignmentList>
-						<ArgumentAssignment argumentName="Packet_ID" argumentValue="2" />
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="10" />
 					</ArgumentAssignmentList>
 				</BaseMetaCommand>
 				<ArgumentList>
-					<Argument argumentTypeRef="Battery_Type" name="Battery" shortDescription="Number of the battery" />
+					<Argument argumentTypeRef="state" name="state" shortDescription="Desired OBC state" />
 				</ArgumentList>
-				<CommandContainer name="SwitchVoltageOn">
+				<CommandContainer name="OBC_SET_STATE">
 					<EntryList>
-						<ArgumentRefEntry argumentRef="Battery" />
+						<ArgumentRefEntry argumentRef="state" />
 					</EntryList>
-					<BaseContainer containerRef="SpacecraftPacket" />
+					<BaseContainer containerRef="CommandPacket" />
 				</CommandContainer>
 			</MetaCommand>
-			<MetaCommand name="SwitchVoltageOff" shortDescription="Switches a battery off">
-				<BaseMetaCommand metaCommandRef="SpacecraftPacket">
+			<MetaCommand name="OBC_SET_HEATER" shortDescription="Sets the OBC heater ON/OFF">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
 					<ArgumentAssignmentList>
-						<ArgumentAssignment argumentName="Packet_ID" argumentValue="3" />
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="11" />
 					</ArgumentAssignmentList>
-				</BaseMetaCommand>
+				</BaseMetaCommand>	
 				<ArgumentList>
-					<Argument argumentTypeRef="Battery_Type" name="Battery" shortDescription="Number of the battery" />
-				</ArgumentList>
-				<CommandContainer name="SwitchVoltageOff">
+					<Argument argumentTypeRef="heater" name="heater" shortDescription="Desired heater state" />
+				</ArgumentList>	
+				<CommandContainer name="OBC_SET_HEATER">
 					<EntryList>
-						<ArgumentRefEntry argumentRef="Battery" />
+						<ArgumentRefEntry argumentRef="heater" />
 					</EntryList>
-					<BaseContainer containerRef="SpacecraftPacket" />
+					<BaseContainer containerRef="CommandPacket" />
 				</CommandContainer>
 			</MetaCommand>
+			<MetaCommand name="OBC_SET_HEATER_SETPOINT" shortDescription="Sets the OBC heater setpoint">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="12" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>	
+				<ArgumentList>
+					<Argument argumentTypeRef="setpoint" name="setpoint" shortDescription="Desired heater setpoint" />
+				</ArgumentList>	
+				<CommandContainer name="OBC_SET_HEATER_SETPOINT">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="setpoint" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>	
+			</MetaCommand>
+			<MetaCommand name="OBC_SET_MODE" shortDescription="Sets the OBC mode">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="13" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>	
+				<ArgumentList>
+					<Argument argumentTypeRef="obc_mode" name="mode" shortDescription="Desired OBC mode" />
+				</ArgumentList>	
+				<CommandContainer name="OBC_SET_MODE">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="mode" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>	
+			</MetaCommand> 	
+			<MetaCommand name="OBC_RESET" shortDescription="Resets the OBC">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="14" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand> 
+			</MetaCommand>	
+
+			<!-- POWER Commands -->
+			<MetaCommand name="POWER_SET_STATE" shortDescription="Sets the POWER state">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="20" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand> 
+				<ArgumentList>
+					<Argument argumentTypeRef="state" name="state" shortDescription="Desired POWER state" />
+				</ArgumentList>
+				<CommandContainer name="POWER_SET_STATE">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="state" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>
+			</MetaCommand>	
+			<MetaCommand name="POWER_SET_HEATER" shortDescription="Sets the POWER heater ON/OFF">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="21" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand> 
+				<ArgumentList>
+					<Argument argumentTypeRef="heater" name="heater" shortDescription="Desired heater state" />
+				</ArgumentList>	
+				<CommandContainer name="POWER_SET_HEATER">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="heater" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>	
+			</MetaCommand>	
+			<MetaCommand name="POWER_SET_HEATER_SETPOINT" shortDescription="Sets the POWER heater setpoint">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="22" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand> 
+				<ArgumentList>
+					<Argument argumentTypeRef="setpoint" name="setpoint" shortDescription="Desired heater setpoint" />
+				</ArgumentList>	
+				<CommandContainer name="POWER_SET_HEATER_SETPOINT">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="setpoint" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>	
+			</MetaCommand>			
+
+			<!-- ADCS Commands -->
+			<MetaCommand name="ADCS_SET_STATE" shortDescription="Sets the ADCS state">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="30" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand> 
+				<ArgumentList>
+					<Argument argumentTypeRef="state" name="state" shortDescription="Desired ADCS state" />
+				</ArgumentList>
+				<CommandContainer name="ADCS_SET_STATE">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="state" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>	
+			</MetaCommand>		
+			<MetaCommand name="ADCS_SET_HEATER" shortDescription="Sets the ADCS heater ON/OFF">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="31" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand> 
+				<ArgumentList>
+					<Argument argumentTypeRef="heater" name="heater" shortDescription="Desired heater state" />
+				</ArgumentList>	
+				<CommandContainer name="ADCS_SET_HEATER">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="heater" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>	
+			</MetaCommand>				
+			<MetaCommand name="ADCS_SET_HEATER_SETPOINT" shortDescription="Sets the ADCS heater setpoint">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="32" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>	 
+				<ArgumentList>
+					<Argument argumentTypeRef="setpoint" name="setpoint" shortDescription="Desired heater setpoint" />
+				</ArgumentList>		
+				<CommandContainer name="ADCS_SET_HEATER_SETPOINT">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="setpoint" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>		
+			</MetaCommand>
+			<MetaCommand name="ADCS_SET_MODE" shortDescription="Sets the ADCS mode">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="33" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+				<ArgumentList>
+					<Argument argumentTypeRef="adcs_mode" name="mode" shortDescription="Desired ADCS mode" />
+				</ArgumentList>	
+				<CommandContainer name="ADCS_SET_MODE">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="mode" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>		
+			</MetaCommand>	
+			<MetaCommand name="ADCS_SET_QUATERNION" shortDescription="Sets the ADCS quaternion">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="34" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+				<ArgumentList>
+					<Argument argumentTypeRef="quaternion" name="q1" shortDescription="Desired quaternion q1" />
+					<Argument argumentTypeRef="quaternion" name="q2" shortDescription="Desired quaternion q2" />
+					<Argument argumentTypeRef="quaternion" name="q3" shortDescription="Desired quaternion q3" />
+					<Argument argumentTypeRef="quaternion" name="q4" shortDescription="Desired quaternion q4" />
+				</ArgumentList>	
+				<CommandContainer name="ADCS_SET_QUATERNION">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="q1" />
+						<ArgumentRefEntry argumentRef="q2" />
+						<ArgumentRefEntry argumentRef="q3" />
+						<ArgumentRefEntry argumentRef="q4" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>		
+			</MetaCommand>	
+
+			<!-- COMMS Commands -->
+			<MetaCommand name="COMMS_SET_STATE" shortDescription="Sets the COMMS state">	
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="40" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+				<ArgumentList>
+					<Argument argumentTypeRef="state" name="state" shortDescription="Desired COMMS state" />
+				</ArgumentList>	
+				<CommandContainer name="COMMS_SET_STATE">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="state" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>			
+			</MetaCommand>		
+			<MetaCommand name="COMMS_SET_HEATER" shortDescription="Sets the COMMS heater ON/OFF">	
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="41" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+				<ArgumentList>
+					<Argument argumentTypeRef="heater" name="heater" shortDescription="Desired heater state" />
+				</ArgumentList>	
+				<CommandContainer name="COMMS_SET_HEATER">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="heater" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>		
+			</MetaCommand>	
+			<MetaCommand name="COMMS_SET_HEATER_SETPOINT" shortDescription="Sets the COMMS heater setpoint">		
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="42" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+				<ArgumentList>
+					<Argument argumentTypeRef="setpoint" name="setpoint" shortDescription="Desired heater setpoint" />
+				</ArgumentList>	
+				<CommandContainer name="COMMS_SET_HEATER_SETPOINT">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="setpoint" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>		
+			</MetaCommand>
+			<MetaCommand name="COMMS_SET_MODE" shortDescription="Sets the COMMS mode">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="43" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+				<ArgumentList>
+					<Argument argumentTypeRef="comms_mode" name="mode" shortDescription="Desired COMMS mode" />
+				</ArgumentList>	
+				<CommandContainer name="COMMS_SET_MODE">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="mode" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>		
+			</MetaCommand>	
+			<MetaCommand name="COMMS_CLEAR_TM_QUEUE" shortDescription="Clears the COMMS telemetry queue">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="44" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+			</MetaCommand>		
+			<MetaCommand name="COMMS_CLEAR_TC_QUEUE" shortDescription="Clears the COMMS telecommand queue">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="45" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+			</MetaCommand>		
+			<MetaCommand name="COMMS_SET_TM_BITRATE" shortDescription="Sets the COMMS telemetry bitrate">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="46" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+				<ArgumentList>
+					<Argument argumentTypeRef="bitrate" name="bitrate" shortDescription="Desired telemetry bitrate" />
+				</ArgumentList>		
+				<CommandContainer name="COMMS_SET_TM_BITRATE">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="bitrate" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>			
+			</MetaCommand>		
+			<MetaCommand name="COMMS_SET_TC_BITRATE" shortDescription="Sets the COMMS telecommand bitrate">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="47" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+				<ArgumentList>
+					<Argument argumentTypeRef="bitrate" name="bitrate" shortDescription="Desired telecommand bitrate" />
+				</ArgumentList>			
+				<CommandContainer name="COMMS_SET_TC_BITRATE">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="bitrate" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>			
+			</MetaCommand>		
+
+			<!-- PAYLOAD Commands -->	
+			<MetaCommand name="PAYLOAD_SET_STATE" shortDescription="Sets the PAYLOAD state">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="50" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+				<ArgumentList>
+					<Argument argumentTypeRef="state" name="state" shortDescription="Desired PAYLOAD state" />
+				</ArgumentList>	
+				<CommandContainer name="PAYLOAD_SET_STATE">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="state" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>			
+			</MetaCommand>	
+			<MetaCommand name="PAYLOAD_SET_HEATER" shortDescription="Sets the PAYLOAD heater ON/OFF">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="51" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+				<ArgumentList>
+					<Argument argumentTypeRef="heater" name="heater" shortDescription="Desired heater state" />
+				</ArgumentList>	
+				<CommandContainer name="PAYLOAD_SET_HEATER">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="heater" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>		
+			</MetaCommand>	
+			<MetaCommand name="PAYLOAD_SET_HEATER_SETPOINT" shortDescription="Sets the PAYLOAD heater setpoint">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="52" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+				<ArgumentList>
+					<Argument argumentTypeRef="setpoint" name="setpoint" shortDescription="Desired heater setpoint" />
+				</ArgumentList>	
+				<CommandContainer name="PAYLOAD_SET_HEATER_SETPOINT">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="setpoint" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>			
+			</MetaCommand>			
+			<MetaCommand name="PAYLOAD_IMAGE_CAPTURE" shortDescription="Captures an image">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="53" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+			</MetaCommand>				
+
+			<!-- DATASTORE Commands -->	
+			<MetaCommand name="DATASTORE_SET_STATE" shortDescription="Sets the DATASTORE state">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="60" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+				<ArgumentList>
+					<Argument argumentTypeRef="state" name="state" shortDescription="Desired DATASTORE state" />
+				</ArgumentList>	
+				<CommandContainer name="DATASTORE_SET_STATE">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="state" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>			
+			</MetaCommand>			
+			<MetaCommand name="DATASTORE_SET_HEATER" shortDescription="Sets the DATASTORE heater ON/OFF">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="61" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+				<ArgumentList>
+					<Argument argumentTypeRef="heater" name="heater" shortDescription="Desired heater state" />
+				</ArgumentList>	
+				<CommandContainer name="DATASTORE_SET_HEATER">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="heater" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>		
+			</MetaCommand>
+			<MetaCommand name="DATASTORE_SET_HEATER_SETPOINT" shortDescription="Sets the DATASTORE heater setpoint">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="62" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+				<ArgumentList>
+					<Argument argumentTypeRef="setpoint" name="setpoint" shortDescription="Desired heater setpoint" />
+				</ArgumentList>		
+				<CommandContainer name="DATASTORE_SET_HEATER_SETPOINT">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="setpoint" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>				
+			</MetaCommand>
+			<MetaCommand name="DATASTORE_CLEAR_DATASTORE" shortDescription="Clears all files from the DATASTORE">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="63" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+			</MetaCommand>	
+			<MetaCommand name="DATASTORE_DELETE_LAST_FILE" shortDescription="Deletes the most recent file from the DATASTORE">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="64" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+			</MetaCommand>	
+			<MetaCommand name="DATASTORE_TRANSFER_FILE" shortDescription="Transfers a file from the DATASTORE">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="65" />
+					</ArgumentAssignmentList>	
+				</BaseMetaCommand>		 
+				<ArgumentList>
+					<Argument argumentTypeRef="filename" name="filename" shortDescription="Name of file to transfer" />
+				</ArgumentList>	
+				<CommandContainer name="DATASTORE_TRANSFER_FILE">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="filename" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>		
+			</MetaCommand>	
+			<MetaCommand name="DATASTORE_TRANSFER_LAST_FILE" shortDescription="Transfers the most recent file from the DATASTORE">
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="66" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		 
+			</MetaCommand>		
 		</MetaCommandSet>
 	</CommandMetaData>
 </SpaceSystem>
