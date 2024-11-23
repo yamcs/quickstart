@@ -13,14 +13,11 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <yamcsVersion>5.10.8</yamcsVersion>
-    <jsleVersion>1.1.0</jsleVersion>
     <pythonVersion>3.9</pythonVersion>
-    <yamcsSleVersion>1.3.4</yamcsSleVersion>
   </properties>
 
   <modules>
     <module>MCS</module>
-    <module>GND</module>
   </modules>
 
   <dependencies>
@@ -36,12 +33,6 @@
       <artifactId>yamcs-web</artifactId>
       <version>${yamcsVersion}</version>
     </dependency>
-    <!-- JSLE for ground station simulation -->
-    <dependency>
-      <groupId>org.yamcs</groupId>
-      <artifactId>jsle</artifactId>
-      <version>${jsleVersion}</version>
-    </dependency>
   </dependencies>
 
   <build>
@@ -55,32 +46,6 @@
         </configuration>
       </plugin>
       
-      <!-- Yamcs Maven plugin -->
-      <plugin>
-        <groupId>org.yamcs</groupId>
-        <artifactId>yamcs-maven-plugin</artifactId>
-        <version>1.3.5</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>detect</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>bundle-yamcs</id>
-            <phase>package</phase>
-            <goals>
-              <goal>bundle</goal>
-            </goals>
-            <configuration>
-              <formats>
-                <format>tar.gz</format>
-              </formats>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
       <!-- Plugin for Python integration -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -89,13 +54,6 @@
         <configuration>
           <executable>python3</executable>
         </configuration>
-      </plugin>
-
-      <!-- Yamcs Sle plugin -->
-      <plugin>
-        <groupId>org.yamcs</groupId>
-        <artifactId>yamcs-sle-plugin</artifactId>
-        <version>${yamcsSleVersion}</version>
       </plugin>
     </plugins>
   </build>
@@ -109,11 +67,6 @@
       <id>yamcs</id>
       <name>Yamcs Repository</name>
       <url>https://www.yamcs.org/maven/</url>
-    </repository>
-    <repository>
-      <id>esa</id>
-      <name>ESA Repository</name>
-      <url>https://artifacts.esa.int/repository/maven-public/</url>
     </repository>
   </repositories>
 

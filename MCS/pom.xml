@@ -27,12 +27,6 @@
             <artifactId>yamcs-web</artifactId>
             <version>${yamcsVersion}</version>
         </dependency>
-        <!-- SLE support -->
-        <dependency>
-            <groupId>org.yamcs</groupId>
-            <artifactId>yamcs-sle</artifactId>
-            <version>${yamcsSleVersion}</version>
-        </dependency>
         <!-- Testing dependencies -->
         <dependency>
             <groupId>junit</groupId>
@@ -61,6 +55,9 @@
                         <goals>
                             <goal>detect</goal>
                         </goals>
+                        <configuration>
+                            <configDirectory>${project.basedir}/yamcs/src/main/yamcs</configDirectory>
+                        </configuration>
                     </execution>
                     <execution>
                         <id>bundle-yamcs</id>
