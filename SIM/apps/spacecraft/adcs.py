@@ -5,7 +5,7 @@ from config import SPACECRAFT_CONFIG
 class ADCSModule:
     def __init__(self):
         self.logger = SimLogger.get_logger("ADCSModule")
-        config = SPACECRAFT_CONFIG['initial_state']['adcs']
+        config = SPACECRAFT_CONFIG['spacecraft']['initial_state']['adcs']
         
         # Initialize ADCS state from config
         self.state = config['state']

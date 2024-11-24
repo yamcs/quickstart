@@ -5,7 +5,7 @@ from config import SPACECRAFT_CONFIG
 class OBCModule:
     def __init__(self):
         self.logger = SimLogger.get_logger("OBCModule")
-        config = SPACECRAFT_CONFIG['initial_state']['obc']
+        config = SPACECRAFT_CONFIG['spacecraft']['initial_state']['obc']
         
         # Initialize OBC state from config
         self.state = config['state']

@@ -5,7 +5,7 @@ from config import SPACECRAFT_CONFIG
 class PayloadModule:
     def __init__(self):
         self.logger = SimLogger.get_logger("PayloadModule")
-        config = SPACECRAFT_CONFIG['initial_state']['payload']
+        config = SPACECRAFT_CONFIG['spacecraft']['initial_state']['payload']
         
         # Initialize PAYLOAD state from config
         self.state = config['state']

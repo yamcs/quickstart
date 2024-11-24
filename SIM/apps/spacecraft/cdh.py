@@ -11,7 +11,7 @@ from config import SPACECRAFT_CONFIG
 class CDHModule:
     def __init__(self):
         self.logger = SimLogger.get_logger("CDHModule")
-        config = SPACECRAFT_CONFIG['initial_state']['cdh']
+        config = SPACECRAFT_CONFIG['spacecraft']['initial_state']['cdh']
         
         # Initialize CDH state from config
         self.state = config['state']

@@ -8,8 +8,8 @@ class CommsModule:
     def __init__(self, cdh):
         self.logger = SimLogger.get_logger("CommsModule")
         self.cdh = cdh
-        config = SPACECRAFT_CONFIG['initial_state']['comms']
-        comms_config = SPACECRAFT_CONFIG['comms']
+        config = SPACECRAFT_CONFIG['spacecraft']['initial_state']['comms']
+        comms_config = SPACECRAFT_CONFIG['spacecraft']['comms']
         
         # Initialize COMMS state from config
         self.state = config['state']

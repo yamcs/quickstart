@@ -5,7 +5,7 @@ from config import SPACECRAFT_CONFIG
 class DatastoreModule:
     def __init__(self):
         self.logger = SimLogger.get_logger("DatastoreModule")
-        config = SPACECRAFT_CONFIG['initial_state']['datastore']
+        config = SPACECRAFT_CONFIG['spacecraft']['initial_state']['datastore']
         
         # Initialize DATASTORE state from config
         self.state = config['state']
