@@ -268,6 +268,12 @@
             <Parameter name="OBC_power_draw" parameterTypeRef="float_W"/>
             <Parameter name="OBC_mode" parameterTypeRef="OBCMode_Type"/>
 
+			<!-- CDH Parameters -->
+			<Parameter name="CDH_state" parameterTypeRef="SubsystemState_Type"/>	
+			<Parameter name="CDH_temperature" parameterTypeRef="int8_degC"/>
+			<Parameter name="CDH_heater_setpoint" parameterTypeRef="int8_degC"/>
+			<Parameter name="CDH_power_draw" parameterTypeRef="float_W"/>
+
             <!-- Power Parameters -->
             <Parameter name="POWER_state" parameterTypeRef="SubsystemState_Type"/>
             <Parameter name="POWER_temperature" parameterTypeRef="int8_degC"/>
@@ -358,7 +364,11 @@
 					<ParameterRefEntry parameterRef="OBC_temperature"/>
 					<ParameterRefEntry parameterRef="OBC_heater_setpoint"/>
 					<ParameterRefEntry parameterRef="OBC_power_draw"/>
-					<ParameterRefEntry parameterRef="OBC_mode"/>	
+					<ParameterRefEntry parameterRef="OBC_mode"/>		
+					<ParameterRefEntry parameterRef="CDH_state"/>
+					<ParameterRefEntry parameterRef="CDH_temperature"/>
+					<ParameterRefEntry parameterRef="CDH_heater_setpoint"/>
+					<ParameterRefEntry parameterRef="CDH_power_draw"/>	
 					<ParameterRefEntry parameterRef="POWER_state"/>
 					<ParameterRefEntry parameterRef="POWER_temperature"/>
 					<ParameterRefEntry parameterRef="POWER_heater_setpoint"/>
@@ -636,8 +646,62 @@
 					<ArgumentAssignmentList>
 						<ArgumentAssignment argumentName="Command_ID" argumentValue="14" />
 					</ArgumentAssignmentList>
-				</BaseMetaCommand> 
+				</BaseMetaCommand>
+				<CommandContainer name="OBC_RESET">
+					<EntryList/>
+					<BaseContainer containerRef="CommandPacket"/>
+				</CommandContainer>
 			</MetaCommand>	
+
+			<!-- CDH Commands -->
+			<MetaCommand name="CDH_SET_STATE" shortDescription="Sets the CDH state">	
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="20" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>		
+				<ArgumentList>
+					<Argument argumentTypeRef="state" name="state" shortDescription="Desired CDH state" />
+				</ArgumentList>
+				<CommandContainer name="CDH_SET_STATE">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="state" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>
+			</MetaCommand>	
+			<MetaCommand name="CDH_SET_HEATER" shortDescription="Sets the CDH heater ON/OFF">	
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="21" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>	
+				<ArgumentList>
+					<Argument argumentTypeRef="heater" name="heater" shortDescription="Desired heater state" />
+				</ArgumentList>	
+				<CommandContainer name="CDH_SET_HEATER">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="heater" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>
+			</MetaCommand>		
+			<MetaCommand name="CDH_SET_HEATER_SETPOINT" shortDescription="Sets the CDH heater setpoint">	
+				<BaseMetaCommand metaCommandRef="CommandPacket">
+					<ArgumentAssignmentList>
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="22" />
+					</ArgumentAssignmentList>
+				</BaseMetaCommand>	
+				<ArgumentList>
+					<Argument argumentTypeRef="setpoint" name="setpoint" shortDescription="Desired heater setpoint" />
+				</ArgumentList>	
+				<CommandContainer name="CDH_SET_HEATER_SETPOINT">
+					<EntryList>
+						<ArgumentRefEntry argumentRef="setpoint" />
+					</EntryList>
+					<BaseContainer containerRef="CommandPacket" />
+				</CommandContainer>	
+			</MetaCommand>			
 
 			<!-- POWER Commands -->
 			<MetaCommand name="POWER_SET_STATE" shortDescription="Sets the POWER state">
@@ -847,7 +911,11 @@
 					<ArgumentAssignmentList>
 						<ArgumentAssignment argumentName="Command_ID" argumentValue="44" />
 					</ArgumentAssignmentList>
-				</BaseMetaCommand>		 
+				</BaseMetaCommand>		  
+				<CommandContainer name="COMMS_CLEAR_TM_QUEUE">
+					<EntryList/>
+					<BaseContainer containerRef="CommandPacket"/>
+				</CommandContainer>	
 			</MetaCommand>		
 			<MetaCommand name="COMMS_CLEAR_TC_QUEUE" shortDescription="Clears the COMMS telecommand queue">
 				<BaseMetaCommand metaCommandRef="CommandPacket">
@@ -855,6 +923,10 @@
 						<ArgumentAssignment argumentName="Command_ID" argumentValue="45" />
 					</ArgumentAssignmentList>
 				</BaseMetaCommand>		 
+				<CommandContainer name="COMMS_CLEAR_TC_QUEUE">
+					<EntryList/>
+					<BaseContainer containerRef="CommandPacket"/>
+				</CommandContainer>	
 			</MetaCommand>		
 			<MetaCommand name="COMMS_SET_TM_BITRATE" shortDescription="Sets the COMMS telemetry bitrate">
 				<BaseMetaCommand metaCommandRef="CommandPacket">
@@ -943,7 +1015,11 @@
 					<ArgumentAssignmentList>
 						<ArgumentAssignment argumentName="Command_ID" argumentValue="53" />
 					</ArgumentAssignmentList>
-				</BaseMetaCommand>		 
+				</BaseMetaCommand>		  
+				<CommandContainer name="PAYLOAD_IMAGE_CAPTURE">
+					<EntryList/>
+					<BaseContainer containerRef="CommandPacket"/>
+				</CommandContainer>	
 			</MetaCommand>				
 
 			<!-- DATASTORE Commands -->	
@@ -1000,14 +1076,22 @@
 					<ArgumentAssignmentList>
 						<ArgumentAssignment argumentName="Command_ID" argumentValue="63" />
 					</ArgumentAssignmentList>
-				</BaseMetaCommand>		 
+				</BaseMetaCommand>		  
+				<CommandContainer name="DATASTORE_CLEAR_DATASTORE">
+					<EntryList/>
+					<BaseContainer containerRef="CommandPacket"/>
+				</CommandContainer>	
 			</MetaCommand>	
 			<MetaCommand name="DATASTORE_DELETE_LAST_FILE" shortDescription="Deletes the most recent file from the DATASTORE">
 				<BaseMetaCommand metaCommandRef="CommandPacket">
 					<ArgumentAssignmentList>
 						<ArgumentAssignment argumentName="Command_ID" argumentValue="64" />
 					</ArgumentAssignmentList>
-				</BaseMetaCommand>		 
+				</BaseMetaCommand>		  
+				<CommandContainer name="DATASTORE_DELETE_LAST_FILE">
+					<EntryList/>
+					<BaseContainer containerRef="CommandPacket"/>
+				</CommandContainer>	
 			</MetaCommand>	
 			<MetaCommand name="DATASTORE_TRANSFER_FILE" shortDescription="Transfers a file from the DATASTORE">
 				<BaseMetaCommand metaCommandRef="CommandPacket">
@@ -1030,7 +1114,11 @@
 					<ArgumentAssignmentList>
 						<ArgumentAssignment argumentName="Command_ID" argumentValue="66" />
 					</ArgumentAssignmentList>
-				</BaseMetaCommand>		 
+				</BaseMetaCommand>		  
+				<CommandContainer name="DATASTORE_TRANSFER_LAST_FILE">
+					<EntryList/>
+					<BaseContainer containerRef="CommandPacket"/>
+				</CommandContainer>	
 			</MetaCommand>		
 		</MetaCommandSet>
 	</CommandMetaData>
