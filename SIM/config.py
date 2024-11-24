@@ -9,27 +9,91 @@ SIM_CONFIG = {
 
 # Spacecraft Configuration
 SPACECRAFT_CONFIG = {
-    # Communication parameters
     'comms': {
-        'tc_port': 10025,                                 # Telecommand port
-        'tm_port': 10015,                                 # Telemetry port
-        'host': 'localhost'                               # Network host
+        'host': 'localhost',
+        'tc_port': 10025,  # Telecommand reception port
+        'tm_port': 10015   # Telemetry transmission port
     },
-    
-    # Initial spacecraft state
     'initial_state': {
-        'adcs_temperature': -10,                          # Initial ADCS temperature
-        # Add more initial states as needed
-    },
+        # OBC Initial State
+        'obc': {
+            'state': 2,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
+            'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
+            'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
+            'power_draw': 2.5,    # float_W: Power consumption in Watts
+            'mode': 1            # OBCMode_Type (uint8): 0=SAFE, 1=NOMINAL, 2=PAYLOAD
+        },
 
-    # Orbital parameters (Keplerian elements)
-    'orbit': {
-        'semi_major_axis': 6778.0,                       # km (altitude + Earth radius)
-        'eccentricity': 0.0001,                          # Nearly circular
-        'inclination': 51.6,                             # degrees
-        'raan': 0.0,                                     # Right Ascension of Ascending Node (degrees)
-        'arg_perigee': 0.0,                              # Argument of Perigee (degrees)
-        'true_anomaly': 0.0,                             # True Anomaly (degrees)
+        # CDH Initial State
+        'cdh': {
+            'state': 2,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
+            'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
+            'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
+            'power_draw': 2.0,    # float_W: Power consumption in Watts
+            'mode': 0            # OBCMode_Type (uint8): 0=SAFE, 1=NOMINAL, 2=PAYLOAD
+        },
+
+        # POWER Initial State
+        'power': {
+            'state': 2,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
+            'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
+            'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
+            'power_draw': 1.0,    # float_W: Power consumption in Watts
+            'battery_voltage': 7.4,# float_V: Battery voltage in Volts
+            'battery_current': 0.0,# float_A: Battery current in Amperes
+            'battery_charge': 100.0,# float_percent: Battery charge percentage
+            'power_balance': 0,   # PowerBalance_Type (uint8): 0=BALANCED, 1=POSITIVE, 2=NEGATIVE
+            'solar_total_generation': 0.0,  # float_W: Total solar power generation in Watts
+            'solar_panel_generation': {     # float_W: Per-panel solar generation in Watts
+                'pX': 0.0,       # +X panel power generation
+                'nX': 0.0,       # -X panel power generation
+                'pY': 0.0,       # +Y panel power generation
+                'nY': 0.0        # -Y panel power generation
+            }
+        },
+
+        # ADCS Initial State
+        'adcs': {
+            'state': 2,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
+            'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
+            'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
+            'power_draw': 5.0,    # float_W: Power consumption in Watts
+            'mode': 0,           # ADCSMode_Type (uint8): 0=OFF, 1=LOCK, 2=SUNPOINTING, 3=NADIR, 4=DOWNLOAD
+            'status': 0,         # ADCSStatus_Type (uint8): 0=UNCONTROLLED, 1=SLEWING, 2=POINTING
+            'quaternion': [0.707, 0.0, 0.0, 0.707],  # float[4]: Attitude quaternion [q1,q2,q3,q4]
+            'angular_velocity': [0.0, 0.0, 0.0],     # float_deg_s[3]: Angular rates [x,y,z] in deg/s
+            'position': [0.0, 0.0, 400.0],           # [float_deg,float_deg,float_km]: [lat,lon,alt]
+            'eclipse': 0         # Eclipse_Type (uint8): 0=DAY, 1=NIGHT
+        },
+
+        # COMMS Initial State
+        'comms': {
+            'state': 2,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
+            'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
+            'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
+            'power_draw': 3.0,    # float_W: Power consumption in Watts
+            'mode': 0,           # CommsMode_Type (uint8): 0=OFF, 1=RX, 2=TXRX
+            'uplink_bitrate': 9600,   # uint32_bps: Uplink data rate in bits per second
+            'downlink_bitrate': 9600  # uint32_bps: Downlink data rate in bits per second
+        },
+
+        # PAYLOAD Initial State
+        'payload': {
+            'state': 0,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
+            'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
+            'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
+            'power_draw': 2.0,    # float_W: Power consumption in Watts
+            'status': 0          # PayloadStatus_Type (uint8): 0=READY, 1=BUSY
+        },
+
+        # DATASTORE Initial State
+        'datastore': {
+            'state': 2,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
+            'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
+            'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
+            'power_draw': 1.5,    # float_W: Power consumption in Watts
+            'storage_total': 1024 * 1024 * 1024  # uint32: Total storage in bytes (1GB)
+        }
     }
 }
 
