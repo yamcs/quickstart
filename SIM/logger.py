@@ -4,7 +4,7 @@ from pathlib import Path
 from datetime import datetime
 
 # Logger Configuration
-LOG_LEVEL = 'INFO'    # Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+LOG_LEVEL = 'DEBUG'    # Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 LOG_RATE = 5.0        # How often to log simulation time (seconds)
 
 class SimLogger:

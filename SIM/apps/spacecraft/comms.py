@@ -3,6 +3,7 @@ import socket
 import threading
 from logger import SimLogger
 from config import SPACECRAFT_CONFIG
+import numpy as np
 
 class CommsModule:
     def __init__(self, cdh):
@@ -36,19 +37,16 @@ class CommsModule:
     def get_telemetry(self):
         """Package current COMMS state into telemetry format"""
         values = [
-            self.state,              # COMMS_state (uint8)
-            int(self.temperature),   # COMMS_temperature (uint8)
-            int(self.heater_setpoint), # COMMS_heater_setpoint (uint8)
-            self.power_draw,         # COMMS_power_draw (float)
-            self.mode,               # COMMS_mode (uint8)
-            # Queue and Bitrate
-            self.packets_sent,       # COMMS_tm_queue_size (uint32)
-            self.packets_received,   # COMMS_tc_queue_size (uint32)
-            self.downlink_bitrate,   # COMMS_tm_bitrate (uint32)
-            self.uplink_bitrate      # COMMS_tc_bitrate (uint32)
+            np.uint8(self.state),              # SubsystemState_Type (8 bits)
+            np.int8(self.temperature),         # int8_degC (8 bits)
+            np.int8(self.heater_setpoint),     # int8_degC (8 bits)
+            np.float32(self.power_draw),       # float_W (32 bits)
+            np.uint8(self.mode),               # CommsMode_Type (8 bits)
+            np.uint32(self.downlink_bitrate),        # uint32_bps (32 bits)
+            np.uint32(self.uplink_bitrate)         # uint32_bps (32 bits)
         ]
         
-        return struct.pack(">BBBfBIIII", *values)
+        return struct.pack(">BbbfBII", *values)
         
     def process_command(self, command_id, command_data):
         """Process COMMS commands (Command_ID range 40-49)"""

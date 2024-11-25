@@ -1,6 +1,7 @@
 import struct
 from logger import SimLogger
 from config import SPACECRAFT_CONFIG
+import numpy as np
 
 class PayloadModule:
     def __init__(self):
@@ -23,14 +24,14 @@ class PayloadModule:
     def get_telemetry(self):
         """Package current PAYLOAD state into telemetry format"""
         values = [
-            self.state,              # PAYLOAD_state (uint8)
-            int(self.temperature),   # PAYLOAD_temperature (uint8)
-            int(self.heater_setpoint), # PAYLOAD_heater_setpoint (uint8)
-            self.power_draw,         # PAYLOAD_power_draw (float)
-            self.status              # PAYLOAD_status (uint8)
+            np.uint8(self.state),              # SubsystemState_Type (8 bits)
+            np.int8(self.temperature),         # int8_degC (8 bits)
+            np.int8(self.heater_setpoint),     # int8_degC (8 bits)
+            np.float32(self.power_draw),       # float_W (32 bits)
+            np.uint8(self.status)              # PayloadStatus_Type (8 bits)
         ]
         
-        return struct.pack(">BBBfB", *values)
+        return struct.pack(">BbbfB", *values)
         
     def process_command(self, command_id, command_data):
         """Process PAYLOAD commands (Command_ID range 50-59)"""

@@ -31,7 +31,6 @@ SPACECRAFT_CONFIG = {
                 'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
                 'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
                 'power_draw': 2.0,    # float_W: Power consumption in Watts
-                'mode': 0            # OBCMode_Type (uint8): 0=SAFE, 1=NOMINAL, 2=PAYLOAD
             },
 
             # POWER Initial State
@@ -95,6 +94,38 @@ SPACECRAFT_CONFIG = {
                 'power_draw': 1.5,    # float_W: Power consumption in Watts
                 'storage_total': 1024 * 1024 * 1024  # uint32: Total storage in bytes (1GB)
             }
+        },
+        'hardware': {
+            'adcs': {
+                'magnetorquers': {
+                    'x': {'max_moment': 0.2},     # A⋅m² (magnetic dipole moment)
+                    'y': {'max_moment': 0.2},
+                    'z': {'max_moment': 0.2}
+                },
+                'reaction_wheels': {
+                    'x': {
+                        'max_torque': 0.001,      # N⋅m
+                        'max_momentum': 0.05,      # N⋅m⋅s
+                        'moment_of_inertia': 0.001 # kg⋅m²
+                    },
+                    'y': {
+                        'max_torque': 0.001,
+                        'max_momentum': 0.05,
+                        'moment_of_inertia': 0.001
+                    },
+                    'z': {
+                        'max_torque': 0.001,
+                        'max_momentum': 0.05,
+                        'moment_of_inertia': 0.001
+                    }
+                },
+                'pointing_requirements': {
+                    'accuracy_threshold': 2.0,     # degrees, threshold between SLEWING and POINTING
+                    'stability_duration': 0,    # seconds, duration pointing must be maintained
+                    'max_slew_rate': 3.0,         # degrees/second, maximum allowed slew rate
+                    'nominal_slew_rate': 2.0      # degrees/second, target slew rate during maneuvers
+                }
+            }
         }
     }   
 }
@@ -121,12 +152,12 @@ ORBIT_CONFIG = {
     'spacecraft': {  # Matches spacecraft name in SPACECRAFT_CONFIG
         'epoch': SIM_CONFIG['mission_start_time'],
         'elements': {
-            'semi_major_axis': 6778.0,    # km (400km altitude + Earth radius)
-            'eccentricity': 0.0001,       # Nearly circular
-            'inclination': 51.6,          # degrees
-            'raan': 0.0,                  # degrees (Right Ascension of Ascending Node)
-            'arg_perigee': 0.0,           # degrees (Argument of Perigee)
-            'true_anomaly': 0.0           # degrees (True Anomaly at epoch)
+            'semi_major_axis': 6878.0,    # km (500km altitude + Earth radius 6378km)
+            'eccentricity': 0.0001,       # Nearly circular (0.0001 is close enough)    
+            'inclination': 97.4,          # degrees (SSO inclination for 500km)
+            'raan': 22.5,                 # degrees (typically chosen for LTAN)
+            'arg_perigee': 0.0,           # degrees (0° is prograde, 90° is prograde circular)
+            'true_anomaly': 0.0           # degrees (0° is perigee, 180° is apogee) 
         }
     }
 }

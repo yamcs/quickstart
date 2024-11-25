@@ -314,8 +314,6 @@
             <Parameter name="COMMS_heater_setpoint" parameterTypeRef="int8_degC"/>
             <Parameter name="COMMS_power_draw" parameterTypeRef="float_W"/>
             <Parameter name="COMMS_mode" parameterTypeRef="CommsMode_Type"/>
-            <Parameter name="COMMS_tm_queue_size" parameterTypeRef="uint32_bits"/>
-            <Parameter name="COMMS_tc_queue_size" parameterTypeRef="uint32_bits"/>
             <Parameter name="COMMS_tm_bitrate" parameterTypeRef="uint32_bps"/>
             <Parameter name="COMMS_tc_bitrate" parameterTypeRef="uint32_bps"/>
 
@@ -404,8 +402,6 @@
 					<ParameterRefEntry parameterRef="COMMS_heater_setpoint"/>
 					<ParameterRefEntry parameterRef="COMMS_power_draw"/>
 					<ParameterRefEntry parameterRef="COMMS_mode"/>
-					<ParameterRefEntry parameterRef="COMMS_tm_queue_size"/>
-					<ParameterRefEntry parameterRef="COMMS_tc_queue_size"/>
 					<ParameterRefEntry parameterRef="COMMS_tm_bitrate"/>
 					<ParameterRefEntry parameterRef="COMMS_tc_bitrate"/>
 					<ParameterRefEntry parameterRef="PAYLOAD_state"/>

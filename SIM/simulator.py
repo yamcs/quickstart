@@ -44,6 +44,12 @@ class Simulator:
         
         try:
             while self.running:
+                # Update subsystems
+                self.cdh.adcs.update(self.current_time)
+                #self.cdh.power.update(self.current_time)
+                #self.cdh.payload.update(self.current_time)
+                #self.cdh.obc.update(self.current_time)
+                
                 # Create telemetry packet through CDH
                 tm_packet = self.cdh.create_tm_packet()
                 

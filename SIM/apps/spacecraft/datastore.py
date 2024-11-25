@@ -1,6 +1,7 @@
 import struct
 from logger import SimLogger
 from config import SPACECRAFT_CONFIG
+import numpy as np
 
 class DatastoreModule:
     def __init__(self):
@@ -18,19 +19,21 @@ class DatastoreModule:
         self.storage_used = 0   # Always start with 0 bytes used
         self.files_stored = 0   # Always start with 0 files
         self.files = []        # Always start with empty file list
+        self.storage_remaining = self.storage_total - self.storage_used
+        self.number_of_files = self.files_stored
         
     def get_telemetry(self):
         """Package current DATASTORE state into telemetry format"""
         values = [
-            self.state,              # DATASTORE_state (uint8)
-            int(self.temperature),   # DATASTORE_temperature (uint8)
-            int(self.heater_setpoint), # DATASTORE_heater_setpoint (uint8)
-            self.power_draw,         # DATASTORE_power_draw (float)
-            self.storage_total - self.storage_used,  # DATASTORE_storage_remaining (float)
-            self.files_stored        # DATASTORE_number_of_files (uint32)
+            np.uint8(self.state),                # SubsystemState_Type (8 bits)
+            np.int8(self.temperature),           # int8_degC (8 bits)
+            np.int8(self.heater_setpoint),       # int8_degC (8 bits)
+            np.float32(self.power_draw),         # float_W (32 bits)
+            np.float32(self.storage_remaining),  # float_MB (32 bits)
+            np.uint32(self.number_of_files)      # uint32 (32 bits)
         ]
         
-        return struct.pack(">BBBffI", *values)
+        return struct.pack(">BbbffI", *values)
         
     def process_command(self, command_id, command_data):
         """Process DATASTORE commands (Command_ID range 60-69)"""

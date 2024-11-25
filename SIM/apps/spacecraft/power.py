@@ -1,6 +1,7 @@
 import struct
 from logger import SimLogger
 from config import SPACECRAFT_CONFIG
+import numpy as np
 
 class PowerModule:
     def __init__(self):
@@ -22,27 +23,30 @@ class PowerModule:
         self.power_balance = config['power_balance']
         self.solar_total_generation = config['solar_total_generation']
         self.solar_panel_generation = config['solar_panel_generation'].copy()
+        self.solar_panel_generation_pX = self.solar_panel_generation['pX']
+        self.solar_panel_generation_nX = self.solar_panel_generation['nX']
+        self.solar_panel_generation_pY = self.solar_panel_generation['pY']
+        self.solar_panel_generation_nY = self.solar_panel_generation['nY']
         
     def get_telemetry(self):
         """Package current POWER state into telemetry format"""
         values = [
-            self.state,                    # POWER_state (uint8)
-            int(self.temperature),         # POWER_temperature (uint8)
-            int(self.heater_setpoint),     # POWER_heater_setpoint (uint8)
-            self.power_draw,               # POWER_power_draw (float)
-            self.battery_voltage,          # POWER_battery_voltage (float)
-            self.battery_current,          # POWER_battery_current (float)
-            self.battery_charge,           # POWER_battery_charge (float)
-            self.power_balance,            # POWER_total_power_balance (float)
-            self.solar_total_generation,   # POWER_solar_total_generation (float)
-            # Solar Panel Generation
-            self.solar_panel_generation['pX'],  # POWER_solar_panel_generation_pX (float)
-            self.solar_panel_generation['nX'],  # POWER_solar_panel_generation_nX (float)
-            self.solar_panel_generation['pY'],  # POWER_solar_panel_generation_pY (float)
-            self.solar_panel_generation['nY']   # POWER_solar_panel_generation_nY (float)
+            np.uint8(self.state),                    # SubsystemState_Type (8 bits)
+            np.int8(self.temperature),               # int8_degC (8 bits)
+            np.int8(self.heater_setpoint),           # int8_degC (8 bits)
+            np.float32(self.power_draw),             # float_W (32 bits)
+            np.float32(self.battery_voltage),        # float_V (32 bits)
+            np.float32(self.battery_current),        # float_A (32 bits)
+            np.float32(self.battery_charge),         # float_percent (32 bits)
+            np.uint8(self.power_balance),            # PowerBalance_Type (8 bits)
+            np.float32(self.solar_total_generation), # float_W (32 bits)
+            np.float32(self.solar_panel_generation_pX), # float_W (32 bits)
+            np.float32(self.solar_panel_generation_nX), # float_W (32 bits)
+            np.float32(self.solar_panel_generation_pY), # float_W (32 bits)
+            np.float32(self.solar_panel_generation_nY)  # float_W (32 bits)
         ]
         
-        return struct.pack(">BbBffffffffff", *values)
+        return struct.pack(">BbbffffBfffff", *values)
         
     def process_command(self, command_id, command_data):
         """Process POWER commands (Command_ID range 20-29)"""

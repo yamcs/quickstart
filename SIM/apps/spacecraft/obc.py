@@ -1,6 +1,7 @@
 import struct
 from logger import SimLogger
 from config import SPACECRAFT_CONFIG
+import numpy as np
 
 class OBCModule:
     def __init__(self):
@@ -17,14 +18,14 @@ class OBCModule:
     def get_telemetry(self):
         """Package current OBC state into telemetry format"""
         values = [
-            self.state,              # OBC_state (uint8)
-            int(self.temperature),   # OBC_temperature (uint8)
-            int(self.heater_setpoint), # OBC_heater_setpoint (uint8)
-            self.power_draw,         # OBC_power_draw (float)
-            self.mode                # OBC_mode (uint8)
+            np.uint8(self.state),              # SubsystemState_Type (8 bits)
+            np.int8(self.temperature),         # int8_degC (8 bits)
+            np.int8(self.heater_setpoint),     # int8_degC (8 bits)
+            np.float32(self.power_draw),       # float_W (32 bits)
+            np.uint8(self.mode)                # OBCMode_Type (8 bits)
         ]
         
-        return struct.pack(">BBBfB", *values)
+        return struct.pack(">BbbfB", *values)
         
     def process_command(self, command_id, command_data):
         """Process OBC commands (Command_ID range 10-19)"""

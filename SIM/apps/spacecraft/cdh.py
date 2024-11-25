@@ -7,6 +7,7 @@ from apps.spacecraft.payload import PayloadModule
 from apps.spacecraft.datastore import DatastoreModule
 from apps.spacecraft.comms import CommsModule
 from config import SPACECRAFT_CONFIG
+import numpy as np
 
 class CDHModule:
     def __init__(self):
@@ -18,7 +19,6 @@ class CDHModule:
         self.temperature = config['temperature']
         self.heater_setpoint = config['heater_setpoint']
         self.power_draw = config['power_draw']
-        self.mode = config['mode']
         
         # Initialize sequence counter for CCSDS packets
         self.sequence_count = 0
@@ -34,14 +34,13 @@ class CDHModule:
     def get_telemetry(self):
         """Package CDH state into telemetry format"""
         values = [
-            self.state,              # CDH_state (uint8)
-            int(self.temperature),   # CDH_temperature (uint8)
-            int(self.heater_setpoint), # CDH_heater_setpoint (uint8)
-            self.power_draw,         # CDH_power_draw (float)
-            self.mode                # CDH_mode (uint8)
+            np.uint8(self.state),              # SubsystemState_Type (8 bits)
+            np.int8(self.temperature),         # int8_degC (8 bits)
+            np.int8(self.heater_setpoint),     # int8_degC (8 bits)
+            np.float32(self.power_draw)        # float_W (32 bits)
         ]
         
-        return struct.pack(">BBBfB", *values)
+        return struct.pack(">Bbbf", *values)
 
     def create_tm_packet(self):
         """Create a CCSDS telemetry packet"""
