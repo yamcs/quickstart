@@ -24,12 +24,16 @@ services:
   - class: org.yamcs.plists.ParameterListService
   - class: org.yamcs.timeline.TimelineService
 
+timeService:
+  class: org.yamcs.time.SimulationTimeService
+
 dataLinks:
   - name: udp-in
     class: org.yamcs.tctm.UdpTmDataLink
     stream: tm_realtime
     port: 10015
     packetPreprocessorClassName: com.example.spacecraft.MyPacketPreprocessor
+    updateSimulationTime: true
 
   - name: udp-out
     class: org.yamcs.tctm.UdpTcDataLink

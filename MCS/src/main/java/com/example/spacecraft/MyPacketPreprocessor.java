@@ -46,34 +46,37 @@ public class MyPacketPreprocessor extends AbstractPacketPreprocessor {
 
     @Override
     public TmPacket process(TmPacket packet) {
-
         byte[] bytes = packet.getPacket();
-        if (bytes.length < 6) { // Expect at least the length of CCSDS primary header
+        if (bytes.length < 10) { // Primary header (6) + Secondary header (4)
             eventProducer.sendWarning("SHORT_PACKET",
-                    "Short packet received, length: " + bytes.length + "; minimum required length is 6 bytes.");
-
-            // If we return null, the packet is dropped.
+                    "Short packet received, length: " + bytes.length + "; minimum required length is 10 bytes.");
             return null;
         }
 
-        // Verify continuity for a given APID based on the CCSDS sequence counter
+        // Extract APID and sequence count from primary header
         int apidseqcount = ByteBuffer.wrap(bytes).getInt(0);
         int apid = (apidseqcount >> 16) & 0x07FF;
         int seq = (apidseqcount) & 0x3FFF;
+
+        // Verify sequence continuity
         AtomicInteger ai = seqCounts.computeIfAbsent(apid, k -> new AtomicInteger());
         int oldseq = ai.getAndSet(seq);
-
         if (((seq - oldseq) & 0x3FFF) != 1) {
             eventProducer.sendWarning("SEQ_COUNT_JUMP",
                     "Sequence count jump for APID: " + apid + " old seq: " + oldseq + " newseq: " + seq);
         }
 
-        // Our custom packets don't include a secundary header with time information.
-        // Use Yamcs-local time instead.
-        packet.setGenerationTime(TimeEncoding.getWallclockTime());
-
-        // Use the full 32-bits, so that both APID and the count are included.
-        // Yamcs uses this attribute to uniquely identify the packet (together with the gentime)
+        // Extract time from secondary header
+        ByteBuffer buf = ByteBuffer.wrap(bytes);
+        buf.position(6); // Skip primary header
+        long deltaTimeMillis = buf.getInt() & 0xFFFFFFFFL;  // Convert unsigned int to long
+        
+        // Convert delta time to absolute time
+        long missionStartMillis = 1735689600000L; // 2025-01-01 00:00:00 UTC
+        long absoluteTimeMillis = missionStartMillis + deltaTimeMillis;
+        
+        // Set the generation time
+        packet.setGenerationTime(TimeEncoding.fromUnixMillisec(absoluteTimeMillis));
         packet.setSequenceCount(apidseqcount);
 
         return packet;

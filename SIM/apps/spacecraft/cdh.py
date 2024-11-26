@@ -8,11 +8,13 @@ from apps.spacecraft.datastore import DatastoreModule
 from apps.spacecraft.comms import CommsModule
 from config import SPACECRAFT_CONFIG
 import numpy as np
+from datetime import datetime
 
 class CDHModule:
     def __init__(self):
         self.logger = SimLogger.get_logger("CDHModule")
         config = SPACECRAFT_CONFIG['spacecraft']['initial_state']['cdh']
+        self.simulator = None  # Will be set by simulator
         
         # Initialize CDH state from config
         self.state = config['state']
@@ -31,6 +33,10 @@ class CDHModule:
         self.datastore = DatastoreModule()
         self.comms = CommsModule(self)  # Pass self reference for command routing
         
+    def set_simulator(self, simulator):
+        """Set reference to simulator instance"""
+        self.simulator = simulator
+
     def get_telemetry(self):
         """Package CDH state into telemetry format"""
         values = [
@@ -47,13 +53,25 @@ class CDHModule:
         # CCSDS Primary Header
         version = 0
         packet_type = 0  # TM
-        sec_hdr_flag = 0
+        sec_hdr_flag = 1  # Enable secondary header
         apid = 100  # Housekeeping
         sequence_flags = 3  # Standalone packet
         packet_sequence_count = self.sequence_count & 0x3FFF
         
         first_word = (version << 13) | (packet_type << 12) | (sec_hdr_flag << 11) | apid
         second_word = (sequence_flags << 14) | packet_sequence_count
+        
+        # Get simulation time
+        from config import SIM_CONFIG
+        mission_start = SIM_CONFIG['mission_start_time']
+        sim_time = self.simulator.get_sim_time() if self.simulator else mission_start
+        
+        # Calculate elapsed time in milliseconds since mission start
+        elapsed_seconds = (sim_time - mission_start).total_seconds()
+        timestamp = int(elapsed_seconds * 1000)  # Convert to milliseconds
+        
+        # Pack as 4-byte unsigned int
+        secondary_header = struct.pack(">I", timestamp & 0xFFFFFFFF)
         
         # Get telemetry from all subsystems in correct order
         obc_tm = self.obc.get_telemetry()
@@ -68,10 +86,10 @@ class CDHModule:
         data = obc_tm + cdh_tm + power_tm + adcs_tm + comms_tm + payload_tm + datastore_tm
         
         # Calculate packet length (minus 1 per CCSDS standard)
-        packet_length = len(data) - 1
+        packet_length = len(secondary_header) + len(data) - 1
         
         # Create the complete packet
-        packet = struct.pack(">HHH", first_word, second_word, packet_length) + data
+        packet = struct.pack(">HHH", first_word, second_word, packet_length) + secondary_header + data
         
         self.sequence_count += 1
         return packet
