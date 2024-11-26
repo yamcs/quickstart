@@ -102,3 +102,20 @@ docker/all.log
 # Docker
 .docker/
 docker-compose.override.yml
+
+# Virtual Environment
+venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Logs
+*.log
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
