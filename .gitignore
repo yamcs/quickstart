@@ -79,6 +79,7 @@ Icon
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
+*.png
 
 # Windows
 Thumbs.db
