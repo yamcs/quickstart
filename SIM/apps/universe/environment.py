@@ -1,4 +1,5 @@
 import numpy as np
+import logging
 
 class Environment:
     """Environmental models for space simulation"""
@@ -13,8 +14,7 @@ class Environment:
         rho0 = 1.225 # Sea level density [kg/m³]
         return rho0 * np.exp(-altitude / h0)
     
-    @staticmethod
-    def solar_illumination(spacecraft_pos, sun_pos, quaternion):
+    def solar_illumination(self,spacecraft_pos, sun_pos, quaternion):
         """Calculate solar panel illumination angles
         Inputs: 
         - spacecraft_pos: [x,y,z] in km
@@ -45,5 +45,8 @@ class Environment:
             'pY': np.degrees(np.arccos(np.clip(sun_body[1], -1, 1))),
             'nY': np.degrees(np.arccos(np.clip(-sun_body[1], -1, 1)))
         }
+
+        logger = logging.getLogger(__name__)
+        logger.debug(f"Panel angles: {panels}")
         
         return panels

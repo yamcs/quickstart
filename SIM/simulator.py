@@ -7,6 +7,12 @@ from config import SIM_CONFIG
 from logger import SimLogger
 
 class Simulator:
+    _sim_time = SIM_CONFIG['mission_start_time']  # Initialize at class level
+    
+    @classmethod
+    def get_sim_time(cls):
+        return cls._sim_time  # Simply return the current simulation time
+
     def __init__(self):
         self.logger = SimLogger.get_logger("Simulator")
         
@@ -44,9 +50,19 @@ class Simulator:
         
         try:
             while self.running:
+                # Debug logging for time updates
+                self.logger.debug(f"Before update - Sim time: {Simulator._sim_time}")
+                
+                # Update simulation time - use time_factor here
+                Simulator._sim_time += timedelta(seconds=self.time_step * self.time_factor)
+                self.current_time = Simulator._sim_time
+                
+                # Debug logging after update
+                self.logger.debug(f"After update - Sim time: {Simulator._sim_time}")
+                
                 # Update subsystems
                 self.cdh.adcs.update(self.current_time)
-                #self.cdh.power.update(self.current_time)
+                self.cdh.power.update(self.current_time, self.cdh.adcs)
                 #self.cdh.payload.update(self.current_time)
                 #self.cdh.obc.update(self.current_time)
                 
@@ -55,9 +71,6 @@ class Simulator:
                 
                 # Send telemetry packet through COMMS
                 self.cdh.comms.send_tm_packet(tm_packet)
-                
-                # Update simulation time
-                self.current_time += timedelta(seconds=self.time_step)
                 
                 # Sleep for time_step adjusted by time_factor
                 time.sleep(self.time_step / self.time_factor)

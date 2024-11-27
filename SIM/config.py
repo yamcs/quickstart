@@ -125,6 +125,16 @@ SPACECRAFT_CONFIG = {
                     'max_slew_rate': 3.0,         # degrees/second, maximum allowed slew rate
                     'nominal_slew_rate': 2.0      # degrees/second, target slew rate during maneuvers
                 }
+            },
+            'power': {
+                'solar_panels': {
+                    'pX': {'area': 0.03},  # 10x30cm = 0.03 m²
+                    'nX': {'area': 0.03},
+                    'pY': {'area': 0.03},
+                    'nY': {'area': 0.03}
+                },
+                'solar_efficiency': 0.3,  # 30% efficient solar cells
+                'solar_flux': 1361.0     # W/m² (solar constant)
             }
         }
     }   
