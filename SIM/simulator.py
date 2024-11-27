@@ -64,7 +64,7 @@ class Simulator:
                 # Update subsystems
                 self.cdh.adcs.update(self.current_time)
                 self.cdh.power.update(self.current_time, self.cdh.adcs)
-                #self.cdh.payload.update(self.current_time)
+                self.cdh.payload.update(self.current_time, self.cdh.adcs)
                 #self.cdh.obc.update(self.current_time)
                 
                 # Create telemetry packet through CDH

@@ -520,3 +520,18 @@ class ADCSModule:
     def _quaternion_conjugate(self, q):
         """Return the conjugate of a quaternion"""
         return np.array([-q[0], -q[1], -q[2], q[3]])
+
+    @property
+    def latitude(self):
+        """Get current latitude in degrees"""
+        return self.position[0]
+        
+    @property
+    def longitude(self):
+        """Get current longitude in degrees"""
+        return self.position[1]
+        
+    @property
+    def altitude(self):
+        """Get current altitude in km"""
+        return self.position[2]

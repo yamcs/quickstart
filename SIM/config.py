@@ -22,7 +22,7 @@ SPACECRAFT_CONFIG = {
                 'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
                 'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
                 'power_draw': 0.6,    # float_W: Power consumption in Watts
-                'mode': 1            # OBCMode_Type (uint8): 0=SAFE, 1=NOMINAL, 2=PAYLOAD
+                'mode': 2            # OBCMode_Type (uint8): 0=SAFE, 1=NOMINAL, 2=ALLON
             },
 
             # CDH Initial State
@@ -62,7 +62,7 @@ SPACECRAFT_CONFIG = {
                 'status': 0,         # ADCSStatus_Type (uint8): 0=UNCONTROLLED, 1=SLEWING, 2=POINTING
                 'quaternion': [0.707, 0.0, 0.0, 0.707],  # float[4]: Attitude quaternion [q1,q2,q3,q4]
                 'angular_velocity': [0.0, 0.0, 0.0],     # float_deg_s[3]: Angular rates [x,y,z] in deg/s
-                'position': [0.0, 0.0, 400.0],           # [float_deg,float_deg,float_km]: [lat,lon,alt]
+                'position': [0.0, 0.0, 500.0],           # [float_deg,float_deg,float_km]: [lat,lon,alt]
                 'eclipse': 0         # Eclipse_Type (uint8): 0=DAY, 1=NIGHT
             },
 
@@ -79,11 +79,11 @@ SPACECRAFT_CONFIG = {
 
             # PAYLOAD Initial State
             'payload': {
-                'state': 0,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
+                'state': 2,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
                 'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
                 'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
                 'power_draw': 1.8,    # float_W: Power consumption in Watts
-                'status': 0          # PayloadStatus_Type (uint8): 0=READY, 1=BUSY
+                'status': 0          # PayloadStatus_Type (uint8): 0=IDLE, 1=CAPTURING
             },
 
             # DATASTORE Initial State
@@ -92,7 +92,9 @@ SPACECRAFT_CONFIG = {
                 'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
                 'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
                 'power_draw': 0.4,    # float_W: Power consumption in Watts
-                'storage_total': 1024 * 1024 * 1024  # uint32: Total storage in bytes (1GB)
+                'storage_path': "./apps/spacecraft/datastore/", # Path to the datastore directory, relative to the BOSSY/SIM/ directory
+                'storage_total': 1024 * 1024 * 1024,  # uint32: Total storage in bytes (1GB)
+                'mode': 0           # DatastoreMode_Type (uint8): 0=IDLE, 1=TRANSFERING
             }
         },
         'hardware': {
@@ -135,6 +137,10 @@ SPACECRAFT_CONFIG = {
                 },
                 'solar_efficiency': 0.3,  # 30% efficient solar cells
                 'solar_flux': 1361.0     # W/m² (solar constant)
+            },
+            'eo_camera': {  # EO Camera Configuration
+                'resolution': 1024,  # pixels
+                'swath': 1.0,       # km, width of the swath in kilometers
             }
         }
     }   

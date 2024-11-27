@@ -1,10 +1,16 @@
 import struct
 from logger import SimLogger
-from config import SPACECRAFT_CONFIG
+from config import SPACECRAFT_CONFIG, SIM_CONFIG
 import numpy as np
+import time
+import requests
+import os
+from PIL import Image
+from io import BytesIO
+from datetime import datetime
 
 class PayloadModule:
-    def __init__(self):
+    def __init__(self, adcs):
         self.logger = SimLogger.get_logger("PayloadModule")
         config = SPACECRAFT_CONFIG['spacecraft']['initial_state']['payload']
         
@@ -14,12 +20,18 @@ class PayloadModule:
         self.heater_setpoint = config['heater_setpoint']
         self.power_draw = config['power_draw']
         self.status = config['status']
-        
-        # Payload specific parameters
-        self.data_rate = 0      # bps
-        self.data_collected = 0 # bytes
-        self.storage_used = 0   # bytes
-        self.storage_total = 1024 * 1024  # 1MB total storage
+        self.storage_path = SPACECRAFT_CONFIG['spacecraft']['initial_state']['datastore']['storage_path']
+        self.adcs_module = adcs  # Reference to ADCS module
+        self.latitude = self.adcs_module.position[0]
+        self.longitude = self.adcs_module.position[1]
+        self.altitude = self.adcs_module.position[2]
+        self.mission_epoch = SIM_CONFIG['mission_start_time']
+        self.current_time = SIM_CONFIG['mission_start_time']
+
+        # EO Camera Configuration
+        self.eo_camera = SPACECRAFT_CONFIG['spacecraft']['hardware']['eo_camera']
+        self.swath = self.eo_camera['swath']
+        self.resolution = self.eo_camera['resolution']
         
     def get_telemetry(self):
         """Package current PAYLOAD state into telemetry format"""
@@ -32,6 +44,14 @@ class PayloadModule:
         ]
         
         return struct.pack(">BbbfB", *values)
+    
+    def update(self, current_time, adcs):
+        """Update PAYLOAD state"""
+        self.adcs = adcs
+        self.latitude = self.adcs.latitude
+        self.longitude = self.adcs.longitude
+        self.altitude = self.adcs.altitude
+        self.current_time = current_time
         
     def process_command(self, command_id, command_data):
         """Process PAYLOAD commands (Command_ID range 50-59)"""
@@ -53,29 +73,84 @@ class PayloadModule:
                 self.logger.info(f"Setting PAYLOAD heater setpoint to: {setpoint}°C")
                 self.heater_setpoint = setpoint
                 
-            elif command_id == 53:   # PAYLOAD_SET_MODE
-                mode = struct.unpack(">B", command_data)[0]
-                self.logger.info(f"Setting PAYLOAD mode to: {mode}")
-                self.mode = mode
-                
-            elif command_id == 54:   # PAYLOAD_START_COLLECTION
-                self.logger.info("Starting data collection")
-                if self.state == 1:  # Only if powered ON
-                    self.mode = 1    # COLLECTING
-                    self.data_rate = 1024  # 1 kbps
-                
-            elif command_id == 55:   # PAYLOAD_STOP_COLLECTION
-                self.logger.info("Stopping data collection")
-                self.mode = 0    # IDLE
-                self.data_rate = 0
-                
-            elif command_id == 56:   # PAYLOAD_CLEAR_DATA
-                self.logger.info("Clearing collected data")
-                self.data_collected = 0
-                self.storage_used = 0
+            elif command_id == 53:   # PAYLOAD_IMAGE_CAPTURE
+                met_sec = struct.unpack(">I", command_data)[0]
+                epoch = self.mission_epoch
+                current_time = self.current_time
+                lat = self.latitude
+                lon = self.longitude
+                alt = self.altitude
+                res = self.resolution
+                swath = self.swath
+                self.logger.info(f"Starting image capture at MET seconds: {met_sec}, Lat: {lat}, Lon: {lon}, Alt: {alt}, Res: {res}, Swath: {swath}")
+                if self.state == 2:  # Only if powered ON
+                    self._capture_image(met_sec, epoch, current_time, lat, lon, alt, res, swath)
                 
             else:
                 self.logger.warning(f"Unknown PAYLOAD command ID: {command_id}")
                 
         except struct.error as e:
             self.logger.error(f"Error unpacking PAYLOAD command {command_id}: {e}")
+
+
+    def _capture_image(self, met_sec, epoch, current_time, lat, lon, alt, res, swath):
+        """Capture an image at the specified MET seconds"""
+        self.logger.debug(f"Current time: {current_time}")
+        self.logger.debug(f"Epoch: {epoch}")
+        self.logger.debug(f"Current MET seconds: {(current_time - epoch).total_seconds()}")
+        self.logger.debug(f"Capturing image at MET seconds: {met_sec}, Lat: {lat}, Lon: {lon}, Alt: {alt}, Res: {res}, Swath: {swath}")
+        
+        wait_time = met_sec - (current_time - epoch).total_seconds()
+        while wait_time > 0:
+            self.logger.debug(f"Waiting for {wait_time} seconds before capturing image")
+            time.sleep(1)
+            wait_time -= 1
+        
+        self.logger.debug("Capturing image")
+        try:
+            self.status = 1  # Set to CAPTURING
+            # For 1km width at 1m/pixel resolution
+            width = 1024  # Fixed at 1024 pixels
+            
+            # Calculate zoom level for 1km width
+            zoom = 16  # This gives us roughly 1km width
+            
+            # Build API request
+            params = {
+                'center': f'{lat},{lon}',  # Use spacecraft's actual position
+                'zoom': zoom,
+                'size': f'{width}x{width}',  # 1024x1024 pixels
+                'maptype': 'satellite',
+                'key': 'AIzaSyDL__brVoZ4VY72_ZnRl5MhLnWLpuP4bsA',
+                'scale': 2  # Request high-resolution tiles
+            }
+
+            self.logger.info(f"Capturing {width}x{width} image at position (lat={lat}, lon={lon}) at zoom level {zoom}")
+            
+            # Create filename that increments with each capture
+            filename = f"EO_image_met_{met_sec}.png"
+            filepath = os.path.join(self.storage_path, filename)
+
+            # Ensure storage directory exists
+            os.makedirs(self.storage_path, exist_ok=True)
+
+            # Make API request
+            base_url = "https://maps.googleapis.com/maps/api/staticmap"
+            response = requests.get(base_url, params=params)
+            img = Image.open(BytesIO(response.content))
+            
+            # Resize to exactly 1024x1024 if needed
+            if img.size != (1024, 1024):
+                img = img.resize((1024, 1024), Image.Resampling.LANCZOS)
+            
+            # Save the image in PNG format
+            img.save(filepath, 'PNG')
+            self.logger.info(f"Saved {img.size} image to {filepath}")
+            
+            # Update payload status to indicate capture complete
+            self.status = 0  # Back to IDLE
+            
+        except Exception as e:
+            self.logger.error(f"Error capturing/saving image: {e}")
+            self.status = 0  # Set back to IDLE on error
+        return

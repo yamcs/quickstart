@@ -201,7 +201,7 @@
 				<EnumerationList>
 					<Enumeration label="SAFE" value="0"/>
 					<Enumeration label="NOMINAL" value="1"/>
-					<Enumeration label="PAYLOAD" value="2"/>
+					<Enumeration label="ALLON" value="2"/>
 				</EnumerationList>
 			</EnumeratedParameterType>
 
@@ -209,10 +209,19 @@
 			<EnumeratedParameterType name="PayloadStatus_Type">
 				<IntegerDataEncoding sizeInBits="8"/>
 				<EnumerationList>
-					<Enumeration label="READY" value="0"/>
-					<Enumeration label="BUSY" value="1"/>
+					<Enumeration label="IDLE" value="0"/>
+					<Enumeration label="CAPTURING" value="1"/>
 				</EnumerationList>
 			</EnumeratedParameterType>	
+
+			<!-- Datastore Mode Type -->	
+			<EnumeratedParameterType name="DatastoreMode_Type">
+				<IntegerDataEncoding sizeInBits="8"/>
+				<EnumerationList>
+					<Enumeration label="IDLE" value="0"/>
+					<Enumeration label="TRANSFERING" value="1"/>
+				</EnumerationList>
+			</EnumeratedParameterType>
 
 			<!-- Generic State -->	
 			<EnumeratedParameterType name="GenericState_Type">
@@ -338,6 +347,7 @@
             <Parameter name="DATASTORE_power_draw" parameterTypeRef="float_W"/>
             <Parameter name="DATASTORE_storage_remaining" parameterTypeRef="float_MB"/>
             <Parameter name="DATASTORE_number_of_files" parameterTypeRef="uint32"/>
+			<Parameter name="DATASTORE_mode" parameterTypeRef="DatastoreMode_Type"/>
         </ParameterSet>
 
         <ContainerSet>
@@ -424,6 +434,7 @@
 					<ParameterRefEntry parameterRef="DATASTORE_power_draw"/>
 					<ParameterRefEntry parameterRef="DATASTORE_storage_remaining"/>
 					<ParameterRefEntry parameterRef="DATASTORE_number_of_files"/>
+					<ParameterRefEntry parameterRef="DATASTORE_mode"/>
 				</EntryList>
 				<BaseContainer containerRef="TelemetryPacket">
 					<RestrictionCriteria>
@@ -498,7 +509,7 @@
 				<EnumerationList>
 					<Enumeration label="SAFE" value="0"/>
 					<Enumeration label="NOMINAL" value="1"/>
-					<Enumeration label="PAYLOAD" value="2"/>
+					<Enumeration label="ALLON" value="2"/>
 				</EnumerationList>
 			</EnumeratedArgumentType>
 
@@ -529,6 +540,13 @@
 				</UnitSet>
 				<IntegerDataEncoding sizeInBits="32"/>
 			</IntegerArgumentType>	
+
+			<IntegerArgumentType name="met_sec" signed="false">
+				<UnitSet>
+					<Unit>s</Unit>
+				</UnitSet>
+				<IntegerDataEncoding sizeInBits="32"/>
+			</IntegerArgumentType>
 
             <StringArgumentType name="filename" sizeInBits="64"/>
 
@@ -1020,9 +1038,14 @@
 					<ArgumentAssignmentList>
 						<ArgumentAssignment argumentName="Command_ID" argumentValue="53" />
 					</ArgumentAssignmentList>
-				</BaseMetaCommand>		  
+				</BaseMetaCommand>		
+				<ArgumentList>
+					<Argument argumentTypeRef="met_sec" name="met_sec" shortDescription="Desired MET seconds to start image capture" />
+				</ArgumentList>  
 				<CommandContainer name="PAYLOAD_IMAGE_CAPTURE">
-					<EntryList/>
+					<EntryList>
+						<ArgumentRefEntry argumentRef="met_sec" />
+					</EntryList>
 					<BaseContainer containerRef="CommandPacket"/>
 				</CommandContainer>	
 			</MetaCommand>				
@@ -1087,21 +1110,10 @@
 					<BaseContainer containerRef="CommandPacket"/>
 				</CommandContainer>	
 			</MetaCommand>	
-			<MetaCommand name="DATASTORE_DELETE_LAST_FILE" shortDescription="Deletes the most recent file from the DATASTORE">
-				<BaseMetaCommand metaCommandRef="CommandPacket">
-					<ArgumentAssignmentList>
-						<ArgumentAssignment argumentName="Command_ID" argumentValue="64" />
-					</ArgumentAssignmentList>
-				</BaseMetaCommand>		  
-				<CommandContainer name="DATASTORE_DELETE_LAST_FILE">
-					<EntryList/>
-					<BaseContainer containerRef="CommandPacket"/>
-				</CommandContainer>	
-			</MetaCommand>	
 			<MetaCommand name="DATASTORE_TRANSFER_FILE" shortDescription="Transfers a file from the DATASTORE">
 				<BaseMetaCommand metaCommandRef="CommandPacket">
 					<ArgumentAssignmentList>
-						<ArgumentAssignment argumentName="Command_ID" argumentValue="65" />
+						<ArgumentAssignment argumentName="Command_ID" argumentValue="64" />
 					</ArgumentAssignmentList>	
 				</BaseMetaCommand>		 
 				<ArgumentList>
@@ -1113,17 +1125,6 @@
 					</EntryList>
 					<BaseContainer containerRef="CommandPacket" />
 				</CommandContainer>		
-			</MetaCommand>	
-			<MetaCommand name="DATASTORE_TRANSFER_LAST_FILE" shortDescription="Transfers the most recent file from the DATASTORE">
-				<BaseMetaCommand metaCommandRef="CommandPacket">
-					<ArgumentAssignmentList>
-						<ArgumentAssignment argumentName="Command_ID" argumentValue="66" />
-					</ArgumentAssignmentList>
-				</BaseMetaCommand>		  
-				<CommandContainer name="DATASTORE_TRANSFER_LAST_FILE">
-					<EntryList/>
-					<BaseContainer containerRef="CommandPacket"/>
-				</CommandContainer>	
 			</MetaCommand>		
 		</MetaCommandSet>
 	</CommandMetaData>

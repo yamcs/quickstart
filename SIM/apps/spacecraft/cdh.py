@@ -29,7 +29,7 @@ class CDHModule:
         self.adcs = ADCSModule()
         self.obc = OBCModule()
         self.power = PowerModule()
-        self.payload = PayloadModule()
+        self.payload = PayloadModule(self.adcs)
         self.datastore = DatastoreModule()
         self.comms = CommsModule(self)  # Pass self reference for command routing
         
@@ -94,27 +94,24 @@ class CDHModule:
         self.sequence_count += 1
         return packet
 
-    def process_command(self, command_data):
+    def process_command(self, command_id, command_data):
         """Process incoming telecommands"""
-        try:
-            command_id = struct.unpack(">H", command_data[6:8])[0]
-            command_payload = command_data[8:]
-            
+        try:            
             self.logger.info(f"Received command ID: {command_id}")
             
             # Route commands to appropriate subsystem
             if 10 <= command_id <= 19:
-                self.obc.process_command(command_id, command_payload)
+                self.obc.process_command(command_id, command_data)
             elif 20 <= command_id <= 29:
-                self.power.process_command(command_id, command_payload)
+                self.power.process_command(command_id, command_data)
             elif 30 <= command_id <= 39:
-                self.adcs.process_command(command_id, command_payload)
+                self.adcs.process_command(command_id, command_data)
             elif 40 <= command_id <= 49:
-                self.comms.process_command(command_id, command_payload)
+                self.comms.process_command(command_id, command_data)
             elif 50 <= command_id <= 59:
-                self.payload.process_command(command_id, command_payload)
+                self.payload.process_command(command_id, command_data)
             elif 60 <= command_id <= 69:
-                self.datastore.process_command(command_id, command_payload)
+                self.datastore.process_command(command_id, command_data)
             else:
                 self.logger.warning(f"Unhandled command ID: {command_id}")
                 

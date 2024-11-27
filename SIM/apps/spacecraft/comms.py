@@ -119,8 +119,21 @@ class CommsModule:
                 data, addr = self.tc_socket.recvfrom(1024)
                 self.packets_received += 1
                 self.logger.info(f"Received TC from {addr}")
-                # Forward command to CDH for processing
-                self.cdh.process_command(data)
+                
+                # Parse CCSDS packet
+                try:
+                    # Skip CCSDS header (6 bytes) and timestamp (4 bytes)
+                    command_id = struct.unpack(">H", data[10:12])[0]  # 16-bit command ID
+                    command_data = data[12:]  # Rest is command data
+                    
+                    self.logger.debug(f"Parsed command ID: {command_id}, data: {command_data.hex()}")
+                    
+                    # Forward command to CDH for processing
+                    self.cdh.process_command(command_id, command_data)
+                    
+                except struct.error as e:
+                    self.logger.error(f"Error parsing telecommand: {e}")
+                    
             except socket.error as e:
                 if self.running:
                     self.logger.error(f"Socket error: {e}")
