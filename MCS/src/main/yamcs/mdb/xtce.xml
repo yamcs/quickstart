@@ -54,6 +54,12 @@
 				</UnitSet>
 				<IntegerDataEncoding sizeInBits="16" />
 			</IntegerParameterType>
+			<IntegerParameterType name="CCSDS_Time_Type" signed="false">
+				<UnitSet>
+					<Unit>ms</Unit>
+				</UnitSet>
+				<IntegerDataEncoding sizeInBits="32" byteOrder="mostSignificantByteFirst"/>
+			</IntegerParameterType>
 
 			<!-- Generic Types -->
 			<IntegerParameterType name="int8" signed="true">
@@ -260,6 +266,7 @@
 			<Parameter name="CCSDS_Packet_ID" parameterTypeRef="CCSDS_Packet_ID_Type" />
 			<Parameter name="CCSDS_Packet_Sequence" parameterTypeRef="CCSDS_Packet_Sequence_Type" />
 			<Parameter name="CCSDS_Packet_Length" parameterTypeRef="CCSDS_Packet_Length_Type" />
+			<Parameter name="CCSDS_Time" parameterTypeRef="CCSDS_Time_Type" />
 
             <!-- OBC Parameters --> 	
             <Parameter name="OBC_state" parameterTypeRef="SubsystemState_Type"/>
@@ -283,7 +290,8 @@
             <Parameter name="POWER_battery_current" parameterTypeRef="float_A"/>
             <Parameter name="POWER_battery_charge" parameterTypeRef="float_percent"/>
 			<Parameter name="POWER_total_power_balance" parameterTypeRef="PowerBalance_Type"/>
-			<Parameter name="POWER_solar_total_generation" parameterTypeRef="float_W"/>
+			<Parameter name="POWER_total_power_draw" parameterTypeRef="float_W"/>
+			<Parameter name="POWER_total_power_generation" parameterTypeRef="float_W"/>
             <Parameter name="POWER_solar_panel_generation_pX" parameterTypeRef="float_W"/>
             <Parameter name="POWER_solar_panel_generation_nX" parameterTypeRef="float_W"/>
 			<Parameter name="POWER_solar_panel_generation_pY" parameterTypeRef="float_W"/>
@@ -340,6 +348,7 @@
 					<ParameterRefEntry parameterRef="CCSDS_Packet_ID" />
 					<ParameterRefEntry parameterRef="CCSDS_Packet_Sequence" />
 					<ParameterRefEntry parameterRef="CCSDS_Packet_Length" />
+					<ParameterRefEntry parameterRef="CCSDS_Time" />
 				</EntryList>
 			</SequenceContainer>
 
@@ -375,7 +384,8 @@
 					<ParameterRefEntry parameterRef="POWER_battery_current"/>
 					<ParameterRefEntry parameterRef="POWER_battery_charge"/>
 					<ParameterRefEntry parameterRef="POWER_total_power_balance"/>
-					<ParameterRefEntry parameterRef="POWER_solar_total_generation"/>
+					<ParameterRefEntry parameterRef="POWER_total_power_draw"/>
+					<ParameterRefEntry parameterRef="POWER_total_power_generation"/>
 					<ParameterRefEntry parameterRef="POWER_solar_panel_generation_pX"/>
 					<ParameterRefEntry parameterRef="POWER_solar_panel_generation_nX"/>
 					<ParameterRefEntry parameterRef="POWER_solar_panel_generation_pY"/>
@@ -547,6 +557,7 @@
 						<FixedValueEntry name="CCSDS_Source_Sequence_Count" binaryValue="0000" sizeInBits="14" />
 						<!-- Final value is set by post-processor after the command is submitted. -->
 						<FixedValueEntry name="CCSDS_Packet_Length" binaryValue="0000" sizeInBits="16" />
+						<FixedValueEntry name="CCSDS_Time" binaryValue="00000000" sizeInBits="32" />
 					</EntryList>
 				</CommandContainer>
 			</MetaCommand>

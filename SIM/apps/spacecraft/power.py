@@ -27,7 +27,8 @@ class PowerModule:
         
         # Power balance
         self.power_balance = config['power_balance']
-        self.solar_total_generation = config['solar_total_generation']
+        self.total_power_draw = 0.0
+        self.total_power_generation = 0.0
         self.solar_panel_generation = config['solar_panel_generation'].copy()
         self.solar_panel_generation_pX = self.solar_panel_generation['pX']
         self.solar_panel_generation_nX = self.solar_panel_generation['nX']
@@ -37,22 +38,23 @@ class PowerModule:
     def get_telemetry(self):
         """Package current POWER state into telemetry format"""
         values = [
-            np.uint8(self.state),                    # SubsystemState_Type (8 bits)
-            np.int8(self.temperature),               # int8_degC (8 bits)
-            np.int8(self.heater_setpoint),           # int8_degC (8 bits)
-            np.float32(self.power_draw),             # float_W (32 bits)
-            np.float32(self.battery_voltage),        # float_V (32 bits)
-            np.float32(self.battery_current),        # float_A (32 bits)
-            np.float32(self.battery_charge),         # float_percent (32 bits)
-            np.uint8(self.power_balance),            # PowerBalance_Type (8 bits)
-            np.float32(self.solar_total_generation), # float_W (32 bits)
+            np.uint8(self.state),                       # SubsystemState_Type (8 bits)
+            np.int8(self.temperature),                  # int8_degC (8 bits)
+            np.int8(self.heater_setpoint),              # int8_degC (8 bits)
+            np.float32(self.power_draw),                # float_W (32 bits)
+            np.float32(self.battery_voltage),           # float_V (32 bits)
+            np.float32(self.battery_current),           # float_A (32 bits)
+            np.float32(self.battery_charge),            # float_percent (32 bits)
+            np.uint8(self.power_balance),               # PowerBalance_Type (8 bits)
+            np.float32(self.total_power_draw),          # float_W (32 bits)
+            np.float32(self.total_power_generation),    # float_W (32 bits)
             np.float32(self.solar_panel_generation_pX), # float_W (32 bits)
             np.float32(self.solar_panel_generation_nX), # float_W (32 bits)
             np.float32(self.solar_panel_generation_pY), # float_W (32 bits)
             np.float32(self.solar_panel_generation_nY)  # float_W (32 bits)
         ]
         
-        return struct.pack(">BbbffffBfffff", *values)
+        return struct.pack(">BbbffffBffffff", *values)
         
     def process_command(self, command_id, command_data):
         """Process POWER commands (Command_ID range 20-29)"""
@@ -88,7 +90,10 @@ class PowerModule:
             
             # Get orbit state
             orbit_state = self.orbit_propagator.propagate(current_time)
-            
+
+            # Get total power draw
+            self.total_power_draw = self._total_power_draw() + np.random.uniform(-0.15, 0.15)
+
             # Reset total generation
             self.solar_total_generation = 0.0
             self.solar_panel_generation = {
@@ -142,19 +147,35 @@ class PowerModule:
             self.logger.debug(f"Solar panel generation: {self.solar_panel_generation}")
             
             # Calculate total generation
-            self.solar_total_generation = sum(self.solar_panel_generation.values())
+            self.total_power_generation = sum(self.solar_panel_generation.values())
 
-            self.logger.debug(f"Solar total generation: {self.solar_total_generation} W")
+            self.logger.debug(f"Total power draw: {self.total_power_draw} W")
+            self.logger.debug(f"Solar total generation: {self.total_power_generation} W")
             
             # Simple power balance calculation
-            if self.solar_total_generation > self.power_draw:
+            if self.total_power_generation > self.total_power_draw:
                 self.power_balance = 1  # POSITIVE
-                self.battery_charge = min(100.0, self.battery_charge + 0.1)  # Very simple charging
-            elif self.solar_total_generation < self.power_draw:
+                self.battery_charge = min(100.0, self.battery_charge + 0.027)  # Very simple charging
+                self.battery_voltage = min(self.battery_voltage + 0.007, 8.4)  # Very simple charging
+                self.battery_current = min(self.battery_current + 0.007, 0.1)  # Very simple charging
+            elif self.total_power_generation < self.total_power_draw:
                 self.power_balance = 2  # NEGATIVE
-                self.battery_charge = max(0.0, self.battery_charge - 0.1)  # Very simple discharging
+                self.battery_charge = max(0.0, self.battery_charge - 0.0307)  # Very simple discharging
+                self.battery_voltage = max(self.battery_voltage - 0.007, 6.0)  # Very simple discharging
+                self.battery_current = max(self.battery_current - 0.007, -0.1)  # Very simple discharging
             else:
                 self.power_balance = 0  # BALANCED
                 
         except Exception as e:
             self.logger.error(f"Error updating power state: {str(e)}")
+
+    def _total_power_draw(self):
+        """Calculate total power draw based on subsystem states"""
+        obc_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['obc']['power_draw']
+        cdh_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['cdh']['power_draw']
+        power_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['power']['power_draw']
+        adcs_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['adcs']['power_draw']
+        comms_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['comms']['power_draw']
+        payload_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['payload']['power_draw']
+        data_storage_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['datastore']['power_draw']
+        return sum([obc_power_draw, cdh_power_draw, power_power_draw, adcs_power_draw, comms_power_draw, payload_power_draw, data_storage_power_draw])

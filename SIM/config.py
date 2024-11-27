@@ -21,7 +21,7 @@ SPACECRAFT_CONFIG = {
                 'state': 2,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
                 'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
                 'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
-                'power_draw': 2.5,    # float_W: Power consumption in Watts
+                'power_draw': 0.6,    # float_W: Power consumption in Watts
                 'mode': 1            # OBCMode_Type (uint8): 0=SAFE, 1=NOMINAL, 2=PAYLOAD
             },
 
@@ -30,7 +30,7 @@ SPACECRAFT_CONFIG = {
                 'state': 2,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
                 'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
                 'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
-                'power_draw': 2.0,    # float_W: Power consumption in Watts
+                'power_draw': 0.4,    # float_W: Power consumption in Watts
             },
 
             # POWER Initial State
@@ -38,10 +38,10 @@ SPACECRAFT_CONFIG = {
                 'state': 2,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
                 'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
                 'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
-                'power_draw': 1.0,    # float_W: Power consumption in Watts
+                'power_draw': 0.4,    # float_W: Power consumption in Watts
                 'battery_voltage': 7.4,# float_V: Battery voltage in Volts
                 'battery_current': 0.0,# float_A: Battery current in Amperes
-                'battery_charge': 100.0,# float_percent: Battery charge percentage
+                'battery_charge': 80.0,# float_percent: Battery charge percentage
                 'power_balance': 0,   # PowerBalance_Type (uint8): 0=BALANCED, 1=POSITIVE, 2=NEGATIVE
                 'solar_total_generation': 0.0,  # float_W: Total solar power generation in Watts
                 'solar_panel_generation': {     # float_W: Per-panel solar generation in Watts
@@ -57,7 +57,7 @@ SPACECRAFT_CONFIG = {
                 'state': 2,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
                 'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
                 'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
-                'power_draw': 5.0,    # float_W: Power consumption in Watts
+                'power_draw': 2.3,    # float_W: Power consumption in Watts
                 'mode': 0,           # ADCSMode_Type (uint8): 0=OFF, 1=LOCK, 2=SUNPOINTING, 3=NADIR, 4=DOWNLOAD
                 'status': 0,         # ADCSStatus_Type (uint8): 0=UNCONTROLLED, 1=SLEWING, 2=POINTING
                 'quaternion': [0.707, 0.0, 0.0, 0.707],  # float[4]: Attitude quaternion [q1,q2,q3,q4]
@@ -71,7 +71,7 @@ SPACECRAFT_CONFIG = {
                 'state': 2,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
                 'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
                 'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
-                'power_draw': 3.0,    # float_W: Power consumption in Watts
+                'power_draw': 3.7,    # float_W: Power consumption in Watts
                 'mode': 0,           # CommsMode_Type (uint8): 0=OFF, 1=RX, 2=TXRX
                 'uplink_bitrate': 9600,   # uint32_bps: Uplink data rate in bits per second
                 'downlink_bitrate': 9600  # uint32_bps: Downlink data rate in bits per second
@@ -82,7 +82,7 @@ SPACECRAFT_CONFIG = {
                 'state': 0,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
                 'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
                 'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
-                'power_draw': 2.0,    # float_W: Power consumption in Watts
+                'power_draw': 1.8,    # float_W: Power consumption in Watts
                 'status': 0          # PayloadStatus_Type (uint8): 0=READY, 1=BUSY
             },
 
@@ -91,7 +91,7 @@ SPACECRAFT_CONFIG = {
                 'state': 2,          # SubsystemState_Type (uint8): 0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR
                 'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
                 'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
-                'power_draw': 1.5,    # float_W: Power consumption in Watts
+                'power_draw': 0.4,    # float_W: Power consumption in Watts
                 'storage_total': 1024 * 1024 * 1024  # uint32: Total storage in bytes (1GB)
             }
         },
