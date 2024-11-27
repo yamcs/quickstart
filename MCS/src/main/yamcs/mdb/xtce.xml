@@ -419,7 +419,7 @@
 				<BaseContainer containerRef="TelemetryPacket">
 					<RestrictionCriteria>
 						<ComparisonList>
-							<Comparison value="0" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
+							<Comparison value="1" parameterRef="CCSDS_Packet_ID/SecHdrFlag" />
 							<Comparison value="100" parameterRef="CCSDS_Packet_ID/APID" />
 						</ComparisonList>
 					</RestrictionCriteria>
