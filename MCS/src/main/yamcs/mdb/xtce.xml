@@ -190,9 +190,8 @@
 			<EnumeratedParameterType name="CommsMode_Type">
 				<IntegerDataEncoding sizeInBits="8"/>
 				<EnumerationList>
-					<Enumeration label="OFF" value="0"/>
-					<Enumeration label="RX" value="1"/>
-					<Enumeration label="TXRX" value="2"/>
+					<Enumeration label="RX" value="0"/>
+					<Enumeration label="TXRX" value="1"/>
 				</EnumerationList>
 			</EnumeratedParameterType>
 
@@ -517,9 +516,8 @@
 			<EnumeratedArgumentType name="comms_mode">
 				<IntegerDataEncoding sizeInBits="8"/>
 				<EnumerationList>
-					<Enumeration label="OFF" value="0"/>
-					<Enumeration label="RX" value="1"/>
-					<Enumeration label="TXRX" value="2"/>
+					<Enumeration label="RX" value="0"/>
+					<Enumeration label="TXRX" value="1"/>
 				</EnumerationList>
 			</EnumeratedArgumentType>	
 
