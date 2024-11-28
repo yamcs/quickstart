@@ -86,6 +86,12 @@
 				</UnitSet>
 				<IntegerDataEncoding encoding="unsigned" sizeInBits="32" />
 			</IntegerParameterType>
+			<IntegerParameterType name="uint8_percent" signed="false">
+				<UnitSet>
+					<Unit>%</Unit>
+				</UnitSet>
+				<IntegerDataEncoding sizeInBits="8" />
+			</IntegerParameterType>
 			<FloatParameterType name="float">
 				<FloatDataEncoding sizeInBits="32" />
 			</FloatParameterType>
@@ -348,6 +354,7 @@
             <Parameter name="DATASTORE_storage_remaining" parameterTypeRef="float_MB"/>
             <Parameter name="DATASTORE_number_of_files" parameterTypeRef="uint32"/>
 			<Parameter name="DATASTORE_mode" parameterTypeRef="DatastoreMode_Type"/>
+			<Parameter name="DATASTORE_transfer_progress" parameterTypeRef="float_percent"/>
         </ParameterSet>
 
         <ContainerSet>
@@ -435,6 +442,7 @@
 					<ParameterRefEntry parameterRef="DATASTORE_storage_remaining"/>
 					<ParameterRefEntry parameterRef="DATASTORE_number_of_files"/>
 					<ParameterRefEntry parameterRef="DATASTORE_mode"/>
+					<ParameterRefEntry parameterRef="DATASTORE_transfer_progress"/>
 				</EntryList>
 				<BaseContainer containerRef="TelemetryPacket">
 					<RestrictionCriteria>
@@ -548,7 +556,16 @@
 				<IntegerDataEncoding sizeInBits="32"/>
 			</IntegerArgumentType>
 
-            <StringArgumentType name="filename" sizeInBits="64"/>
+            <StringArgumentType name="filename">
+                <UnitSet/>
+                <StringDataEncoding>
+                    <SizeInBits>
+                        <Fixed>
+                            <FixedValue>512</FixedValue>
+                        </Fixed>
+                    </SizeInBits>
+                </StringDataEncoding>
+            </StringArgumentType>
 
         </ArgumentTypeSet>
 
