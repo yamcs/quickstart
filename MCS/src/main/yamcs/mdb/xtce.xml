@@ -150,112 +150,59 @@
 			<!-- Spacecraft Telemetry Types -->
 
 			<!-- Telemetry Mode Type -->	
-			<EnumeratedParameterType name="TelemetryMode_Type">
-				<IntegerDataEncoding sizeInBits="8"/>
-				<EnumerationList>
-					<Enumeration label="MIN" value="0"/>
-					<Enumeration label="NOM" value="1"/>
-					<Enumeration label="MAX" value="2"/>
-				</EnumerationList>
-			</EnumeratedParameterType>
+			<IntegerParameterType name="TelemetryMode_Type" shortDescription="Telemetry Mode (0=MIN, 1=NOM, 2=MAX)">
+				<IntegerDataEncoding sizeInBits="8"/>		
+			</IntegerParameterType>
 
 			<!-- Subsystem State Type -->	
-			<EnumeratedParameterType name="SubsystemState_Type">
+			<IntegerParameterType name="SubsystemState_Type" shortDescription="Subsystem State (0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR)">
 				<IntegerDataEncoding sizeInBits="8"/>
-				<EnumerationList>
-					<Enumeration label="OFF" value="0"/>
-					<Enumeration label="IDLE" value="1"/>
-					<Enumeration label="ACTIVE" value="2"/>
-					<Enumeration label="ERROR" value="3"/>
-				</EnumerationList>
-			</EnumeratedParameterType>
+			</IntegerParameterType>
 
 			<!-- ADCS Mode -->	
-			<EnumeratedParameterType name="ADCSMode_Type">
+			<IntegerParameterType name="ADCSMode_Type" shortDescription="ADCS Mode (0=OFF, 1=LOCK, 2=SUNPOINTING, 3=NADIR, 4=DOWNLOAD)">
 				<IntegerDataEncoding sizeInBits="8"/>
-				<EnumerationList>
-					<Enumeration label="OFF" value="0"/>
-					<Enumeration label="LOCK" value="1"/>
-					<Enumeration label="SUNPOINTING" value="2"/>
-					<Enumeration label="NADIR" value="3"/>
-					<Enumeration label="DOWNLOAD" value="4"/>
-				</EnumerationList>
-			</EnumeratedParameterType>	
+			</IntegerParameterType>	
 
 			<!-- ADCS Status Type -->	
-			<EnumeratedParameterType name="ADCSStatus_Type">
+			<IntegerParameterType name="ADCSStatus_Type" shortDescription="ADCS Status (0=UNCONTROLLED, 1=SLEWING, 2=POINTING)">
 				<IntegerDataEncoding sizeInBits="8"/>
-				<EnumerationList>
-					<Enumeration label="UNCONTROLLED" value="0"/>
-					<Enumeration label="SLEWING" value="1"/>
-					<Enumeration label="POINTING" value="2"/>
-				</EnumerationList>
-			</EnumeratedParameterType>
+			</IntegerParameterType>
 
 			<!-- Communications Mode Type -->	
-			<EnumeratedParameterType name="CommsMode_Type">
+			<IntegerParameterType name="CommsMode_Type" shortDescription="Communications Mode (0=RX, 1=TXRX)">
 				<IntegerDataEncoding sizeInBits="8"/>
-				<EnumerationList>
-					<Enumeration label="RX" value="0"/>
-					<Enumeration label="TXRX" value="1"/>
-				</EnumerationList>
-			</EnumeratedParameterType>
+			</IntegerParameterType>
 
 			<!-- OBC Mode Type -->	
-			<EnumeratedParameterType name="OBCMode_Type">
-				<IntegerDataEncoding sizeInBits="8"/>
-				<EnumerationList>
-					<Enumeration label="SAFE" value="0"/>
-					<Enumeration label="NOMINAL" value="1"/>
-					<Enumeration label="ALLON" value="2"/>
-				</EnumerationList>
-			</EnumeratedParameterType>
+			<IntegerParameterType name="OBCMode_Type" shortDescription="OBC Mode (0=SAFE, 1=NOMINAL, 2=ALLON)">
+				<IntegerDataEncoding sizeInBits="8"/>	
+			</IntegerParameterType>
 
 			<!-- Payload Status Type -->	
-			<EnumeratedParameterType name="PayloadStatus_Type">
-				<IntegerDataEncoding sizeInBits="8"/>
-				<EnumerationList>
-					<Enumeration label="IDLE" value="0"/>
-					<Enumeration label="CAPTURING" value="1"/>
-				</EnumerationList>
-			</EnumeratedParameterType>	
+			<IntegerParameterType name="PayloadStatus_Type" shortDescription="Payload Status (0=IDLE, 1=CAPTURING)">
+				<IntegerDataEncoding sizeInBits="8"/>	
+			</IntegerParameterType>	
 
 			<!-- Datastore Mode Type -->	
-			<EnumeratedParameterType name="DatastoreMode_Type">
-				<IntegerDataEncoding sizeInBits="8"/>
-				<EnumerationList>
-					<Enumeration label="IDLE" value="0"/>
-					<Enumeration label="TRANSFERING" value="1"/>
-				</EnumerationList>
-			</EnumeratedParameterType>
+			<IntegerParameterType name="DatastoreMode_Type" shortDescription="Datastore Mode (0=IDLE, 1=TRANSFERING)">
+				<IntegerDataEncoding sizeInBits="8"/>		
+			</IntegerParameterType>
 
 			<!-- Generic State -->	
-			<EnumeratedParameterType name="GenericState_Type">
-				<IntegerDataEncoding sizeInBits="8"/>
-				<EnumerationList>
-					<Enumeration label="OFF" value="0"/>
-					<Enumeration label="ON" value="1"/>
-				</EnumerationList>
-			</EnumeratedParameterType>
+			<IntegerParameterType name="GenericState_Type" shortDescription="Generic State (0=OFF, 1=ON)">
+				<IntegerDataEncoding sizeInBits="8"/>	
+			</IntegerParameterType>
 
 			<!-- Eclipse Type -->
-			<EnumeratedParameterType name="Eclipse_Type">
+			<IntegerParameterType name="Eclipse_Type" shortDescription="Eclipse (0=DAY, 1=NIGHT)">
 				<IntegerDataEncoding sizeInBits="8" />
-				<EnumerationList>
-					<Enumeration label="DAY" value="0"/>
-					<Enumeration label="NIGHT" value="1"/>
-				</EnumerationList>
-			</EnumeratedParameterType>
+			</IntegerParameterType>
 
 			<!-- Power Balance Type -->
-			<EnumeratedParameterType name="PowerBalance_Type">	
-				<IntegerDataEncoding sizeInBits="8"/>
-				<EnumerationList>
-					<Enumeration label="BALANCED" value="0"/>
-					<Enumeration label="POSITIVE" value="1"/>
-					<Enumeration label="NEGATIVE" value="2"/>
-				</EnumerationList>
-			</EnumeratedParameterType>
+			<IntegerParameterType name="PowerBalance_Type" shortDescription="Power Balance (0=BALANCED, 1=POSITIVE, 2=NEGATIVE)">	
+				<IntegerDataEncoding sizeInBits="8"/>	
+			</IntegerParameterType>
 
 			<!-- Basic Integer Types -->
 			<IntegerParameterType name="uint1" signed="false">
@@ -277,84 +224,83 @@
 
 		<ParameterSet>
 			<!-- CCSDS Header Parameters -->
-			<Parameter name="CCSDS_Packet_ID" parameterTypeRef="CCSDS_Packet_ID_Type" />
-			<Parameter name="CCSDS_Packet_Sequence" parameterTypeRef="CCSDS_Packet_Sequence_Type" />
-			<Parameter name="CCSDS_Packet_Length" parameterTypeRef="CCSDS_Packet_Length_Type" />
-			<Parameter name="CCSDS_Time" parameterTypeRef="CCSDS_Time_Type" />
+			<Parameter name="CCSDS_Packet_ID" parameterTypeRef="CCSDS_Packet_ID_Type" shortDescription="CCSDS Packet ID"/>
+			<Parameter name="CCSDS_Packet_Sequence" parameterTypeRef="CCSDS_Packet_Sequence_Type" shortDescription="CCSDS Packet Sequence"/>
+			<Parameter name="CCSDS_Packet_Length" parameterTypeRef="CCSDS_Packet_Length_Type" shortDescription="CCSDS Packet Length (bytes)"/>
+			<Parameter name="CCSDS_Time" parameterTypeRef="CCSDS_Time_Type" shortDescription="CCSDS Time (s)"/>
 
             <!-- OBC Parameters --> 	
-            <Parameter name="OBC_state" parameterTypeRef="SubsystemState_Type"/>
-            <Parameter name="OBC_temperature" parameterTypeRef="int8_degC"/>
-            <Parameter name="OBC_heater_setpoint" parameterTypeRef="int8_degC"/>
-            <Parameter name="OBC_power_draw" parameterTypeRef="float_W"/>
-            <Parameter name="OBC_mode" parameterTypeRef="OBCMode_Type"/>
+            <Parameter name="OBC_state" parameterTypeRef="SubsystemState_Type" shortDescription="OBC State (0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR)"/>
+            <Parameter name="OBC_temperature" parameterTypeRef="int8_degC" shortDescription="OBC Temperature (°C)"/>
+            <Parameter name="OBC_heater_setpoint" parameterTypeRef="int8_degC" shortDescription="OBC Heater Setpoint (°C)"/>
+            <Parameter name="OBC_power_draw" parameterTypeRef="float_W" shortDescription="OBC Power Draw (W)"/>
+            <Parameter name="OBC_mode" parameterTypeRef="OBCMode_Type" shortDescription="OBC Mode (0=SAFE, 1=NOMINAL, 2=ALLON)"/>
 
 			<!-- CDH Parameters -->
-			<Parameter name="CDH_state" parameterTypeRef="SubsystemState_Type"/>	
-			<Parameter name="CDH_temperature" parameterTypeRef="int8_degC"/>
-			<Parameter name="CDH_heater_setpoint" parameterTypeRef="int8_degC"/>
-			<Parameter name="CDH_power_draw" parameterTypeRef="float_W"/>
+			<Parameter name="CDH_state" parameterTypeRef="SubsystemState_Type" shortDescription="CDH State (0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR)"/>	
+			<Parameter name="CDH_temperature" parameterTypeRef="int8_degC" shortDescription="CDH Temperature (°C)"/>
+			<Parameter name="CDH_heater_setpoint" parameterTypeRef="int8_degC" shortDescription="CDH Heater Setpoint (°C)"/>
+			<Parameter name="CDH_power_draw" parameterTypeRef="float_W" shortDescription="CDH Power Draw (W)"/>
 
             <!-- Power Parameters -->
-            <Parameter name="POWER_state" parameterTypeRef="SubsystemState_Type"/>
-            <Parameter name="POWER_temperature" parameterTypeRef="int8_degC"/>
-            <Parameter name="POWER_heater_setpoint" parameterTypeRef="int8_degC"/>
-            <Parameter name="POWER_power_draw" parameterTypeRef="float_W"/>
-            <Parameter name="POWER_battery_voltage" parameterTypeRef="float_V"/>
-            <Parameter name="POWER_battery_current" parameterTypeRef="float_A"/>
-            <Parameter name="POWER_battery_charge" parameterTypeRef="float_percent"/>
-			<Parameter name="POWER_total_power_balance" parameterTypeRef="PowerBalance_Type"/>
-			<Parameter name="POWER_total_power_draw" parameterTypeRef="float_W"/>
-			<Parameter name="POWER_total_power_generation" parameterTypeRef="float_W"/>
-            <Parameter name="POWER_solar_panel_generation_pX" parameterTypeRef="float_W"/>
-            <Parameter name="POWER_solar_panel_generation_nX" parameterTypeRef="float_W"/>
-			<Parameter name="POWER_solar_panel_generation_pY" parameterTypeRef="float_W"/>
-			<Parameter name="POWER_solar_panel_generation_nY" parameterTypeRef="float_W"/>
+            <Parameter name="POWER_state" parameterTypeRef="SubsystemState_Type" shortDescription="POWER State (0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR)"/>
+            <Parameter name="POWER_temperature" parameterTypeRef="int8_degC" shortDescription="POWER Temperature (°C)"/>
+            <Parameter name="POWER_heater_setpoint" parameterTypeRef="int8_degC" shortDescription="POWER Heater Setpoint (°C)"/>
+            <Parameter name="POWER_power_draw" parameterTypeRef="float_W" shortDescription="POWER Power Draw (W)"/>
+            <Parameter name="POWER_battery_voltage" parameterTypeRef="float_V" shortDescription="POWER Battery Voltage (V)"/>
+            <Parameter name="POWER_battery_current" parameterTypeRef="float_A" shortDescription="POWER Battery Current (A)"/>
+			<Parameter name="POWER_total_power_balance" parameterTypeRef="PowerBalance_Type" shortDescription="POWER Total Power Balance (0=BALANCED, 1=POSITIVE, 2=NEGATIVE)"/>
+			<Parameter name="POWER_total_power_draw" parameterTypeRef="float_W" shortDescription="POWER Total Power Draw (W)"/>
+			<Parameter name="POWER_total_power_generation" parameterTypeRef="float_W" shortDescription="POWER Total Power Generation (W)"/>
+            <Parameter name="POWER_solar_panel_generation_pX" parameterTypeRef="float_W" shortDescription="POWER Solar Panel Generation (pX) (W)"/>
+            <Parameter name="POWER_solar_panel_generation_nX" parameterTypeRef="float_W" shortDescription="POWER Solar Panel Generation (nX) (W)"/>
+			<Parameter name="POWER_solar_panel_generation_pY" parameterTypeRef="float_W" shortDescription="POWER Solar Panel Generation (pY) (W)"/>
+			<Parameter name="POWER_solar_panel_generation_nY" parameterTypeRef="float_W" shortDescription="POWER Solar Panel Generation (nY) (W)"/>
 			
             <!-- ADCS Parameters -->
-            <Parameter name="ADCS_state" parameterTypeRef="SubsystemState_Type"/>
-            <Parameter name="ADCS_temperature" parameterTypeRef="int8_degC"/>
-            <Parameter name="ADCS_heater_setpoint" parameterTypeRef="int8_degC"/>
-            <Parameter name="ADCS_power_draw" parameterTypeRef="float_W"/>
-            <Parameter name="ADCS_mode" parameterTypeRef="ADCSMode_Type"/>
-            <Parameter name="ADCS_status" parameterTypeRef="ADCSStatus_Type"/>
-            <Parameter name="ADCS_quaternion_q1" parameterTypeRef="float"/>
-            <Parameter name="ADCS_quaternion_q2" parameterTypeRef="float"/>
-            <Parameter name="ADCS_quaternion_q3" parameterTypeRef="float"/>
-            <Parameter name="ADCS_quaternion_q4" parameterTypeRef="float"/>
-            <Parameter name="ADCS_angular_velocity_x" parameterTypeRef="float_deg_s"/>	
-            <Parameter name="ADCS_angular_velocity_y" parameterTypeRef="float_deg_s"/>	
-            <Parameter name="ADCS_angular_velocity_z" parameterTypeRef="float_deg_s"/>	
-			<Parameter name="ADCS_earth_latitude" parameterTypeRef="float_deg"/>
-			<Parameter name="ADCS_earth_longitude" parameterTypeRef="float_deg"/>	
-			<Parameter name="ADCS_earth_altitude" parameterTypeRef="float_km"/>	
-			<Parameter name="ADCS_eclipse" parameterTypeRef="Eclipse_Type"/>
+            <Parameter name="ADCS_state" parameterTypeRef="SubsystemState_Type" shortDescription="ADCS State (0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR)"/>
+            <Parameter name="ADCS_temperature" parameterTypeRef="int8_degC" shortDescription="ADCS Temperature (°C)"/>
+            <Parameter name="ADCS_heater_setpoint" parameterTypeRef="int8_degC" shortDescription="ADCS Heater Setpoint (°C)"/>
+            <Parameter name="ADCS_power_draw" parameterTypeRef="float_W" shortDescription="ADCS Power Draw (W)"/>
+            <Parameter name="ADCS_mode" parameterTypeRef="ADCSMode_Type" shortDescription="ADCS Mode (0=OFF, 1=LOCK, 2=SUNPOINTING, 3=NADIR, 4=DOWNLOAD)"/>
+            <Parameter name="ADCS_status" parameterTypeRef="ADCSStatus_Type" shortDescription="ADCS Status (0=UNCONTROLLED, 1=SLEWING, 2=POINTING)"/>
+            <Parameter name="ADCS_quaternion_q1" parameterTypeRef="float" shortDescription="ADCS Quaternion (q1)"/>
+            <Parameter name="ADCS_quaternion_q2" parameterTypeRef="float" shortDescription="ADCS Quaternion (q2)"/>
+            <Parameter name="ADCS_quaternion_q3" parameterTypeRef="float" shortDescription="ADCS Quaternion (q3)"/>
+            <Parameter name="ADCS_quaternion_q4" parameterTypeRef="float" shortDescription="ADCS Quaternion (q4)"/>
+            <Parameter name="ADCS_angular_rate_x" parameterTypeRef="float_deg_s" shortDescription="ADCS Angular Rate (x) (deg/s)"/>	
+            <Parameter name="ADCS_angular_rate_y" parameterTypeRef="float_deg_s" shortDescription="ADCS Angular Rate (y) (deg/s)"/>	
+            <Parameter name="ADCS_angular_rate_z" parameterTypeRef="float_deg_s" shortDescription="ADCS Angular Rate (z) (deg/s)"/>	
+			<Parameter name="ADCS_earth_latitude" parameterTypeRef="float_deg" shortDescription="ADCS Earth Latitude (deg)"/>
+			<Parameter name="ADCS_earth_longitude" parameterTypeRef="float_deg" shortDescription="ADCS Earth Longitude (deg)"/>	
+			<Parameter name="ADCS_earth_altitude" parameterTypeRef="float_km" shortDescription="ADCS Earth Altitude (km)"/>	
+			<Parameter name="ADCS_eclipse" parameterTypeRef="Eclipse_Type" shortDescription="ADCS Eclipse (0=DAY, 1=NIGHT)"/>
 
             <!-- Communications Parameters -->
-            <Parameter name="COMMS_state" parameterTypeRef="SubsystemState_Type"/>
-            <Parameter name="COMMS_temperature" parameterTypeRef="int8_degC"/>
-            <Parameter name="COMMS_heater_setpoint" parameterTypeRef="int8_degC"/>
-            <Parameter name="COMMS_power_draw" parameterTypeRef="float_W"/>
-            <Parameter name="COMMS_mode" parameterTypeRef="CommsMode_Type"/>
-            <Parameter name="COMMS_tm_bitrate" parameterTypeRef="uint32_bps"/>
-            <Parameter name="COMMS_tc_bitrate" parameterTypeRef="uint32_bps"/>
+            <Parameter name="COMMS_state" parameterTypeRef="SubsystemState_Type" shortDescription="COMMS State (0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR)"/>
+            <Parameter name="COMMS_temperature" parameterTypeRef="int8_degC" shortDescription="COMMS Temperature (°C)"/>
+            <Parameter name="COMMS_heater_setpoint" parameterTypeRef="int8_degC" shortDescription="COMMS Heater Setpoint (°C)"/>
+            <Parameter name="COMMS_power_draw" parameterTypeRef="float_W" shortDescription="COMMS Power Draw (W)"/>
+            <Parameter name="COMMS_mode" parameterTypeRef="CommsMode_Type" shortDescription="COMMS Mode (0=RX, 1=TXRX)"/>
+            <Parameter name="COMMS_tm_bitrate" parameterTypeRef="uint32_bps" shortDescription="COMMS TM Bitrate (bps)"/>
+            <Parameter name="COMMS_tc_bitrate" parameterTypeRef="uint32_bps" shortDescription="COMMS TC Bitrate (bps)"/>
 
             <!-- Payload Parameters -->
-            <Parameter name="PAYLOAD_state" parameterTypeRef="SubsystemState_Type"/>
-            <Parameter name="PAYLOAD_temperature" parameterTypeRef="int8_degC"/>
-            <Parameter name="PAYLOAD_heater_setpoint" parameterTypeRef="int8_degC"/>
-            <Parameter name="PAYLOAD_power_draw" parameterTypeRef="float_W"/>
-            <Parameter name="PAYLOAD_status" parameterTypeRef="PayloadStatus_Type"/>
+            <Parameter name="PAYLOAD_state" parameterTypeRef="SubsystemState_Type" shortDescription="PAYLOAD State (0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR)"/>
+            <Parameter name="PAYLOAD_temperature" parameterTypeRef="int8_degC" shortDescription="PAYLOAD Temperature (°C)"/>
+            <Parameter name="PAYLOAD_heater_setpoint" parameterTypeRef="int8_degC" shortDescription="PAYLOAD Heater Setpoint (°C)"/>
+            <Parameter name="PAYLOAD_power_draw" parameterTypeRef="float_W" shortDescription="PAYLOAD Power Draw (W)"/>
+            <Parameter name="PAYLOAD_status" parameterTypeRef="PayloadStatus_Type" shortDescription="PAYLOAD Status (0=IDLE, 1=CAPTURING)"/>
 
             <!-- Datastore Parameters -->
-            <Parameter name="DATASTORE_state" parameterTypeRef="SubsystemState_Type"/>
-            <Parameter name="DATASTORE_temperature" parameterTypeRef="int8_degC"/>
-            <Parameter name="DATASTORE_heater_setpoint" parameterTypeRef="int8_degC"/>
-            <Parameter name="DATASTORE_power_draw" parameterTypeRef="float_W"/>
-            <Parameter name="DATASTORE_storage_remaining" parameterTypeRef="float_MB"/>
-            <Parameter name="DATASTORE_number_of_files" parameterTypeRef="uint32"/>
-			<Parameter name="DATASTORE_mode" parameterTypeRef="DatastoreMode_Type"/>
-			<Parameter name="DATASTORE_transfer_progress" parameterTypeRef="float_percent"/>
+            <Parameter name="DATASTORE_state" parameterTypeRef="SubsystemState_Type" shortDescription="DATASTORE State (0=OFF, 1=IDLE, 2=ACTIVE, 3=ERROR)"/>
+            <Parameter name="DATASTORE_temperature" parameterTypeRef="int8_degC" shortDescription="DATASTORE Temperature (°C)"/>
+            <Parameter name="DATASTORE_heater_setpoint" parameterTypeRef="int8_degC" shortDescription="DATASTORE Heater Setpoint (°C)"/>
+            <Parameter name="DATASTORE_power_draw" parameterTypeRef="float_W" shortDescription="DATASTORE Power Draw (W)"/>
+            <Parameter name="DATASTORE_storage_remaining" parameterTypeRef="float_MB" shortDescription="DATASTORE Storage Remaining (MB)"/>
+            <Parameter name="DATASTORE_number_of_files" parameterTypeRef="uint32" shortDescription="DATASTORE Number of Files"/>
+			<Parameter name="DATASTORE_mode" parameterTypeRef="DatastoreMode_Type" shortDescription="DATASTORE Mode (0=IDLE, 1=TRANSFERING)"/>
+			<Parameter name="DATASTORE_transfer_progress" parameterTypeRef="float_percent" shortDescription="DATASTORE Transfer Progress (%)"/>
         </ParameterSet>
 
         <ContainerSet>
@@ -398,7 +344,6 @@
 					<ParameterRefEntry parameterRef="POWER_power_draw"/>
 					<ParameterRefEntry parameterRef="POWER_battery_voltage"/>
 					<ParameterRefEntry parameterRef="POWER_battery_current"/>
-					<ParameterRefEntry parameterRef="POWER_battery_charge"/>
 					<ParameterRefEntry parameterRef="POWER_total_power_balance"/>
 					<ParameterRefEntry parameterRef="POWER_total_power_draw"/>
 					<ParameterRefEntry parameterRef="POWER_total_power_generation"/>
@@ -416,9 +361,9 @@
 					<ParameterRefEntry parameterRef="ADCS_quaternion_q2"/>
 					<ParameterRefEntry parameterRef="ADCS_quaternion_q3"/>
 					<ParameterRefEntry parameterRef="ADCS_quaternion_q4"/>
-					<ParameterRefEntry parameterRef="ADCS_angular_velocity_x"/>
-					<ParameterRefEntry parameterRef="ADCS_angular_velocity_y"/>
-					<ParameterRefEntry parameterRef="ADCS_angular_velocity_z"/>
+					<ParameterRefEntry parameterRef="ADCS_angular_rate_x"/>
+					<ParameterRefEntry parameterRef="ADCS_angular_rate_y"/>
+					<ParameterRefEntry parameterRef="ADCS_angular_rate_z"/>
 					<ParameterRefEntry parameterRef="ADCS_earth_latitude"/>
 					<ParameterRefEntry parameterRef="ADCS_earth_longitude"/>
 					<ParameterRefEntry parameterRef="ADCS_earth_altitude"/>

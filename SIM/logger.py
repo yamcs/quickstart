@@ -2,10 +2,10 @@ import logging
 import sys
 from pathlib import Path
 from datetime import datetime
+from config import LOGGER_CONFIG
 
 # Logger Configuration
-LOG_LEVEL = 'DEBUG'    # Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-LOG_RATE = 5.0        # How often to log simulation time (seconds)
+LOG_LEVEL = LOGGER_CONFIG['level']      # Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
 
 class SimLogger:
     _instance = None

@@ -44,7 +44,6 @@ class PowerModule:
             np.float32(self.power_draw),                # float_W (32 bits)
             np.float32(self.battery_voltage),           # float_V (32 bits)
             np.float32(self.battery_current),           # float_A (32 bits)
-            np.float32(self.battery_charge),            # float_percent (32 bits)
             np.uint8(self.power_balance),               # PowerBalance_Type (8 bits)
             np.float32(self.total_power_draw),          # float_W (32 bits)
             np.float32(self.total_power_generation),    # float_W (32 bits)
@@ -54,7 +53,7 @@ class PowerModule:
             np.float32(self.solar_panel_generation_nY)  # float_W (32 bits)
         ]
         
-        return struct.pack(">BbbffffBffffff", *values)
+        return struct.pack(">BbbfffBffffff", *values)
         
     def process_command(self, command_id, command_data):
         """Process POWER commands (Command_ID range 20-29)"""
@@ -92,7 +91,7 @@ class PowerModule:
             orbit_state = self.orbit_propagator.propagate(current_time)
 
             # Get total power draw
-            self.total_power_draw = self._total_power_draw() + np.random.uniform(-0.15, 0.15)
+            self.total_power_draw = self._total_power_draw()
 
             # Reset total generation
             self.solar_total_generation = 0.0
@@ -171,11 +170,11 @@ class PowerModule:
 
     def _total_power_draw(self):
         """Calculate total power draw based on subsystem states"""
-        obc_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['obc']['power_draw']
-        cdh_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['cdh']['power_draw']
-        power_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['power']['power_draw']
-        adcs_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['adcs']['power_draw']
-        comms_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['comms']['power_draw']
-        payload_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['payload']['power_draw']
-        data_storage_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['datastore']['power_draw']
+        obc_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['obc']['power_draw'] + np.random.uniform(-0.05, 0.05)
+        cdh_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['cdh']['power_draw'] + np.random.uniform(-0.05, 0.05)
+        power_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['power']['power_draw'] + np.random.uniform(-0.05, 0.05)
+        adcs_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['adcs']['power_draw'] + np.random.uniform(-0.05, 0.05)
+        comms_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['comms']['power_draw'] + np.random.uniform(-0.05, 0.05)
+        payload_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['payload']['power_draw'] + np.random.uniform(-0.05, 0.05)
+        data_storage_power_draw = SPACECRAFT_CONFIG['spacecraft']['initial_state']['datastore']['power_draw'] + np.random.uniform(-0.05, 0.05)  
         return sum([obc_power_draw, cdh_power_draw, power_power_draw, adcs_power_draw, comms_power_draw, payload_power_draw, data_storage_power_draw])
