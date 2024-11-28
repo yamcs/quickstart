@@ -69,10 +69,11 @@ public class MyPacketPreprocessor extends AbstractPacketPreprocessor {
         // Extract time from secondary header
         ByteBuffer buf = ByteBuffer.wrap(bytes);
         buf.position(6); // Skip primary header
-        long deltaTimeMillis = buf.getInt() & 0xFFFFFFFFL;  // Convert unsigned int to long
+        long deltaTimeSeconds = buf.getInt() & 0xFFFFFFFFL;  // Convert unsigned int to long
+        long deltaTimeMillis = deltaTimeSeconds * 1000;  // Convert seconds to milliseconds
         
         // Convert delta time to absolute time
-        long missionStartMillis = 1735689600000L; // 2025-01-01 00:00:00 UTC
+        long missionStartMillis = 946684800000L; // 2000-01-01 00:00:00 UTC (epoch from BOSSY/SIM/simulator.py) 
         long absoluteTimeMillis = missionStartMillis + deltaTimeMillis;
         
         // Set the generation time

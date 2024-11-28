@@ -56,7 +56,7 @@
 			</IntegerParameterType>
 			<IntegerParameterType name="CCSDS_Time_Type" signed="false">
 				<UnitSet>
-					<Unit>ms</Unit>
+					<Unit>s</Unit>
 				</UnitSet>
 				<IntegerDataEncoding sizeInBits="32" byteOrder="mostSignificantByteFirst"/>
 			</IntegerParameterType>

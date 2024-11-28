@@ -2,8 +2,8 @@ from datetime import datetime
 
 # Simulator Configuration
 SIM_CONFIG = {
-    'epoch': datetime(2020, 1, 1, 0, 0, 0),  # Epoch time (don't change this!!!)
-    'mission_start_time': datetime(2025, 1, 1, 0, 0, 0),  # Mission start time
+    'epoch': datetime(2000, 1, 1, 0, 0, 0),  # Epoch time (don't change this!!!)
+    'mission_start_time': datetime(2026, 1, 1, 0, 0, 0),  # Mission start time
     'time_step': 1.0,                                     # Simulation time step in seconds
     'time_factor': 1.0,                                    # Time factor (e.g. 1.0 = real time, 2.0 = 2x speed, etc.)
     'download_directory': './BOSSY/MCS/download/',

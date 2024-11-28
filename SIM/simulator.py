@@ -8,10 +8,15 @@ from logger import SimLogger
 
 class Simulator:
     _sim_time = SIM_CONFIG['mission_start_time']  # Initialize at class level
+    _epoch = SIM_CONFIG['epoch']
     
     @classmethod
     def get_sim_time(cls):
         return cls._sim_time  # Simply return the current simulation time
+    
+    @classmethod
+    def get_epoch(cls):
+        return cls._epoch  # Simply return the epoch time
 
     def __init__(self):
         self.logger = SimLogger.get_logger("Simulator")
@@ -68,7 +73,7 @@ class Simulator:
                 #self.cdh.obc.update(self.current_time)
                 
                 # Create telemetry packet through CDH
-                tm_packet = self.cdh.create_tm_packet()
+                tm_packet = self.cdh.create_tm_packet(self.current_time)
                 
                 # Send telemetry packet through COMMS
                 self.cdh.comms.send_tm_packet(tm_packet)

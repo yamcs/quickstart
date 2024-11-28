@@ -6,7 +6,7 @@ from apps.spacecraft.power import PowerModule
 from apps.spacecraft.payload import PayloadModule
 from apps.spacecraft.datastore import DatastoreModule
 from apps.spacecraft.comms import CommsModule
-from config import SPACECRAFT_CONFIG
+from config import SPACECRAFT_CONFIG, SIM_CONFIG
 import numpy as np
 from datetime import datetime
 
@@ -15,6 +15,7 @@ class CDHModule:
         self.logger = SimLogger.get_logger("CDHModule")
         config = SPACECRAFT_CONFIG['spacecraft']['initial_state']['cdh']
         self.simulator = None  # Will be set by simulator
+        self.epoch = SIM_CONFIG['epoch']
         
         # Initialize CDH state from config
         self.state = config['state']
@@ -48,7 +49,7 @@ class CDHModule:
         
         return struct.pack(">Bbbf", *values)
 
-    def create_tm_packet(self):
+    def create_tm_packet(self, current_sim_time):
         """Create a CCSDS telemetry packet"""
         # CCSDS Primary Header
         version = 0
@@ -57,18 +58,17 @@ class CDHModule:
         apid = 100  # Housekeeping
         sequence_flags = 3  # Standalone packet
         packet_sequence_count = self.sequence_count & 0x3FFF
-        
+    
         first_word = (version << 13) | (packet_type << 12) | (sec_hdr_flag << 11) | apid
         second_word = (sequence_flags << 14) | packet_sequence_count
         
-        # Get simulation time
-        from config import SIM_CONFIG
-        mission_start = SIM_CONFIG['mission_start_time']
-        sim_time = self.simulator.get_sim_time() if self.simulator else mission_start
-        
         # Calculate elapsed time in milliseconds since mission start
-        elapsed_seconds = (sim_time - mission_start).total_seconds()
-        timestamp = int(elapsed_seconds * 1000)  # Convert to milliseconds
+        self.logger.debug(f"Current sim time: {current_sim_time}")
+        self.logger.debug(f"Epoch: {self.epoch}")
+        elapsed_seconds = (current_sim_time - self.epoch).total_seconds()
+        self.logger.debug(f"Elapsed seconds: {elapsed_seconds}")
+        timestamp = int(elapsed_seconds)  # not converting to milliseconds due to 4Byte
+        self.logger.debug(f"Timestamp: {timestamp}") 
         
         # Pack as 4-byte unsigned int
         secondary_header = struct.pack(">I", timestamp & 0xFFFFFFFF)
