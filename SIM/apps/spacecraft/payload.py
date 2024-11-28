@@ -110,15 +110,15 @@ class PayloadModule:
         try:
             self.status = 1  # Set to CAPTURING
 
-            zoom = 12  # google api specific value that is roughly the swath width at equator
+            zoom = 12  # google api specific value that is roughly the config.py swath width at equator
             
             # Build API request
             params = {
                 'center': f'{lat},{lon}',  # Use spacecraft's actual position
-                'zoom': zoom,
-                'size': f'{res}x{res}',  # 1024x1024 pixels
-                'maptype': 'satellite',
-                'key': 'AIzaSyDL__brVoZ4VY72_ZnRl5MhLnWLpuP4bsA',
+                'zoom': zoom,  # Google Maps API specific parameter
+                'size': f'{res}x{res}',  # resolution from config.py (pixels), same for width and height
+                'maptype': 'satellite',  # Google Maps API specific parameter
+                'key': SIM_CONFIG['google_maps_api_key'],  # Google Maps API key
                 'scale': 2  # Request high-resolution tiles
             }
 
