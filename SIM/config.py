@@ -139,8 +139,8 @@ SPACECRAFT_CONFIG = {
                 'solar_flux': 1361.0     # W/m² (solar constant)
             },
             'eo_camera': {  # EO Camera Configuration
-                'resolution': 1024,  # pixels
-                'swath': 1.0,       # km, width of the swath in kilometers
+                'resolution': 4096,  # pixels
+                'swath': 25.0,       # km, width of the swath in kilometers
             }
         }
     }   

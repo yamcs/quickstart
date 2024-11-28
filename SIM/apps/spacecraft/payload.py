@@ -109,23 +109,20 @@ class PayloadModule:
         self.logger.debug("Capturing image")
         try:
             self.status = 1  # Set to CAPTURING
-            # For 1km width at 1m/pixel resolution
-            width = 1024  # Fixed at 1024 pixels
-            
-            # Calculate zoom level for 1km width
-            zoom = 16  # This gives us roughly 1km width
+
+            zoom = 12  # google api specific value that is roughly the swath width at equator
             
             # Build API request
             params = {
                 'center': f'{lat},{lon}',  # Use spacecraft's actual position
                 'zoom': zoom,
-                'size': f'{width}x{width}',  # 1024x1024 pixels
+                'size': f'{res}x{res}',  # 1024x1024 pixels
                 'maptype': 'satellite',
                 'key': 'AIzaSyDL__brVoZ4VY72_ZnRl5MhLnWLpuP4bsA',
                 'scale': 2  # Request high-resolution tiles
             }
 
-            self.logger.info(f"Capturing {width}x{width} image at position (lat={lat}, lon={lon}) at zoom level {zoom}")
+            self.logger.info(f"Capturing {res}x{res} image at position (lat={lat}, lon={lon}) at zoom level {zoom}")
             
             # Create filename that increments with each capture
             filename = f"EO_image_met_{met_sec}.png"
@@ -139,9 +136,9 @@ class PayloadModule:
             response = requests.get(base_url, params=params)
             img = Image.open(BytesIO(response.content))
             
-            # Resize to exactly 1024x1024 if needed
-            if img.size != (1024, 1024):
-                img = img.resize((1024, 1024), Image.Resampling.LANCZOS)
+            # Resize to exactly resxres if needed
+            if img.size != (res, res):
+                img = img.resize((res, res), Image.Resampling.LANCZOS)
             
             # Save the image in PNG format
             img.save(filepath, 'PNG')
