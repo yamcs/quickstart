@@ -68,7 +68,7 @@ SPACECRAFT_CONFIG = {
                 'mode': 0,           # ADCSMode_Type (uint8): 0=OFF, 1=LOCK, 2=SUNPOINTING, 3=NADIR, 4=DOWNLOAD
                 'status': 0,         # ADCSStatus_Type (uint8): 0=UNCONTROLLED, 1=SLEWING, 2=POINTING
                 'quaternion': [0.707, 0.0, 0.0, 0.707],  # float[4]: Attitude quaternion [q1,q2,q3,q4]
-                'angular_velocity': [0.0, 0.0, 0.0],     # float_deg_s[3]: Angular rates [x,y,z] in deg/s
+                'angular_rate': [0.0, 0.0, 0.0],     # float_deg_s[3]: Angular rates [x,y,z] in deg/s
                 'position': [0.0, 0.0, 500.0],           # [float_deg,float_deg,float_km]: [lat,lon,alt]
                 'eclipse': 0         # Eclipse_Type (uint8): 0=DAY, 1=NIGHT
             },

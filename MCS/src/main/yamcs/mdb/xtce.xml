@@ -271,6 +271,7 @@
             <Parameter name="ADCS_angular_rate_x" parameterTypeRef="float_deg_s" shortDescription="ADCS Angular Rate (x) (deg/s)"/>	
             <Parameter name="ADCS_angular_rate_y" parameterTypeRef="float_deg_s" shortDescription="ADCS Angular Rate (y) (deg/s)"/>	
             <Parameter name="ADCS_angular_rate_z" parameterTypeRef="float_deg_s" shortDescription="ADCS Angular Rate (z) (deg/s)"/>	
+			<Parameter name="ADCS_angular_rate_total" parameterTypeRef="float_deg_s" shortDescription="ADCS Angular Rate Total (deg/s)"/>
 			<Parameter name="ADCS_earth_latitude" parameterTypeRef="float_deg" shortDescription="ADCS Earth Latitude (deg)"/>
 			<Parameter name="ADCS_earth_longitude" parameterTypeRef="float_deg" shortDescription="ADCS Earth Longitude (deg)"/>	
 			<Parameter name="ADCS_earth_altitude" parameterTypeRef="float_km" shortDescription="ADCS Earth Altitude (km)"/>	
@@ -364,6 +365,7 @@
 					<ParameterRefEntry parameterRef="ADCS_angular_rate_x"/>
 					<ParameterRefEntry parameterRef="ADCS_angular_rate_y"/>
 					<ParameterRefEntry parameterRef="ADCS_angular_rate_z"/>
+					<ParameterRefEntry parameterRef="ADCS_angular_rate_total"/>
 					<ParameterRefEntry parameterRef="ADCS_earth_latitude"/>
 					<ParameterRefEntry parameterRef="ADCS_earth_longitude"/>
 					<ParameterRefEntry parameterRef="ADCS_earth_altitude"/>

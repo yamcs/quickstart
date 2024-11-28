@@ -25,7 +25,7 @@ class ADCSModule:
         
         # Initialize attitude state from config
         self.quaternion = np.array(adcs_config['quaternion'])
-        self.angular_velocity = np.array(adcs_config['angular_velocity']) * np.pi/180.0  # Convert deg/s to rad/s
+        self.angular_rate = np.array(adcs_config['angular_rate']) * np.pi/180.0  # Convert deg/s to rad/s
         
         # Initialize mode and status from config
         self.mode = adcs_config['mode']
@@ -39,7 +39,8 @@ class ADCSModule:
         
         # Initialize attitude and position
         self.quaternion = np.array(config['quaternion'])
-        self.angular_velocity = np.array(config['angular_velocity'])
+        self.angular_rate = np.array(config['angular_rate'])
+        self.angular_rate_total = np.linalg.norm(self.angular_rate)
         self.position = np.array(config['position'])
         self.eclipse = config['eclipse']
         
@@ -123,7 +124,7 @@ class ADCSModule:
         # Debug output before packing
         self.logger.debug(f"Packing telemetry - lat: {self.position[0]}, lon: {self.position[1]}, alt: {self.position[2]}")
         self.logger.debug(f"Quaternion: {self.quaternion}")
-        self.logger.debug(f"Angular velocity (deg/s): {np.degrees(self.angular_velocity)}")
+        self.logger.debug(f"Angular rate (deg/s): {np.degrees(self.angular_rate)}")
 
         # Pack values in correct order with proper types
         values = [
@@ -137,9 +138,10 @@ class ADCSModule:
             np.float32(self.quaternion[1]),          # float (32 bits)
             np.float32(self.quaternion[2]),          # float (32 bits)
             np.float32(self.quaternion[3]),          # float (32 bits)
-            np.float32(self.angular_velocity[0]),    # float_deg_s (32 bits)
-            np.float32(self.angular_velocity[1]),    # float_deg_s (32 bits)
-            np.float32(self.angular_velocity[2]),    # float_deg_s (32 bits)
+            np.float32(self.angular_rate[0]),       # float_deg_s (32 bits)
+            np.float32(self.angular_rate[1]),        # float_deg_s (32 bits)
+            np.float32(self.angular_rate[2]),        # float_deg_s (32 bits)
+            np.float32(self.angular_rate_total),     # float_deg_s (32 bits)
             np.float32(self.position[0]),            # float_deg (32 bits)
             np.float32(self.position[1]),            # float_deg (32 bits)
             np.float32(self.position[2]),            # float_km (32 bits)
@@ -147,7 +149,7 @@ class ADCSModule:
         ]
         
         # Pack using correct format string
-        return struct.pack(">BbbfBBffffffffffB", *values)
+        return struct.pack(">BbbfBBfffffffffffB", *values)
         
     def process_command(self, command_id, command_data):
         """Process ADCS commands (Command_ID range 30-39)"""
@@ -220,51 +222,53 @@ class ADCSModule:
                 elif control_mode == 4:  # DOWNLOAD POINTING
                     q_desired = self._q_desired_nadir(orbit_state)
 
-                q_current, ang_vel = self._keep_pointing(q_desired)
+                q_current, ang_rate = self._keep_pointing(q_desired)
                 self.quaternion = q_current
-                self.angular_velocity = ang_vel
+                self.angular_rate = ang_rate
 
             elif control_mode == 2:  # SUNPOINTING (+X to Sun)
                 q_desired = self._q_desired_sunpointing(orbit_state)
                 q_current = self.quaternion  # Current attitude
-                q_current, ang_vel, errors = self._keep_slewing(q_desired, q_current)
+                q_current, ang_rate, errors = self._keep_slewing(q_desired, q_current)
                 self.quaternion = q_current 
-                self.angular_velocity = ang_vel
+                self.angular_rate = ang_rate
 
                 if (np.abs(errors[0]) > self.pointing_accuracy * 2.0) | (np.abs(errors[1]) > self.pointing_accuracy * 2.0) | (np.abs(errors[2]) > self.pointing_accuracy * 2.0):  # If error more than twice pointing accuracy
                     self.status = 1  # SLEWING
                 else:
                     self.status = 2  # POINTING ACHIEVED
                     rand_noise = np.random.uniform(-0.001, 0.001, 3)
-                    self.angular_velocity = np.array([0.0, 0.0, 0.0]) + rand_noise
+                    self.angular_rate = np.array([0.0, 0.0, 0.0]) + rand_noise
                 
             elif control_mode == 3:  # NADIR (-Z to Earth)
                 q_desired = self._q_desired_nadir(orbit_state)
                 q_current = self.quaternion  # Current attitude
-                q_current, ang_vel, errors = self._keep_slewing(q_desired, q_current)
+                q_current, ang_rate, errors = self._keep_slewing(q_desired, q_current)
                 self.quaternion = q_current 
-                self.angular_velocity = ang_vel
+                self.angular_rate = ang_rate
 
                 if (np.abs(errors[0]) > self.pointing_accuracy * 2.0) | (np.abs(errors[1]) > self.pointing_accuracy * 2.0) | (np.abs(errors[2]) > self.pointing_accuracy * 2.0):  # If error more than twice pointing accuracy
                     self.status = 1  # SLEWING
                 else:
                     self.status = 2  # POINTING ACHIEVED
                     rand_noise = np.random.uniform(-0.001, 0.001, 3)
-                    self.angular_velocity = np.array([0.0, 0.0, 0.0]) + rand_noise
+                    self.angular_rate = np.array([0.0, 0.0, 0.0]) + rand_noise
 
             elif control_mode == 4:  # DOWNLOAD (+Z to Earth)
                 q_desired = self._q_desired_download(orbit_state)  # Convert to quaternion
                 q_current = self.quaternion  # Current attitude
-                q_current, ang_vel, errors = self._keep_slewing(q_desired, q_current)
+                q_current, ang_rate, errors = self._keep_slewing(q_desired, q_current)
                 self.quaternion = q_current 
-                self.angular_velocity = ang_vel
+                self.angular_rate = ang_rate
 
                 if (np.abs(errors[0]) > self.pointing_accuracy * 2.0) | (np.abs(errors[1]) > self.pointing_accuracy * 2.0) | (np.abs(errors[2]) > self.pointing_accuracy * 2.0):  # If error more than twice pointing accuracy
                     self.status = 1  # SLEWING
                 else:
                     self.status = 2  # POINTING ACHIEVED
                     rand_noise = np.random.uniform(-0.001, 0.001, 3)
-                    self.angular_velocity = np.array([0.0, 0.0, 0.0]) + rand_noise
+                    self.angular_rate = np.array([0.0, 0.0, 0.0]) + rand_noise
+
+            self.angular_rate_total = np.linalg.norm(self.angular_rate)
                 
         except Exception as e:
             self.logger.error(f"Error in attitude update: {str(e)}")
@@ -281,8 +285,8 @@ class ADCSModule:
         rpy_current[1] = rpy_desired[1] + rand_error_y
         rpy_current[2] = rpy_desired[2] + rand_error_z
         q_current = self._euler_to_quaternion(rpy_current[0], rpy_current[1], rpy_current[2])
-        ang_vel = np.array([rand_error_x, rand_error_y, rand_error_z])  # deg/s
-        return q_current, ang_vel
+        ang_rate = np.array([rand_error_x, rand_error_y, rand_error_z])  # deg/s
+        return q_current, ang_rate
     
     def _keep_slewing(self, q_desired, q_current):
         rpy_desired = list(self._quaternion_to_euler(q_desired))  # Current Euler angles
@@ -297,7 +301,7 @@ class ADCSModule:
         rpy_current[1] = rpy_current[1] + (np.sign(y_error) * applied_slew_rate_y * self.time_step)
         rpy_current[2] = rpy_current[2] + (np.sign(z_error) * applied_slew_rate_z * self.time_step)
         q_current = self._euler_to_quaternion(rpy_current[0], rpy_current[1], rpy_current[2])
-        ang_vel = np.array([applied_slew_rate_x, applied_slew_rate_y, applied_slew_rate_z])  # deg/s
+        ang_rate = np.array([applied_slew_rate_x, applied_slew_rate_y, applied_slew_rate_z])  # deg/s
 
         error_angle = self._calculate_error_angle(self.quaternion, q_desired)
         est_time_to_target = (error_angle / (np.random.uniform(0.001, 0.1) + self.nominal_slew_rate)) * 1.1  # Add 10% to account for error
@@ -313,7 +317,7 @@ class ADCSModule:
         self.logger.debug(f"     Estimated time to target: {est_time_to_target:.2f} seconds")    
         self.logger.debug(f"            Pointing accuracy: {self.pointing_accuracy:.2f} deg")
 
-        return q_current, ang_vel, [x_error,y_error,z_error]
+        return q_current, ang_rate, [x_error,y_error,z_error]
 
     def _q_desired_sunpointing(self, orbit_state):
         sun_pos = self.orbit_propagator.sun.get_position_at_time(orbit_state['time'])  # Get Sun position 
@@ -371,7 +375,7 @@ class ADCSModule:
         rpy_current[1] = rpy_current[1] + (applied_random_rate_y * self.time_step)
         rpy_current[2] = rpy_current[2] + (applied_random_rate_z * self.time_step)
         q_current = self._euler_to_quaternion(rpy_current[0], rpy_current[1], rpy_current[2])
-        self.angular_velocity = np.array([applied_random_rate_x, applied_random_rate_y, applied_random_rate_z])  # deg/s
+        self.angular_rate = np.array([applied_random_rate_x, applied_random_rate_y, applied_random_rate_z])  # deg/s
         self.quaternion = q_current
 
     def _euler_to_quaternion(self, roll_deg, pitch_deg, yaw_deg):
