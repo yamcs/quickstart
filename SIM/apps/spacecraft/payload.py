@@ -25,7 +25,7 @@ class PayloadModule:
         self.latitude = self.adcs_module.position[0]
         self.longitude = self.adcs_module.position[1]
         self.altitude = self.adcs_module.position[2]
-        self.mission_epoch = SIM_CONFIG['mission_start_time']
+        self.mission_epoch = SIM_CONFIG['epoch']
         self.current_time = SIM_CONFIG['mission_start_time']
 
         # EO Camera Configuration
