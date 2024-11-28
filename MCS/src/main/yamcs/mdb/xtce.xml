@@ -945,61 +945,7 @@
 					</EntryList>
 					<BaseContainer containerRef="CommandPacket" />
 				</CommandContainer>		
-			</MetaCommand>	
-			<MetaCommand name="COMMS_CLEAR_TM_QUEUE" shortDescription="Clears the COMMS telemetry queue">
-				<BaseMetaCommand metaCommandRef="CommandPacket">
-					<ArgumentAssignmentList>
-						<ArgumentAssignment argumentName="Command_ID" argumentValue="44" />
-					</ArgumentAssignmentList>
-				</BaseMetaCommand>		  
-				<CommandContainer name="COMMS_CLEAR_TM_QUEUE">
-					<EntryList/>
-					<BaseContainer containerRef="CommandPacket"/>
-				</CommandContainer>	
-			</MetaCommand>		
-			<MetaCommand name="COMMS_CLEAR_TC_QUEUE" shortDescription="Clears the COMMS telecommand queue">
-				<BaseMetaCommand metaCommandRef="CommandPacket">
-					<ArgumentAssignmentList>
-						<ArgumentAssignment argumentName="Command_ID" argumentValue="45" />
-					</ArgumentAssignmentList>
-				</BaseMetaCommand>		 
-				<CommandContainer name="COMMS_CLEAR_TC_QUEUE">
-					<EntryList/>
-					<BaseContainer containerRef="CommandPacket"/>
-				</CommandContainer>	
-			</MetaCommand>		
-			<MetaCommand name="COMMS_SET_TM_BITRATE" shortDescription="Sets the COMMS telemetry bitrate">
-				<BaseMetaCommand metaCommandRef="CommandPacket">
-					<ArgumentAssignmentList>
-						<ArgumentAssignment argumentName="Command_ID" argumentValue="46" />
-					</ArgumentAssignmentList>
-				</BaseMetaCommand>		 
-				<ArgumentList>
-					<Argument argumentTypeRef="bitrate" name="bitrate" shortDescription="Desired telemetry bitrate" />
-				</ArgumentList>		
-				<CommandContainer name="COMMS_SET_TM_BITRATE">
-					<EntryList>
-						<ArgumentRefEntry argumentRef="bitrate" />
-					</EntryList>
-					<BaseContainer containerRef="CommandPacket" />
-				</CommandContainer>			
-			</MetaCommand>		
-			<MetaCommand name="COMMS_SET_TC_BITRATE" shortDescription="Sets the COMMS telecommand bitrate">
-				<BaseMetaCommand metaCommandRef="CommandPacket">
-					<ArgumentAssignmentList>
-						<ArgumentAssignment argumentName="Command_ID" argumentValue="47" />
-					</ArgumentAssignmentList>
-				</BaseMetaCommand>		 
-				<ArgumentList>
-					<Argument argumentTypeRef="bitrate" name="bitrate" shortDescription="Desired telecommand bitrate" />
-				</ArgumentList>			
-				<CommandContainer name="COMMS_SET_TC_BITRATE">
-					<EntryList>
-						<ArgumentRefEntry argumentRef="bitrate" />
-					</EntryList>
-					<BaseContainer containerRef="CommandPacket" />
-				</CommandContainer>			
-			</MetaCommand>		
+			</MetaCommand>
 
 			<!-- PAYLOAD Commands -->	
 			<MetaCommand name="PAYLOAD_SET_STATE" shortDescription="Sets the PAYLOAD state">

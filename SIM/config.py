@@ -73,7 +73,7 @@ SPACECRAFT_CONFIG = {
                 'temperature': 20,    # int8_degC: Operating temperature in degrees Celsius
                 'heater_setpoint': 25,# int8_degC: Temperature setpoint for heater control
                 'power_draw': 3.7,    # float_W: Power consumption in Watts
-                'mode': 1,           # CommsMode_Type (uint8): 0=OFF, 1=RX, 2=TXRX
+                'mode': 1,           # CommsMode_Type (uint8): 0=RX, 1=TXRX
                 'uplink_bitrate': 32000,   # uint32_bps: Uplink data rate in bits per second
                 'downlink_bitrate': 128000  # uint32_bps: Downlink data rate in bits per second
             },

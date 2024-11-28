@@ -73,11 +73,6 @@ class CommsModule:
                 self.logger.info(f"Setting COMMS mode to: {mode}")
                 self.mode = mode
                 
-            elif command_id == 44:   # COMMS_SET_BITRATE
-                bitrate = struct.unpack(">I", command_data)[0]
-                self.logger.info(f"Setting COMMS bitrate to: {bitrate} bps")
-                self.downlink_bitrate = bitrate
-                
             else:
                 self.logger.warning(f"Unknown COMMS command ID: {command_id}")
                 
@@ -105,12 +100,13 @@ class CommsModule:
         
     def send_tm_packet(self, packet):
         """Send telemetry packet"""
-        try:
-            self.tm_socket.sendto(packet, (self.HOST, self.TM_PORT))
-            self.packets_sent += 1
-            self.logger.debug(f"Sent TM packet: {packet.hex()}")
-        except socket.error as e:
-            self.logger.error(f"Socket error while sending TM: {e}")
+        if self.mode == 1:  # if TXRX mode, send to TM socket
+            try:
+                self.tm_socket.sendto(packet, (self.HOST, self.TM_PORT))
+                self.packets_sent += 1
+                self.logger.debug(f"Sent TM packet: {packet.hex()}")
+            except socket.error as e:
+                self.logger.error(f"Socket error while sending TM: {e}")
             
     def _tc_listener(self):
         """Listen for incoming telecommands"""
