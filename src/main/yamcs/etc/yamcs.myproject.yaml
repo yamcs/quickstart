@@ -18,9 +18,6 @@ services:
     args:
       realtimeFiller:
         enabled: true
-      backFiller:
-        enabled: false
-        warmupTime: 60
   - class: org.yamcs.plists.ParameterListService
   - class: org.yamcs.timeline.TimelineService
 
