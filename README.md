@@ -42,9 +42,23 @@ To start pushing CCSDS packets into Yamcs, run the included Python script:
 
     python simulator.py
 
-This script will send packets at 1 Hz over UDP to Yamcs. There is enough test data to run for a full calendar day.
+This script will poll the Yamcs HTTP API until the target instance reports a `RUNNING` state before sending any packets, avoiding dropped telemetry during Yamcs startup.
+
+It sends packets at 1 Hz over UDP to Yamcs. There is enough test data to run for a full calendar day.
 
 The packets are a bit artificial and include a mixture of HK and accessory data.
+
+The following optional arguments control which Yamcs instance to wait for:
+
+| Argument            | Default       | Description               |
+|---------------------|---------------|---------------------------|
+| `--yamcs_host`      | `127.0.0.1`   | Yamcs HTTP host            |
+| `--yamcs_port`      | `8090`        | Yamcs HTTP port            |
+| `--yamcs_instance`  | `myproject`   | Yamcs instance name        |
+
+Example:
+
+    python simulator.py --yamcs_instance myproject --rate 10
 
 
 ## Telecommanding

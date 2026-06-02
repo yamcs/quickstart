@@ -7,6 +7,10 @@ MAKEFLAGS += --no-builtin-rules
 
 PYTHON := $(shell command -v python3 2>/dev/null || echo python)
 
+YAMCS_HOST     ?= 127.0.0.1
+YAMCS_PORT     ?= 8090
+YAMCS_INSTANCE ?= myproject
+
 .DEFAULT_GOAL := help
 
 # Define function to print messages in different colors
@@ -21,20 +25,26 @@ all: clean yamcs-up yamcs-simulator ## run all: clean, yamcs-up (yamcs-down) and
 
 all-10hz: clean yamcs-up yamcs-simulator-10hz ## run all: clean, yamcs-up (yamcs-down) and yamcs-simulator
 
-yamcs-up: | yamcs-down ## bring up yamcs system
-	docker compose up -d
+yamcs-up: ## bring up yamcs system
+	docker compose -f './docker-compose.yml' up -d --build 'yamcs' 
 
 yamcs-down: ## bring down yamcs system
 	$(call print_message,33,Stopping any running docker-yamcs containers...)
 	docker compose down -v --remove-orphans
 
-yamcs-simulator: ## run yamcs simulator
+yamcs-simulator: ## run yamcs simulator (override with YAMCS_HOST, YAMCS_PORT, YAMCS_INSTANCE)
 	$(call print_message,36,Connect via http://localhost:8090/ system may take about 50 seconds to startup)
-	cd .. && $(PYTHON) ./simulator.py
+	cd .. && $(PYTHON) ./simulator.py \
+		--yamcs_host=$(YAMCS_HOST) \
+		--yamcs_port=$(YAMCS_PORT) \
+		--yamcs_instance=$(YAMCS_INSTANCE)
 
-yamcs-simulator-10hz: ## run yamcs simulator at 10hz
+yamcs-simulator-10hz: ## run yamcs simulator at 10hz (override with YAMCS_HOST, YAMCS_PORT, YAMCS_INSTANCE)
 	$(call print_message,36,Connect via http://localhost:8090/ system may take about 50 seconds to startup)
-	cd .. && $(PYTHON) ./simulator.py --rate=10
+	cd .. && $(PYTHON) ./simulator.py --rate=10 \
+		--yamcs_host=$(YAMCS_HOST) \
+		--yamcs_port=$(YAMCS_PORT) \
+		--yamcs_instance=$(YAMCS_INSTANCE)
 
 yamcs-simulator-down: ## stop the yamcs simulator
 	$(call print_message,33,Stopping the yamcs simulator...)
