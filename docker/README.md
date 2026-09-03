@@ -24,6 +24,11 @@ To bring up yamcs container:
 
     make yamcs-up
 
+This also starts the simulator in a companion container, so telemetry is
+flowing as soon as Yamcs is up. Ports 8090 (web) and 10015/udp (TM) are
+published on 127.0.0.1 only, since the quickstart runs without
+authentication.
+
 To bring down yamcs container:
 
     make yamcs-down

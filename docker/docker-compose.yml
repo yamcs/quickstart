@@ -14,12 +14,30 @@ services:
     volumes:
       - ../:/yamcs
     ports:
-      - "8090:8090"
-      - "10015:10015/udp"
+      # Bound to localhost: the quickstart runs without authentication,
+      # so it should not be reachable from other hosts by default.
+      - "127.0.0.1:8090:8090"
+      - "127.0.0.1:10015:10015/udp"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
       - quickstart
+
+  simulator:
+    image: python:3.12-alpine
+    container_name: yamcs-simulator
+    command: "python3 simulator.py"
+    working_dir: /yamcs
+    volumes:
+      - ../:/yamcs
+    # Share the yamcs network namespace so the simulator's default
+    # 127.0.0.1 TM/TC addresses reach yamcs directly, and the udp-out
+    # link (host: localhost) reaches the simulator's TC port.
+    network_mode: "service:yamcs"
+    depends_on:
+      yamcs:
+        condition: service_healthy
+
 networks:
   quickstart:
     driver: bridge
