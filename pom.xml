@@ -14,9 +14,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!--
     Update this to the latest Yamcs release.
-    Check https://mvnrepository.com/artifact/org.yamcs/yamcs-core
+    Check https://github.com/yamcs/yamcs/releases
     -->
-    <yamcsVersion>5.13.0</yamcsVersion>
+    <yamcsVersion>5.13.7</yamcsVersion>
   </properties>
 
   <dependencies>
@@ -52,7 +52,7 @@
       <plugin>
         <groupId>org.yamcs</groupId>
         <artifactId>yamcs-maven-plugin</artifactId>
-        <version>1.3.7</version>
+        <version>1.3.11</version>
         <executions>
           <!-- Detect plugins, if any -->
           <execution>
