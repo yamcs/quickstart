@@ -54,6 +54,6 @@ This project defines a few example CCSDS telecommands. They are sent to UDP port
 
 ## Bundling
 
-Running through Maven is useful during development, but it is not recommended for production environments. Instead bundle up your Yamcs application in a tar.gz file:
+If you prefer to deploy without Maven, you can bundle up your Yamcs application in a tar.gz file:
 
     ./mvnw package
